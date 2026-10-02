@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\HobbiesClub.Core\HobbiesClub.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Emgu.CV" Version="5.0.0.6584" />
+    <PackageReference Include="Emgu.CV.runtime.windows" Version="5.0.0.6584" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="FaceModels\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
+

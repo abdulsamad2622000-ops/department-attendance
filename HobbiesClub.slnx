@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/HobbiesClub.App/HobbiesClub.App.csproj" />
+    <Project Path="src/HobbiesClub.Biometrics/HobbiesClub.Biometrics.csproj" />
+    <Project Path="src/HobbiesClub.Core/HobbiesClub.Core.csproj" />
+    <Project Path="src/HobbiesClub.Data/HobbiesClub.Data.csproj" />
+    <Project Path="src/HobbiesClub.Services/HobbiesClub.Services.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/HobbiesClub.Tests/HobbiesClub.Tests.csproj" />
+  </Folder>
+</Solution>

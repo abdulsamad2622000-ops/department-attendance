@@ -1,0 +1,19 @@
+﻿<UserControl xmlns:helpers="clr-namespace:HobbiesClub.App.Helpers" x:Class="HobbiesClub.App.Views.SetupView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:views="clr-namespace:HobbiesClub.App.Views">
+    <StackPanel Width="340" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <TextBlock Text="Create the first Super Admin" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,16" />
+        <TextBlock Text="Full name" />
+        <TextBox Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}" Margin="0,2,0,10" Padding="4" />
+        <TextBlock Text="Username" />
+        <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Margin="0,2,0,10" Padding="4" />
+        <TextBlock Text="Password (at least 8 characters)" />
+        <views:PasswordField Password="{Binding Password, Mode=TwoWay}" Margin="0,2,0,10" />
+        <TextBlock Text="Confirm password" />
+        <views:PasswordField Password="{Binding ConfirmPassword, Mode=TwoWay}" Margin="0,2,0,10" />
+        <TextBlock Text="{Binding Error}" helpers:AutoHide.Seconds="6" Foreground="Firebrick" TextWrapping="Wrap" Margin="0,0,0,8" />
+        <Button Content="Create account" Command="{Binding CreateCommand}" Padding="8" IsDefault="True" />
+    </StackPanel>
+</UserControl>
+

@@ -1,0 +1,28 @@
+﻿# Build output
+bin/
+obj/
+publish/
+installer-output/
+*.pdb
+
+# Experiments
+spikes/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Never commit data
+*.db
+*.db-wal
+*.db-shm
+Logs/
+Backups/
+*.log
+
+# Spike / test images
+/*.jpg
+/*.png

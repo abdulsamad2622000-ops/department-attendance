@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="HobbiesClub.App.Views.ReportsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:helpers="clr-namespace:HobbiesClub.App.Helpers">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="B2V" />
+    </UserControl.Resources>
+    <DockPanel>
+        <WrapPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+            <TextBlock Text="Report" VerticalAlignment="Center" Margin="0,0,6,0" />
+            <ComboBox ItemsSource="{Binding ReportTypes}" SelectedItem="{Binding ReportType}" Width="170" Padding="4" />
+            <TextBlock Text="From" VerticalAlignment="Center" Margin="14,0,6,0" />
+            <DatePicker SelectedDate="{Binding From}" Width="130" />
+            <TextBlock Text="To" VerticalAlignment="Center" Margin="12,0,6,0" />
+            <DatePicker SelectedDate="{Binding To}" Width="130" />
+            <ComboBox ItemsSource="{Binding Clubs}" SelectedItem="{Binding Club}" DisplayMemberPath="Name"
+                      Width="150" Margin="12,0,0,0" Padding="4" />
+            <TextBlock Text="Member" VerticalAlignment="Center" Margin="12,0,6,0" />
+            <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" Width="150" Padding="4"
+                     ToolTip="Name, Member ID or phone (empty = all)" />
+            <Button Content="Generate" Command="{Binding GenerateCommand}" Padding="14,4" Margin="12,0,0,0" FontWeight="SemiBold" />
+            <Button Content="Export to Excel (CSV)" Command="{Binding ExportCsvCommand}" Padding="14,4" Margin="8,0,0,0" />
+        </WrapPanel>
+
+        <TextBlock DockPanel.Dock="Top" Text="{Binding Summary}" Foreground="Gray" Margin="0,0,0,4" />
+        <TextBlock DockPanel.Dock="Top" Text="{Binding Error}" helpers:AutoHide.Seconds="6" Foreground="Firebrick" TextWrapping="Wrap" />
+        <TextBlock DockPanel.Dock="Top" Text="{Binding Message}" helpers:AutoHide.Seconds="6" Foreground="SeaGreen" TextWrapping="Wrap" Margin="0,0,0,6" />
+
+        <Grid>
+            <DataGrid ItemsSource="{Binding LogRows}" Visibility="{Binding IsLog, Converter={StaticResource B2V}}"
+                      AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" CanUserAddRows="False"
+                      GridLinesVisibility="Horizontal" RowHeight="28">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="120" />
+                    <DataGridTextColumn Header="Time" Binding="{Binding Time}" Width="90" />
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60" />
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="170" />
+                    <DataGridTextColumn Header="Club" Binding="{Binding Club}" Width="130" />
+                    <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="100" />
+                    <DataGridTextColumn Header="Method" Binding="{Binding Method}" Width="100" />
+                    <DataGridTextColumn Header="Note" Binding="{Binding Note}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <DataGrid ItemsSource="{Binding MemberRows}" Visibility="{Binding IsMember, Converter={StaticResource B2V}}"
+                      AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" CanUserAddRows="False"
+                      GridLinesVisibility="Horizontal" RowHeight="28">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60" />
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="170" />
+                    <DataGridTextColumn Header="Clubs" Binding="{Binding Clubs}" Width="180" />
+                    <DataGridTextColumn Header="Visits" Binding="{Binding Visits}" Width="70" />
+                    <DataGridTextColumn Header="Total time" Binding="{Binding TotalTime}" Width="100" />
+                    <DataGridTextColumn Header="Average per visit" Binding="{Binding AverageTime}" Width="130" />
+                    <DataGridTextColumn Header="Last visit" Binding="{Binding LastVisit}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <DataGrid ItemsSource="{Binding DailyRows}" Visibility="{Binding IsDaily, Converter={StaticResource B2V}}"
+                      AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" CanUserAddRows="False"
+                      GridLinesVisibility="Horizontal" RowHeight="28">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="160" />
+                    <DataGridTextColumn Header="Members" Binding="{Binding Members}" Width="90" />
+                    <DataGridTextColumn Header="Check-ins" Binding="{Binding CheckIns}" Width="90" />
+                    <DataGridTextColumn Header="Check-outs" Binding="{Binding CheckOuts}" Width="90" />
+                    <DataGridTextColumn Header="Check-ins by club" Binding="{Binding ByClub}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </DockPanel>
+</UserControl>
