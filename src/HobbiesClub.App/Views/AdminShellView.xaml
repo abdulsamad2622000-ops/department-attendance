@@ -1,101 +1,168 @@
 ﻿<UserControl xmlns:helpers="clr-namespace:HobbiesClub.App.Helpers" x:Class="HobbiesClub.App.Views.AdminShellView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:views="clr-namespace:HobbiesClub.App.Views">
-    <UserControl.Resources><BooleanToVisibilityConverter x:Key="UB2V" /></UserControl.Resources>
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+             xmlns:views="clr-namespace:HobbiesClub.App.Views"
+             xmlns:app="clr-namespace:HobbiesClub.App">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="UB2V" />
 
-        <Grid Grid.Row="0" Margin="0,0,0,12">
-            <TextBlock Text="{Binding Title}" FontSize="22" FontWeight="SemiBold" VerticalAlignment="Center" />
-            <Button Content="Log out" Command="{Binding LogoutCommand}" Padding="12,6" HorizontalAlignment="Right" />
-        </Grid>
+        <!-- Sidebar menu item -->
+        <Style TargetType="TabItem">
+            <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border x:Name="Bd" Background="Transparent" CornerRadius="10" Padding="14,11" Margin="0,0,0,4">
+                            <ContentPresenter ContentSource="Header" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#F1F5F9" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource PrimarySoftBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
 
-        <TabControl Grid.Row="1" FontSize="14">
-            <TabItem Header="Dashboard" Padding="14,6">
-                <views:DashboardView DataContext="{Binding Dashboard}" Margin="10" />
-            </TabItem>
-
-            <TabItem Header="Members" Padding="14,6">
-                <views:MembersView DataContext="{Binding Members}" Margin="10" />
-            </TabItem>
-
-            <TabItem Header="Reports" Padding="14,6">
-                <views:ReportsView DataContext="{Binding Reports}" Margin="10" />
-            </TabItem>
-
-            <TabItem Header="Users" Padding="14,6">
-                <Grid Margin="10">
+    <TabControl FontSize="14" Background="Transparent" BorderThickness="0" Padding="0">
+        <TabControl.Template>
+            <ControlTemplate TargetType="TabControl">
+                <Grid Background="{StaticResource BackgroundBrush}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="260" />
-                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="248" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Column="0">
-                        <TextBlock Text="Create user" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8" />
-                        <TextBlock Text="Full name" />
-                        <TextBox Text="{Binding NewFullName, UpdateSourceTrigger=PropertyChanged}" Margin="0,2,0,8" Padding="4" />
-                        <TextBlock Text="Username" />
-                        <TextBox Text="{Binding NewUsername, UpdateSourceTrigger=PropertyChanged}" Margin="0,2,0,8" Padding="4" />
-                        <TextBlock Text="Password (at least 8 characters)" />
-                        <views:PasswordField Password="{Binding NewPassword, Mode=TwoWay}" Margin="0,2,0,8" />
-                        <TextBlock Text="Role" />
-                        <ComboBox ItemsSource="{Binding Roles}" SelectedItem="{Binding NewRole}" Margin="0,2,0,8" Padding="4" />
-                        <TextBlock Text="{Binding Error}" helpers:AutoHide.Seconds="6" Foreground="Firebrick" TextWrapping="Wrap" Margin="0,0,0,4" />
-                        <TextBlock Text="{Binding Message}" helpers:AutoHide.Seconds="6" Foreground="SeaGreen" TextWrapping="Wrap" Margin="0,0,0,4" />
-                        <Button Content="Create user" Command="{Binding CreateUserCommand}" Padding="8" />
-                    </StackPanel>
-
-                    <DockPanel Grid.Column="2">
-                        <TextBlock DockPanel.Dock="Top" Text="Users" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8" />
-                        <Border DockPanel.Dock="Bottom" BorderBrush="LightGray" BorderThickness="1" Padding="12" Margin="0,10,0,0"
-                                Visibility="{Binding HasSelectedUser, Converter={StaticResource UB2V}}">
-                            <StackPanel>
-                                <TextBlock FontSize="16" FontWeight="SemiBold"><Run Text="Edit user: " /><Run Text="{Binding SelectedUser.Username, Mode=OneWay}" /></TextBlock>
-                                <WrapPanel Margin="0,8,0,0">
-                                    <StackPanel Margin="0,0,16,0">
-                                        <TextBlock Text="Full name" />
-                                        <TextBox Text="{Binding EditUserFullName, UpdateSourceTrigger=PropertyChanged}" Width="220" Padding="4" />
-                                    </StackPanel>
-                                    <StackPanel Margin="0,0,16,0">
-                                        <TextBlock Text="Role" />
-                                        <ComboBox ItemsSource="{Binding Roles}" SelectedItem="{Binding EditUserRole}" Width="150" Padding="4" />
-                                    </StackPanel>
-                                    <CheckBox Content="Active (can log in)" IsChecked="{Binding EditUserActive}" VerticalAlignment="Bottom" Margin="0,0,16,6" />
-                                </WrapPanel>
-                                <WrapPanel Margin="0,10,0,0">
-                                    <Button Content="Save changes" Command="{Binding SaveUserCommand}" Padding="12,6" Margin="0,0,8,0" FontWeight="SemiBold" />
-                                    <Button Content="Reset password" Command="{Binding ResetUserPasswordCommand}" Padding="12,6" Margin="0,0,8,0" />
-                                    <Button Content="Unlock account" Command="{Binding UnlockUserCommand}" Padding="12,6" />
-                                </WrapPanel>
-                                <TextBlock Text="{Binding UserError}" helpers:AutoHide.Seconds="6" Foreground="Firebrick" TextWrapping="Wrap" Margin="0,8,0,0" />
-                                <TextBlock Text="{Binding UserMessage}" helpers:AutoHide.Seconds="6" Foreground="SeaGreen" TextWrapping="Wrap" />
+                    <Border Grid.Column="0" Background="White" BorderBrush="{StaticResource BorderBrushLight}" BorderThickness="0,0,1,0" Padding="16,24">
+                        <DockPanel>
+                            <StackPanel DockPanel.Dock="Bottom" Margin="8,0,8,0">
+                                <Button Content="Log out" Command="{Binding LogoutCommand}" Height="44" />
+                                <TextBlock Text="{x:Static app:AppInfo.VersionText}" FontSize="11" Foreground="#64748B" Margin="0,6,0,0" />
                             </StackPanel>
-                        </Border>
-                        <DataGrid ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True"
-                                  HeadersVisibility="Column" CanUserAddRows="False">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="100" />
-                                <DataGridTextColumn Header="Name" Binding="{Binding FullName}" Width="140" />
-                                <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="90" />
-                                <DataGridTextColumn Header="Active" Binding="{Binding Active}" Width="60" />
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </DockPanel>
+
+                            <StackPanel DockPanel.Dock="Top">
+                                <StackPanel Orientation="Horizontal" Margin="8,0,0,20">
+                                    <Border Width="40" Height="40" CornerRadius="11" Background="{StaticResource PrimaryBrush}">
+                                        <TextBlock Text="H&amp;AI" Foreground="White" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <TextBlock FontSize="15" FontWeight="Bold" VerticalAlignment="Center" Margin="10,0,0,0">Hobbies Club<LineBreak />&amp; AI Club</TextBlock>
+                                </StackPanel>
+
+                                <Border BorderBrush="{StaticResource BorderBrushLight}" BorderThickness="1" CornerRadius="12" Padding="12" Margin="0,0,0,20">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Width="36" Height="36" CornerRadius="18" Background="#DBE6FF">
+                                            <TextBlock Text="{Binding DisplayInitial}" Foreground="{StaticResource PrimaryBrush}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+                                        <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding DisplayName}" FontSize="14" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" MaxWidth="150" />
+                                            <TextBlock Text="Super Admin" FontSize="12" Foreground="{StaticResource MutedTextBrush}" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <StackPanel IsItemsHost="True" />
+                        </DockPanel>
+                    </Border>
+
+                    <ContentPresenter Grid.Column="1" ContentSource="SelectedContent" Margin="32,28" />
                 </Grid>
-            </TabItem>
-            <TabItem Header="Activity log" Padding="14,6">
-                <views:ActivityLogView DataContext="{Binding ActivityLog}" Margin="10" />
-            </TabItem>
-            <TabItem Header="Backup" Padding="14,6">
-                <views:BackupView DataContext="{Binding Backup}" Margin="10" />
-            </TabItem>
-        </TabControl>
-    </Grid>
+            </ControlTemplate>
+        </TabControl.Template>
+
+        <TabItem Header="Dashboard">
+            <views:DashboardView DataContext="{Binding Dashboard}" />
+        </TabItem>
+
+        <TabItem Header="Members">
+            <views:MembersView DataContext="{Binding Members}" />
+        </TabItem>
+
+        <TabItem Header="Reports">
+            <views:ReportsView DataContext="{Binding Reports}" />
+        </TabItem>
+
+        <TabItem Header="Users">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="260" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Create user" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8" />
+                    <TextBlock Text="Full name" />
+                    <TextBox Text="{Binding NewFullName, UpdateSourceTrigger=PropertyChanged}" Margin="0,2,0,8" Padding="4" />
+                    <TextBlock Text="Username" />
+                    <TextBox Text="{Binding NewUsername, UpdateSourceTrigger=PropertyChanged}" Margin="0,2,0,8" Padding="4" />
+                    <TextBlock Text="Password (at least 8 characters)" />
+                    <views:PasswordField Password="{Binding NewPassword, Mode=TwoWay}" Margin="0,2,0,8" />
+                    <TextBlock Text="Role" />
+                    <ComboBox ItemsSource="{Binding Roles}" SelectedItem="{Binding NewRole}" Margin="0,2,0,8" Padding="4" />
+                    <TextBlock Text="{Binding Error}" helpers:AutoHide.Seconds="6" Foreground="Firebrick" TextWrapping="Wrap" Margin="0,0,0,4" />
+                    <TextBlock Text="{Binding Message}" helpers:AutoHide.Seconds="6" Foreground="SeaGreen" TextWrapping="Wrap" Margin="0,0,0,4" />
+                    <Button Content="Create user" Command="{Binding CreateUserCommand}" Style="{StaticResource PrimaryButton}" Padding="8" />
+                </StackPanel>
+
+                <DockPanel Grid.Column="2">
+                    <TextBlock DockPanel.Dock="Top" Text="Users" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8" />
+                    <Border DockPanel.Dock="Bottom" Style="{StaticResource Card}" Padding="12" Margin="0,10,0,0"
+                            Visibility="{Binding HasSelectedUser, Converter={StaticResource UB2V}}">
+                        <StackPanel>
+                            <TextBlock FontSize="16" FontWeight="SemiBold"><Run Text="Edit user: " /><Run Text="{Binding SelectedUser.Username, Mode=OneWay}" /></TextBlock>
+                            <WrapPanel Margin="0,8,0,0">
+                                <StackPanel Margin="0,0,16,0">
+                                    <TextBlock Text="Full name" />
+                                    <TextBox Text="{Binding EditUserFullName, UpdateSourceTrigger=PropertyChanged}" Width="220" Padding="4" />
+                                </StackPanel>
+                                <StackPanel Margin="0,0,16,0">
+                                    <TextBlock Text="Role" />
+                                    <ComboBox ItemsSource="{Binding Roles}" SelectedItem="{Binding EditUserRole}" Width="150" Padding="4" />
+                                </StackPanel>
+                                <CheckBox Content="Active (can log in)" IsChecked="{Binding EditUserActive}" VerticalAlignment="Bottom" Margin="0,0,16,6" />
+                            </WrapPanel>
+                            <WrapPanel Margin="0,10,0,0">
+                                <Button Content="Save changes" Command="{Binding SaveUserCommand}" Style="{StaticResource PrimaryButton}" Padding="12,6" Margin="0,0,8,0" />
+                                <Button Content="Reset password" Command="{Binding ResetUserPasswordCommand}" Padding="12,6" Margin="0,0,8,0" />
+                                <Button Content="Unlock account" Command="{Binding UnlockUserCommand}" Padding="12,6" />
+                            </WrapPanel>
+                            <TextBlock Text="{Binding UserError}" helpers:AutoHide.Seconds="6" Foreground="Firebrick" TextWrapping="Wrap" Margin="0,8,0,0" />
+                            <TextBlock Text="{Binding UserMessage}" helpers:AutoHide.Seconds="6" Foreground="SeaGreen" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                    <DataGrid ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True"
+                              HeadersVisibility="Column" CanUserAddRows="False" RowHeight="40">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="140" />
+                            <DataGridTextColumn Header="Name" Binding="{Binding FullName}" Width="*" />
+                            <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="120" />
+                            <DataGridTextColumn Header="Active" Binding="{Binding Active}" Width="80" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Grid>
+        </TabItem>
+
+        <TabItem Header="Activity log">
+            <views:ActivityLogView DataContext="{Binding ActivityLog}" />
+        </TabItem>
+
+        <TabItem Header="Backup">
+            <views:BackupView DataContext="{Binding Backup}" />
+        </TabItem>
+    </TabControl>
 </UserControl>
-
-

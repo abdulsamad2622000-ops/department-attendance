@@ -1,8 +1,9 @@
 ﻿<Window x:Class="HobbiesClub.App.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Hobbies Club &amp; AI Club" Height="520" Width="640"
+        Title="Hobbies Club &amp; AI Club" Height="800" Width="1280" MinHeight="680" MinWidth="1024" WindowState="Maximized" Background="#F5F7FB" FontFamily="Segoe UI" FontSize="14" Foreground="#0F172A"
         WindowStartupLocation="CenterScreen">
     <ContentControl Content="{Binding Current}" />
 </Window>
+
 

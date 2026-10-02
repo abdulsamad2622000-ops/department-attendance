@@ -31,6 +31,8 @@ public partial class AdminShellViewModel : ObservableObject
         _actorId = actor.Id;
         _actorUsername = actor.Username;
         Title = $"Admin panel - {actor.FullName}";
+        DisplayName = actor.FullName;
+        DisplayInitial = actor.FullName.Length > 0 ? actor.FullName.Substring(0, 1).ToUpperInvariant() : "A";
         Roles = new[] { UserRole.Kiosk, UserRole.SuperAdmin };
         Members = new MembersViewModel(_actorId, _actorUsername);
         Backup = new BackupViewModel(_actorId, _actorUsername);
@@ -40,6 +42,8 @@ public partial class AdminShellViewModel : ObservableObject
     }
 
     public string Title { get; }
+    public string DisplayName { get; }
+    public string DisplayInitial { get; }
     public UserRole[] Roles { get; }
     public ObservableCollection<UserRow> Users { get; } = new();
     public MembersViewModel Members { get; }

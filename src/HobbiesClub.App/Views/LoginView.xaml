@@ -1,15 +1,225 @@
-﻿<UserControl xmlns:helpers="clr-namespace:HobbiesClub.App.Helpers" x:Class="HobbiesClub.App.Views.LoginView"
+﻿<UserControl x:Class="HobbiesClub.App.Views.LoginView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:views="clr-namespace:HobbiesClub.App.Views">
-    <StackPanel Width="340" VerticalAlignment="Center" HorizontalAlignment="Center">
-        <TextBlock Text="Login" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,16" />
-        <TextBlock Text="Username" />
-        <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Margin="0,2,0,10" Padding="4" />
-        <TextBlock Text="Password" />
-        <views:PasswordField Password="{Binding Password, Mode=TwoWay}" Margin="0,2,0,10" />
-        <TextBlock Text="{Binding Error}" helpers:AutoHide.Seconds="6" Foreground="Firebrick" TextWrapping="Wrap" Margin="0,0,0,8" />
-        <Button Content="Login" Command="{Binding LoginCommand}" Padding="8" IsDefault="True" />
-    </StackPanel>
-</UserControl>
+             xmlns:views="clr-namespace:HobbiesClub.App.Views"
+             xmlns:helpers="clr-namespace:HobbiesClub.App.Helpers"
+             xmlns:app="clr-namespace:HobbiesClub.App">
+    <UserControl.Resources>
+        <!-- Underline inputs (also used inside PasswordField) -->
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#0F172A" />
+            <Setter Property="BorderBrush" Value="#CBD5E1" />
+            <Setter Property="BorderThickness" Value="0,0,0,1.5" />
+            <Setter Property="Padding" Value="0,6" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="False" VerticalAlignment="Center"
+                                          HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#2563EB" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="PasswordBox">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#0F172A" />
+            <Setter Property="BorderBrush" Value="#CBD5E1" />
+            <Setter Property="BorderThickness" Value="0,0,0,1.5" />
+            <Setter Property="Padding" Value="0,6" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="False" VerticalAlignment="Center"
+                                          HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#2563EB" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="Line" TargetType="Path">
+            <Setter Property="StrokeStartLineCap" Value="Round" />
+            <Setter Property="StrokeEndLineCap" Value="Round" />
+            <Setter Property="StrokeLineJoin" Value="Round" />
+        </Style>
+    </UserControl.Resources>
 
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#EEF2FF" Offset="0" />
+                <GradientStop Color="#F5F7FB" Offset="0.55" />
+                <GradientStop Color="#EDE9FE" Offset="1" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Border Background="White" CornerRadius="28" MaxWidth="1120" MaxHeight="660" Margin="48">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="40" ShadowDepth="6" Opacity="0.12" Color="#1E3A8A" />
+            </Border.Effect>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="6*" />
+                    <ColumnDefinition Width="5*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Illustration (original, drawn in XAML) -->
+                <Border Grid.Column="0" CornerRadius="28,0,0,28" Margin="0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#F8FAFF" Offset="0" />
+                            <GradientStop Color="#EEF2FF" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Viewbox Margin="40">
+                        <Canvas Width="480" Height="430">
+                            <!-- platforms -->
+                            <Ellipse Canvas.Left="40" Canvas.Top="300" Width="400" Height="120" Fill="#E0E7FF" />
+                            <Ellipse Canvas.Left="150" Canvas.Top="330" Width="200" Height="60" Fill="#C7D2FE" />
+
+                            <!-- soft decorative tiles -->
+                            <Border Canvas.Left="10" Canvas.Top="20" Width="46" Height="46" CornerRadius="10" Background="#E9D5FF" Opacity="0.6" />
+                            <Border Canvas.Left="420" Canvas.Top="250" Width="40" Height="40" CornerRadius="10" Background="#BFDBFE" Opacity="0.7" />
+                            <Border Canvas.Left="20" Canvas.Top="250" Width="30" Height="30" CornerRadius="8" Background="#DDD6FE" Opacity="0.7" />
+
+                            <!-- kiosk device -->
+                            <Border Canvas.Left="175" Canvas.Top="40" Width="140" Height="280" CornerRadius="24">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#60A5FA" Offset="0" />
+                                        <GradientStop Color="#2563EB" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="24" ShadowDepth="6" Opacity="0.25" Color="#1E3A8A" />
+                                </Border.Effect>
+                                <StackPanel Margin="18,26">
+                                    <Grid Width="68" Height="68" HorizontalAlignment="Center">
+                                        <Ellipse Fill="White" Opacity="0.25" />
+                                        <Ellipse Width="44" Height="44" Fill="White" />
+                                        <Path Style="{StaticResource Line}" Data="M-8,0 L-2,6 L9,-6" Stroke="#2563EB" StrokeThickness="4"
+                                              HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
+                                    </Grid>
+                                    <StackPanel Margin="0,30,0,0">
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                                            <Ellipse Width="14" Height="14" Fill="White" Opacity="0.9" />
+                                            <Border Width="62" Height="6" CornerRadius="3" Background="White" Opacity="0.8" Margin="10,4,0,0" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                                            <Ellipse Width="14" Height="14" Fill="White" Opacity="0.9" />
+                                            <Border Width="50" Height="6" CornerRadius="3" Background="#FBCFE8" Margin="10,4,0,0" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Ellipse Width="14" Height="14" Fill="White" Opacity="0.9" />
+                                            <Border Width="70" Height="6" CornerRadius="3" Background="White" Opacity="0.8" Margin="10,4,0,0" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- chart card -->
+                            <Border Canvas.Left="40" Canvas.Top="70" Width="120" Height="90" CornerRadius="16" Background="#DBEAFE">
+                                <Border.Effect><DropShadowEffect BlurRadius="16" ShadowDepth="3" Opacity="0.12" Color="#1E3A8A" /></Border.Effect>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,16">
+                                    <Border Width="14" Height="22" CornerRadius="4" Background="#93C5FD" Margin="4,0" VerticalAlignment="Bottom" />
+                                    <Border Width="14" Height="38" CornerRadius="4" Background="#60A5FA" Margin="4,0" VerticalAlignment="Bottom" />
+                                    <Border Width="14" Height="30" CornerRadius="4" Background="#3B82F6" Margin="4,0" VerticalAlignment="Bottom" />
+                                    <Border Width="14" Height="50" CornerRadius="4" Background="#2563EB" Margin="4,0" VerticalAlignment="Bottom" />
+                                </StackPanel>
+                            </Border>
+
+                            <!-- member ID card -->
+                            <Border Canvas.Left="330" Canvas.Top="100" Width="120" Height="86" CornerRadius="16" Background="#EDE9FE">
+                                <Border.Effect><DropShadowEffect BlurRadius="16" ShadowDepth="3" Opacity="0.12" Color="#4C1D95" /></Border.Effect>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
+                                    <Grid Width="40" Height="40">
+                                        <Ellipse Fill="#C4B5FD" />
+                                        <Ellipse Width="14" Height="14" Fill="White" VerticalAlignment="Top" Margin="0,8,0,0" />
+                                        <Border Width="24" Height="10" CornerRadius="5,5,0,0" Background="White" VerticalAlignment="Bottom" Margin="0,0,0,7" />
+                                    </Grid>
+                                    <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
+                                        <Border Width="42" Height="6" CornerRadius="3" Background="#8B5CF6" />
+                                        <Border Width="30" Height="6" CornerRadius="3" Background="#C4B5FD" Margin="0,6,0,0" HorizontalAlignment="Left" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- check bubble -->
+                            <Grid Canvas.Left="350" Canvas.Top="30" Width="48" Height="48">
+                                <Ellipse Fill="#DCFCE7" />
+                                <Path Style="{StaticResource Line}" Data="M-7,0 L-2,5 L8,-5" Stroke="#16A34A" StrokeThickness="3.5"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Grid>
+
+                            <!-- clock bubble -->
+                            <Grid Canvas.Left="70" Canvas.Top="200" Width="54" Height="54">
+                                <Ellipse Fill="White" Stroke="#BFDBFE" StrokeThickness="2" />
+                                <Path Style="{StaticResource Line}" Data="M0,-12 L0,0 L9,6" Stroke="#2563EB" StrokeThickness="3"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Grid>
+
+                            <!-- plus bubble -->
+                            <Grid Canvas.Left="330" Canvas.Top="220" Width="40" Height="40">
+                                <Ellipse Fill="#E0E7FF" />
+                                <Path Style="{StaticResource Line}" Data="M-6,0 H6 M0,-6 V6" Stroke="#6366F1" StrokeThickness="3"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Grid>
+                        </Canvas>
+                    </Viewbox>
+                </Border>
+
+                <!-- Sign in -->
+                <Grid Grid.Column="1" Margin="56,48">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" VerticalAlignment="Center" MaxWidth="380">
+                        <TextBlock FontSize="40" FontWeight="Bold" Foreground="#0F172A" LineHeight="48">Hello,<LineBreak />Welcome back</TextBlock>
+                        <TextBlock Text="Sign in to manage Hobbies Club &amp; AI Club" FontSize="15" Foreground="{StaticResource MutedTextBrush}"
+                                   TextWrapping="Wrap" Margin="0,10,0,32" />
+
+                        <TextBlock Text="Username" FontSize="13" Foreground="#64748B" />
+                        <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Height="40" Margin="0,2,0,22" />
+
+                        <TextBlock Text="Password" FontSize="13" Foreground="#64748B" />
+                        <views:PasswordField Password="{Binding Password, Mode=TwoWay}" Margin="0,2,0,16" />
+
+                        <TextBlock Text="{Binding Error}" helpers:AutoHide.Seconds="6" Foreground="{StaticResource DangerBrush}"
+                                   TextWrapping="Wrap" Margin="0,0,0,10" />
+
+                        <Button Content="Login" Command="{Binding LoginCommand}" IsDefault="True"
+                                Style="{StaticResource PrimaryButton}" Height="50" FontSize="16" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Border Width="28" Height="28" CornerRadius="8" Background="{StaticResource PrimaryBrush}">
+                            <TextBlock Text="H&amp;AI" Foreground="White" FontWeight="Bold" FontSize="9"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Text="Hobbies Club &amp; AI Club" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
+                        <TextBlock Text="{x:Static app:AppInfo.VersionText}" FontSize="12" Foreground="#64748B" VerticalAlignment="Center" Margin="12,0,0,0" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

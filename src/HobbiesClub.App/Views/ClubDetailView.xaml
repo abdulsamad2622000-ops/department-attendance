@@ -3,82 +3,103 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="B2V" />
-        <Style x:Key="Tile" TargetType="Border">
+        <Style x:Key="Tile" TargetType="Border" BasedOn="{StaticResource Card}">
             <Setter Property="Margin" Value="8" />
-            <Setter Property="Padding" Value="14,10" />
-            <Setter Property="CornerRadius" Value="8" />
-            <Setter Property="BorderBrush" Value="LightGray" />
-            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="20,16" />
+            <Setter Property="CornerRadius" Value="16" />
+        </Style>
+        <Style x:Key="TileLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}" />
+        </Style>
+        <Style x:Key="TileValue" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="28" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="0,4,0,0" />
         </Style>
     </UserControl.Resources>
-    <Grid Margin="20">
-        <Button Content="Back" Command="{Binding BackCommand}" FontSize="18" Padding="20,8"
-                HorizontalAlignment="Left" VerticalAlignment="Top" />
-        <Button Content="Done" Command="{Binding DoneCommand}" FontSize="18" Padding="20,8"
-                HorizontalAlignment="Right" VerticalAlignment="Top" />
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,50,0,0">
-            <StackPanel Width="720" HorizontalAlignment="Center">
-                <TextBlock Text="{Binding ClubName}" FontSize="32" FontWeight="Bold" HorizontalAlignment="Center" />
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,6,0,4">
-                    <TextBlock Text="{Binding FullName}" FontSize="20" VerticalAlignment="Center" Margin="0,0,10,0" />
-                    <Border CornerRadius="12" Padding="12,2" Background="{Binding BadgeBrush}">
-                        <TextBlock Text="{Binding BadgeText}" Foreground="White" FontWeight="Bold" FontSize="14" />
+
+    <Grid Margin="40,28">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Button Content="Back" Command="{Binding BackCommand}" Height="44" Padding="18,0" HorizontalAlignment="Left" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="{Binding FullName}" FontSize="16" Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Center" />
+                <Border CornerRadius="999" Padding="10,3" Background="{Binding BadgeBrush}" Margin="10,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding BadgeText}" Foreground="White" FontWeight="SemiBold" FontSize="12" />
+                </Border>
+            </StackPanel>
+            <Button Content="Done" Command="{Binding DoneCommand}" Style="{StaticResource PrimaryButton}"
+                    Height="44" Width="120" HorizontalAlignment="Right" />
+        </Grid>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,24,0,0">
+            <StackPanel MaxWidth="900">
+                <DockPanel Margin="8,0,8,12">
+                    <Border DockPanel.Dock="Right" CornerRadius="999" Padding="14,6" Background="White"
+                            BorderBrush="{StaticResource BorderBrushLight}" BorderThickness="1" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusBrush}" FontWeight="SemiBold" FontSize="14" />
                     </Border>
-                </StackPanel>
-                <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusBrush}" FontSize="18"
-                           FontWeight="Bold" HorizontalAlignment="Center" Margin="0,4,0,16" />
+                    <TextBlock Text="{Binding ClubName}" FontSize="32" FontWeight="Bold" VerticalAlignment="Center" />
+                </DockPanel>
 
                 <UniformGrid Columns="3">
                     <Border Style="{StaticResource Tile}"><StackPanel>
-                        <TextBlock Text="Visits this month" Foreground="Gray" />
-                        <TextBlock Text="{Binding MonthVisits}" FontSize="26" FontWeight="Bold" />
+                        <TextBlock Text="Visits this month" Style="{StaticResource TileLabel}" />
+                        <TextBlock Text="{Binding MonthVisits}" Style="{StaticResource TileValue}" />
                     </StackPanel></Border>
                     <Border Style="{StaticResource Tile}"><StackPanel>
-                        <TextBlock Text="Time this month" Foreground="Gray" />
-                        <TextBlock Text="{Binding MonthTime}" FontSize="26" FontWeight="Bold" />
+                        <TextBlock Text="Time this month" Style="{StaticResource TileLabel}" />
+                        <TextBlock Text="{Binding MonthTime}" Style="{StaticResource TileValue}" />
                     </StackPanel></Border>
                     <Border Style="{StaticResource Tile}"><StackPanel>
-                        <TextBlock Text="Average per visit" Foreground="Gray" />
-                        <TextBlock Text="{Binding AverageTime}" FontSize="26" FontWeight="Bold" />
+                        <TextBlock Text="Average per visit" Style="{StaticResource TileLabel}" />
+                        <TextBlock Text="{Binding AverageTime}" Style="{StaticResource TileValue}" />
                     </StackPanel></Border>
                     <Border Style="{StaticResource Tile}"><StackPanel>
-                        <TextBlock Text="Total visits" Foreground="Gray" />
-                        <TextBlock Text="{Binding TotalVisits}" FontSize="26" FontWeight="Bold" />
+                        <TextBlock Text="Total visits" Style="{StaticResource TileLabel}" />
+                        <TextBlock Text="{Binding TotalVisits}" Style="{StaticResource TileValue}" />
                     </StackPanel></Border>
                     <Border Style="{StaticResource Tile}"><StackPanel>
-                        <TextBlock Text="Total time" Foreground="Gray" />
-                        <TextBlock Text="{Binding TotalTime}" FontSize="26" FontWeight="Bold" />
+                        <TextBlock Text="Total time" Style="{StaticResource TileLabel}" />
+                        <TextBlock Text="{Binding TotalTime}" Style="{StaticResource TileValue}" />
                     </StackPanel></Border>
                     <Border Style="{StaticResource Tile}"><StackPanel>
-                        <TextBlock Text="Last entry" Foreground="Gray" />
-                        <TextBlock Text="{Binding LastEntry}" FontSize="18" FontWeight="Bold" TextWrapping="Wrap" />
+                        <TextBlock Text="Last entry" Style="{StaticResource TileLabel}" />
+                        <TextBlock Text="{Binding LastEntry}" FontSize="17" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,6,0,0" />
                     </StackPanel></Border>
                 </UniformGrid>
 
-                <TextBlock Text="Recent entries" FontSize="20" FontWeight="SemiBold" Margin="8,18,0,6" />
-                <TextBlock Text="No entries yet." Foreground="Gray" Margin="8,0,0,0"
-                           Visibility="{Binding HasNoEntries, Converter={StaticResource B2V}}" />
-                <ItemsControl ItemsSource="{Binding Recent}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border BorderBrush="#FFEEEEEE" BorderThickness="0,0,0,1" Padding="8,6">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="120" />
-                                        <ColumnDefinition Width="230" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding When}" FontSize="15" />
-                                    <TextBlock Grid.Column="1" Text="{Binding TypeText}" Foreground="{Binding TypeBrush}"
-                                               FontWeight="Bold" FontSize="15" />
-                                    <TextBlock Grid.Column="2" Text="{Binding Extra}" Foreground="Gray" FontSize="14" />
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <Border Style="{StaticResource Card}" CornerRadius="16" Padding="0" Margin="8,16,8,0">
+                    <StackPanel>
+                        <TextBlock Text="Recent entries" FontSize="18" FontWeight="Bold" Margin="20,16,20,8" />
+                        <TextBlock Text="No entries yet." Foreground="{StaticResource MutedTextBrush}" Margin="20,0,20,16"
+                                   Visibility="{Binding HasNoEntries, Converter={StaticResource B2V}}" />
+                        <ItemsControl ItemsSource="{Binding Recent}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="#EEF1F6" BorderThickness="0,1,0,0" Padding="20,12">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="140" />
+                                                <ColumnDefinition Width="240" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding When}" FontSize="15" />
+                                            <TextBlock Grid.Column="1" Text="{Binding TypeText}" Foreground="{Binding TypeBrush}" FontWeight="Bold" FontSize="14" />
+                                            <TextBlock Grid.Column="2" Text="{Binding Extra}" Foreground="{StaticResource MutedTextBrush}" FontSize="14" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </ScrollViewer>
     </Grid>
 </UserControl>
-

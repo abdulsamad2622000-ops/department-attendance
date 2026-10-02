@@ -75,7 +75,10 @@ public partial class ClubDetailViewModel : ObservableObject
         StatusBrush = s.IsInside ? Brushes.SeaGreen : Brushes.Gray;
         MonthVisits = s.MonthVisits.ToString();
         MonthTime = Fmt(s.MonthTime);
-        AverageTime = s.MonthVisits > 0 ? Fmt(s.MonthTime / s.MonthVisits) : "-";
+        // Average only over finished visits: an open visit has no time counted yet.
+        var openThisMonth = s.IsInside && s.LastEntry is DateTime le && le >= new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+        var finished = s.MonthVisits - (openThisMonth ? 1 : 0);
+        AverageTime = finished > 0 ? Fmt(s.MonthTime / finished) : "-";
         TotalVisits = s.TotalVisits.ToString();
         TotalTime = Fmt(s.TotalTime);
         LastEntry = s.LastEntry is DateTime d ? d.ToString("dd MMM, hh:mm tt") : "-";
@@ -108,4 +111,5 @@ public partial class ClubDetailViewModel : ObservableObject
         _shell.NavigateTo(new KioskViewModel(_shell, string.Empty));
     }
 }
+
 

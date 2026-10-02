@@ -4,6 +4,10 @@
              xmlns:vm="clr-namespace:HobbiesClub.App.ViewModels"
              xmlns:views="clr-namespace:HobbiesClub.App.Views">
     <Application.Resources>
+        <ResourceDictionary>
+        <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="Theme.xaml" />
+        </ResourceDictionary.MergedDictionaries>
         <DataTemplate DataType="{x:Type vm:SetupViewModel}">
             <views:SetupView />
         </DataTemplate>
@@ -31,8 +35,10 @@
         <DataTemplate DataType="{x:Type vm:ClubDetailViewModel}">
             <views:ClubDetailView />
         </DataTemplate>
+            </ResourceDictionary>
     </Application.Resources>
 </Application>
+
 
 
 
