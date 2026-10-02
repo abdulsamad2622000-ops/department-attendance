@@ -1,11 +1,12 @@
 ﻿<UserControl x:Class="HobbiesClub.App.Views.DashboardView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime">
     <UserControl.Resources>
         <DataTemplate x:Key="PhotoCell">
             <Grid Width="38" Height="38">
-                <Ellipse Fill="#FF3B5BA9" />
-                <TextBlock Text="{Binding Initial}" Foreground="White" FontWeight="Bold" FontSize="16"
+                <Ellipse Fill="#DBE6FF" />
+                <TextBlock Text="{Binding Initial}" Foreground="{StaticResource PrimaryBrush}" FontWeight="Bold" FontSize="16"
                            HorizontalAlignment="Center" VerticalAlignment="Center" />
                 <Ellipse>
                     <Ellipse.Fill>
@@ -14,87 +15,159 @@
                 </Ellipse>
             </Grid>
         </DataTemplate>
+
+        <Style x:Key="StatCard" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="MinWidth" Value="190" />
+            <Setter Property="Margin" Value="0,0,14,14" />
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrushLight}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="White" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1"
+                                CornerRadius="16" Padding="20,16">
+                            <ContentPresenter HorizontalAlignment="Left" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#2563EB" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Label}" Value="Missed check-outs">
+                    <Setter Property="BorderBrush" Value="#F3D9B1" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="StatValue" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="32" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="0,6,0,4" />
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Label}" Value="Missed check-outs">
+                    <Setter Property="Foreground" Value="#B45309" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
-    <DockPanel>
-        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,10">
-            <Button DockPanel.Dock="Right" Content="Refresh" Command="{Binding RefreshCommand}" Padding="12,4" />
-            <TextBlock Text="{Binding UpdatedText}" Foreground="Gray" VerticalAlignment="Center" />
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <DockPanel Grid.Row="0" Margin="0,0,0,20">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Bottom">
+                <TextBlock Text="{Binding UpdatedText}" Foreground="{StaticResource MutedTextBrush}" FontSize="12"
+                           VerticalAlignment="Center" Margin="0,0,12,0" MaxWidth="320" TextWrapping="Wrap" />
+                <Button Content="Refresh" Command="{Binding RefreshCommand}" Height="40" Padding="16,0" />
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='dddd, dd MMMM yyyy'}"
+                           FontSize="14" Foreground="{StaticResource MutedTextBrush}" />
+                <TextBlock FontSize="32" FontWeight="Bold" Margin="0,4,0,0">
+                    <Run Text="Welcome back, " /><Run Text="{Binding DataContext.DisplayName, RelativeSource={RelativeSource AncestorType=TabControl}, Mode=OneWay}" />
+                </TextBlock>
+            </StackPanel>
         </DockPanel>
 
-        <ItemsControl DockPanel.Dock="Top" ItemsSource="{Binding Tiles}" Margin="0,0,0,8">
+        <!-- Stat cards -->
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Tiles}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Margin="0,0,10,10" Padding="14,8" MinWidth="140" Cursor="Hand"
-                            Background="White" BorderBrush="LightGray" BorderThickness="1" HorizontalContentAlignment="Left"
+                    <Button Style="{StaticResource StatCard}"
                             Command="{Binding DataContext.OpenTileCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                             CommandParameter="{Binding}">
                         <StackPanel>
-                            <TextBlock Text="{Binding Label}" Foreground="Gray" FontSize="12" />
-                            <TextBlock Text="{Binding Value}" FontSize="28" FontWeight="Bold" />
-                            <TextBlock Text="View details" Foreground="#FF3B5BA9" FontSize="11" />
+                            <TextBlock Text="{Binding Label}" Foreground="{StaticResource MutedTextBrush}" FontSize="13" />
+                            <TextBlock Text="{Binding Value}" Style="{StaticResource StatValue}" />
+                            <TextBlock Text="View details" Foreground="{StaticResource PrimaryBrush}" FontSize="12" FontWeight="SemiBold" />
                         </StackPanel>
                     </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <TextBlock DockPanel.Dock="Top" Text="Clubs" FontSize="16" FontWeight="SemiBold" Margin="0,4,0,6" />
-        <ItemsControl DockPanel.Dock="Top" ItemsSource="{Binding ClubRows}" Margin="0,0,0,8">
+        <!-- Clubs -->
+        <ItemsControl Grid.Row="2" ItemsSource="{Binding ClubRows}" Margin="0,0,0,6">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="#FF3B5BA9" BorderThickness="2" Padding="16,10" Margin="0,0,12,10" MinWidth="220">
-                        <StackPanel>
-                            <TextBlock Text="{Binding Name}" FontSize="20" FontWeight="Bold" />
-                            <TextBlock Margin="0,6,0,0"><Run Text="Inside now: " Foreground="Gray" /><Run Text="{Binding Inside, Mode=OneWay}" FontWeight="Bold" Foreground="SeaGreen" /></TextBlock>
-                            <TextBlock><Run Text="Active members: " Foreground="Gray" /><Run Text="{Binding Members, Mode=OneWay}" /></TextBlock>
-                            <TextBlock><Run Text="Check-ins today: " Foreground="Gray" /><Run Text="{Binding TodayCheckIns, Mode=OneWay}" /></TextBlock>
-                        </StackPanel>
+                    <Border Style="{StaticResource Card}" CornerRadius="16" Padding="22,18" Margin="0,0,14,14" Width="420">
+                        <DockPanel>
+                            <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Inside}" FontSize="32" FontWeight="Bold" Foreground="{StaticResource SuccessBrush}" HorizontalAlignment="Right" />
+                                <TextBlock Text="inside now" FontSize="12" Foreground="{StaticResource MutedTextBrush}" HorizontalAlignment="Right" />
+                            </StackPanel>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Name}" FontSize="20" FontWeight="Bold" />
+                                <TextBlock FontSize="13" Foreground="{StaticResource MutedTextBrush}" Margin="0,4,0,0">
+                                    <Run Text="{Binding Members, Mode=OneWay}" /><Run Text=" active members · " /><Run Text="{Binding TodayCheckIns, Mode=OneWay}" /><Run Text=" check-ins today" />
+                                </TextBlock>
+                            </StackPanel>
+                        </DockPanel>
                     </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+        <!-- Inside right now -->
+        <Border Grid.Row="3" Style="{StaticResource Card}" CornerRadius="16" Padding="0" Margin="0,0,0,14">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Text="Inside right now" FontSize="17" FontWeight="Bold" Margin="20,16,20,10" />
+                <DataGrid ItemsSource="{Binding Inside}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
+                          CanUserAddRows="False" RowHeight="50" BorderThickness="0" Margin="0,0,0,6">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="" Width="64" CellTemplate="{StaticResource PhotoCell}" />
+                        <DataGridTextColumn Header="ID" Binding="{Binding MemberCode}" Width="70" />
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="200" />
+                        <DataGridTextColumn Header="Club" Binding="{Binding ClubName}" Width="160" />
+                        <DataGridTextColumn Header="Inside since" Binding="{Binding Since}" Width="160" />
+                        <DataGridTextColumn Header="Inside for" Binding="{Binding InsideFor}" Width="110" />
+                        <DataGridTextColumn Header="Note" Binding="{Binding Note}" Width="*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="#B45309" />
+                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </Border>
 
-            <TextBlock Grid.Row="0" Text="Inside right now" FontSize="16" FontWeight="SemiBold" Foreground="SeaGreen" Margin="0,4,0,6" />
-            <DataGrid Grid.Row="1" ItemsSource="{Binding Inside}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
-                      CanUserAddRows="False" RowHeight="46" GridLinesVisibility="Horizontal">
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="" Width="56" CellTemplate="{StaticResource PhotoCell}" />
-                    <DataGridTextColumn Header="ID" Binding="{Binding MemberCode}" Width="60" />
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="180" />
-                    <DataGridTextColumn Header="Club" Binding="{Binding ClubName}" Width="160" />
-                    <DataGridTextColumn Header="Inside since" Binding="{Binding Since}" Width="150" />
-                    <DataGridTextColumn Header="Inside for" Binding="{Binding InsideFor}" Width="100" />
-                    <DataGridTextColumn Header="Note" Binding="{Binding Note}" Width="*" />
-                </DataGrid.Columns>
-            </DataGrid>
-
-            <TextBlock Grid.Row="2" Text="Not inside right now" FontSize="16" FontWeight="SemiBold" Foreground="Gray" Margin="0,14,0,6" />
-            <DataGrid Grid.Row="3" ItemsSource="{Binding NotInside}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
-                      CanUserAddRows="False" RowHeight="46" GridLinesVisibility="Horizontal">
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="" Width="56" CellTemplate="{StaticResource PhotoCell}" />
-                    <DataGridTextColumn Header="ID" Binding="{Binding MemberCode}" Width="60" />
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="180" />
-                    <DataGridTextColumn Header="Clubs" Binding="{Binding ClubName}" Width="160" />
-                    <DataGridTextColumn Header="Last entry" Binding="{Binding Since}" Width="150" />
-                    <DataGridTextColumn Header="Last action" Binding="{Binding InsideFor}" Width="*" />
-                </DataGrid.Columns>
-            </DataGrid>
-        </Grid>
-    </DockPanel>
+        <!-- Not inside right now -->
+        <Border Grid.Row="4" Style="{StaticResource Card}" CornerRadius="16" Padding="0">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Text="Not inside right now" FontSize="17" FontWeight="Bold" Margin="20,16,20,10" />
+                <DataGrid ItemsSource="{Binding NotInside}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
+                          CanUserAddRows="False" RowHeight="50" BorderThickness="0" Margin="0,0,0,6">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="" Width="64" CellTemplate="{StaticResource PhotoCell}" />
+                        <DataGridTextColumn Header="ID" Binding="{Binding MemberCode}" Width="70" />
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="200" />
+                        <DataGridTextColumn Header="Clubs" Binding="{Binding ClubName}" Width="200" />
+                        <DataGridTextColumn Header="Last entry" Binding="{Binding Since}" Width="160" />
+                        <DataGridTextColumn Header="Last action" Binding="{Binding InsideFor}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </Border>
+    </Grid>
 </UserControl>

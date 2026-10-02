@@ -3,133 +3,237 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="B2V" />
+        <Style x:Key="Label" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}" />
+            <Setter Property="Margin" Value="0,0,0,4" />
+        </Style>
+        <Style x:Key="Field" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Height" Value="38" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+        <Style x:Key="Section" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="0,18,0,8" />
+        </Style>
+        <Style x:Key="Pill" TargetType="Border">
+            <Setter Property="CornerRadius" Value="999" />
+            <Setter Property="Padding" Value="10,3" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
     </UserControl.Resources>
+
     <DockPanel>
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
-            <TextBlock Text="Search" VerticalAlignment="Center" Margin="0,0,6,0" />
-            <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" Width="220" Padding="4"
-                     ToolTip="Name, phone or Member ID" />
-            <ComboBox ItemsSource="{Binding ClubOptions}" SelectedItem="{Binding ClubFilter}" Width="150"
-                      Margin="12,0,0,0" Padding="4" />
-            <ComboBox ItemsSource="{Binding StatusOptions}" SelectedItem="{Binding StatusFilter}" Width="120"
-                      Margin="8,0,0,0" Padding="4" />
-            <Button Content="Refresh" Command="{Binding LoadCommand}" Padding="10,4" Margin="12,0,0,0" />
-            <TextBlock Text="{Binding Summary}" Foreground="Gray" VerticalAlignment="Center" Margin="16,0,0,0" />
+        <!-- Title -->
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,16">
+            <TextBlock Text="Members" FontSize="28" FontWeight="Bold" VerticalAlignment="Bottom" />
+            <TextBlock Text="{Binding Summary}" Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Bottom" Margin="14,0,0,5" />
+        </StackPanel>
+
+        <!-- Toolbar -->
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,16">
+            <Border Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="10" Width="300" Height="44" Padding="12,0">
+                <DockPanel>
+                    <Canvas DockPanel.Dock="Left" Width="24" Height="24" VerticalAlignment="Center" Margin="0,0,6,0">
+                        <Path Data="M17,11 A6,6 0 1 1 5,11 A6,6 0 1 1 17,11 M20,20 L15.5,15.5" Stroke="#64748B" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" />
+                    </Canvas>
+                    <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent"
+                             VerticalAlignment="Center" ToolTip="Name, phone or Member ID" />
+                </DockPanel>
+            </Border>
+            <ComboBox ItemsSource="{Binding ClubOptions}" SelectedItem="{Binding ClubFilter}" Width="170" Height="44"
+                      Margin="12,0,0,0" VerticalContentAlignment="Center" Padding="10,0" />
+            <ComboBox ItemsSource="{Binding StatusOptions}" SelectedItem="{Binding StatusFilter}" Width="140" Height="44"
+                      Margin="10,0,0,0" VerticalContentAlignment="Center" Padding="10,0" />
+            <Button Content="Refresh" Command="{Binding LoadCommand}" Height="44" Padding="18,0" Margin="12,0,0,0" />
         </StackPanel>
 
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition x:Name="PanelCol" Width="280" MinWidth="240" MaxWidth="500" />
+                <ColumnDefinition x:Name="PanelCol" Width="360" MinWidth="300" MaxWidth="520" />
             </Grid.ColumnDefinitions>
-        <Border Grid.Column="2" Margin="0" Padding="12" BorderBrush="LightGray"
-                BorderThickness="1" Visibility="{Binding HasSelection, Converter={StaticResource B2V}}">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <StackPanel Margin="0,0,14,0">
-                    <Grid Width="120" Height="120" HorizontalAlignment="Center">
-                        <Ellipse Fill="#FF3B5BA9" />
-                        <TextBlock Text="{Binding Selected.Initial}" Foreground="White" FontWeight="Bold" FontSize="48"
-                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        <Ellipse>
-                            <Ellipse.Fill>
-                                <ImageBrush ImageSource="{Binding Selected.Photo}" Stretch="UniformToFill" />
-                            </Ellipse.Fill>
-                        </Ellipse>
-                    </Grid>
-                    <TextBlock Text="{Binding Selected.FullName}" FontSize="20" FontWeight="SemiBold"
-                               HorizontalAlignment="Center" TextWrapping="Wrap" Margin="0,8,0,0" />
-                    <TextBlock HorizontalAlignment="Center" Foreground="Gray">
-                        <Run Text="ID " /><Run Text="{Binding Selected.MemberCode, Mode=OneWay}" />
-                        <Run Text=" - " /><Run Text="{Binding Selected.Status, Mode=OneWay}" />
-                    </TextBlock>
 
-                    <TextBlock Text="{Binding ActionError}" Foreground="Firebrick" TextWrapping="Wrap" Margin="0,8,0,0" />
-                    <TextBlock Text="{Binding ActionMessage}" Foreground="SeaGreen" TextWrapping="Wrap" Margin="0,8,0,0" />
-                    <TextBlock Text="Details" Margin="0,14,0,2" FontWeight="SemiBold" />
-                    <TextBlock Text="Name" Foreground="Gray" FontSize="11" />
-                    <TextBox Text="{Binding EditName, UpdateSourceTrigger=PropertyChanged}" Padding="4" Margin="0,0,0,4" />
-                    <TextBlock Text="Phone" Foreground="Gray" FontSize="11" />
-                    <TextBox Text="{Binding EditPhone, UpdateSourceTrigger=PropertyChanged}" Padding="4" Margin="0,0,0,4" />
-                    <TextBlock Text="Rank" Foreground="Gray" FontSize="11" />
-                    <TextBox Text="{Binding EditRank, UpdateSourceTrigger=PropertyChanged}" Padding="4" Margin="0,0,0,4" />
-                    <TextBlock Text="R/N" Foreground="Gray" FontSize="11" />
-                    <TextBox Text="{Binding EditRoll, UpdateSourceTrigger=PropertyChanged}" Padding="4" Margin="0,0,0,4" />
-                    <TextBlock Text="Unit" Foreground="Gray" FontSize="11" />
-                    <TextBox Text="{Binding EditUnit, UpdateSourceTrigger=PropertyChanged}" Padding="4" Margin="0,0,0,4" />
-                    <Button Content="Save details" Command="{Binding SaveDetailsCommand}" Padding="8" Margin="0,4,0,0" />
+            <!-- Detail panel -->
+            <Border Grid.Column="2" Style="{StaticResource Card}" CornerRadius="16" Padding="22,20"
+                    Visibility="{Binding HasSelection, Converter={StaticResource B2V}}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="0,0,10,0">
+                        <Grid Width="104" Height="104" HorizontalAlignment="Center">
+                            <Ellipse Fill="#DBE6FF" />
+                            <TextBlock Text="{Binding Selected.Initial}" Foreground="{StaticResource PrimaryBrush}" FontWeight="Bold" FontSize="40"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <Ellipse>
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="{Binding Selected.Photo}" Stretch="UniformToFill" />
+                                </Ellipse.Fill>
+                            </Ellipse>
+                        </Grid>
+                        <TextBlock Text="{Binding Selected.FullName}" FontSize="20" FontWeight="Bold"
+                                   HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Margin="0,10,0,6" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Border Style="{StaticResource Pill}" Background="#DBE6FF">
+                                <TextBlock FontSize="12" FontWeight="SemiBold" Foreground="#1E40AF"><Run Text="ID " /><Run Text="{Binding Selected.MemberCode, Mode=OneWay}" /></TextBlock>
+                            </Border>
+                            <Border Margin="6,0,0,0">
+                                <Border.Style>
+                                    <Style TargetType="Border" BasedOn="{StaticResource Pill}">
+                                        <Setter Property="Background" Value="{StaticResource DangerSoftBrush}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Selected.Status}" Value="Active">
+                                                <Setter Property="Background" Value="{StaticResource SuccessSoftBrush}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <TextBlock Text="{Binding Selected.Status}" FontSize="12" FontWeight="SemiBold" Foreground="#334155" />
+                            </Border>
+                        </StackPanel>
 
-                    <StackPanel Visibility="{Binding IsActiveMember, Converter={StaticResource B2V}}">
-                        <Button Content="Re-enroll face" Command="{Binding ReenrollFaceCommand}" Padding="8" Margin="0,12,0,0" />
-                        <Button Content="Re-enroll fingerprints" Command="{Binding ReenrollFingersCommand}" Padding="8" Margin="0,8,0,0" />
-                        <Button Content="Reset PIN" Command="{Binding ResetPinCommand}" Padding="8" Margin="0,8,0,0" />
+                        <TextBlock Text="{Binding ActionError}" Foreground="{StaticResource DangerBrush}" TextWrapping="Wrap" Margin="0,10,0,0" HorizontalAlignment="Center" TextAlignment="Center" />
+                        <TextBlock Text="{Binding ActionMessage}" Foreground="{StaticResource SuccessBrush}" TextWrapping="Wrap" Margin="0,4,0,0" HorizontalAlignment="Center" TextAlignment="Center" />
 
-                        <TextBlock Text="Badge" Margin="0,14,0,2" FontWeight="SemiBold" />
-                        <DockPanel>
-                            <Button DockPanel.Dock="Right" Content="Save" Command="{Binding SaveBadgeCommand}" Padding="10,4" Margin="6,0,0,0" />
-                            <ComboBox ItemsSource="{Binding BadgeOptions}" SelectedItem="{Binding SelectedBadge}" Padding="4" />
-                        </DockPanel>
+                        <TextBlock Text="Details" Style="{StaticResource Section}" />
+                        <TextBlock Text="Name" Style="{StaticResource Label}" />
+                        <TextBox Text="{Binding EditName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource Field}" />
+                        <TextBlock Text="Phone" Style="{StaticResource Label}" />
+                        <TextBox Text="{Binding EditPhone, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource Field}" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Rank" Style="{StaticResource Label}" />
+                                <TextBox Text="{Binding EditRank, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource Field}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="R/N" Style="{StaticResource Label}" />
+                                <TextBox Text="{Binding EditRoll, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource Field}" />
+                            </StackPanel>
+                        </Grid>
+                        <TextBlock Text="Unit" Style="{StaticResource Label}" />
+                        <TextBox Text="{Binding EditUnit, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource Field}" />
+                        <Button Content="Save details" Command="{Binding SaveDetailsCommand}" Style="{StaticResource PrimaryButton}" Height="42" />
 
-                        <TextBlock Text="Clubs" Margin="0,14,0,2" FontWeight="SemiBold" />
-                        <DockPanel Margin="0,0,0,6">
-                            <Button DockPanel.Dock="Right" Content="Remove" Command="{Binding RemoveClubCommand}" Padding="10,4" Margin="6,0,0,0" />
-                            <ComboBox ItemsSource="{Binding MyClubs}" SelectedItem="{Binding SelectedMyClub}"
-                                      DisplayMemberPath="Name" Padding="4" />
-                        </DockPanel>
-                        <DockPanel>
-                            <Button DockPanel.Dock="Right" Content="Add" Command="{Binding AddClubCommand}" Padding="10,4" Margin="6,0,0,0" />
-                            <ComboBox ItemsSource="{Binding JoinableClubs}" SelectedItem="{Binding SelectedJoinClub}"
-                                      DisplayMemberPath="Name" Padding="4" />
-                        </DockPanel>
+                        <StackPanel Visibility="{Binding IsActiveMember, Converter={StaticResource B2V}}">
+                            <TextBlock Text="Actions" Style="{StaticResource Section}" />
+                            <UniformGrid Columns="2">
+                                <Button Content="Re-enroll face" Command="{Binding ReenrollFaceCommand}" Height="42" Margin="0,0,4,8" Padding="6,0" />
+                                <Button Content="Re-enroll fingers" Command="{Binding ReenrollFingersCommand}" Height="42" Margin="4,0,0,8" Padding="6,0" />
+                                <Button Content="Reset PIN" Command="{Binding ResetPinCommand}" Height="42" Margin="0,0,4,0" Padding="6,0" />
+                            </UniformGrid>
 
-                        <Button Content="Terminate member" Command="{Binding TerminateCommand}" Padding="8" Margin="0,18,0,0"
-                                Foreground="Firebrick" />
+                            <TextBlock Text="Badge" Style="{StaticResource Section}" />
+                            <DockPanel>
+                                <Button DockPanel.Dock="Right" Content="Save" Command="{Binding SaveBadgeCommand}" Height="40" Padding="16,0" Margin="8,0,0,0" />
+                                <ComboBox ItemsSource="{Binding BadgeOptions}" SelectedItem="{Binding SelectedBadge}" Height="40" VerticalContentAlignment="Center" Padding="10,0" />
+                            </DockPanel>
+
+                            <TextBlock Text="Clubs" Style="{StaticResource Section}" />
+                            <DockPanel Margin="0,0,0,8">
+                                <Button DockPanel.Dock="Right" Content="Remove" Command="{Binding RemoveClubCommand}" Height="40" Padding="12,0" Margin="8,0,0,0" />
+                                <ComboBox ItemsSource="{Binding MyClubs}" SelectedItem="{Binding SelectedMyClub}" DisplayMemberPath="Name"
+                                          Height="40" VerticalContentAlignment="Center" Padding="10,0" />
+                            </DockPanel>
+                            <DockPanel>
+                                <Button DockPanel.Dock="Right" Content="Add" Command="{Binding AddClubCommand}" Height="40" Padding="22,0" Margin="8,0,0,0" />
+                                <ComboBox ItemsSource="{Binding JoinableClubs}" SelectedItem="{Binding SelectedJoinClub}" DisplayMemberPath="Name"
+                                          Height="40" VerticalContentAlignment="Center" Padding="10,0" />
+                            </DockPanel>
+
+                            <Button Content="Terminate member" Command="{Binding TerminateCommand}" Style="{StaticResource DangerButton}"
+                                    Height="44" Margin="0,22,0,4" />
+                        </StackPanel>
+
+                        <StackPanel Visibility="{Binding IsTerminated, Converter={StaticResource B2V}}">
+                            <Button Content="Reactivate member" Command="{Binding ReactivateCommand}" Style="{StaticResource PrimaryButton}"
+                                    Height="44" Margin="0,22,0,4" />
+                        </StackPanel>
                     </StackPanel>
+                </ScrollViewer>
+            </Border>
 
-                    <StackPanel Visibility="{Binding IsTerminated, Converter={StaticResource B2V}}">
-                        <Button Content="Reactivate member" Command="{Binding ReactivateCommand}" Padding="8" Margin="0,18,0,0" />
-                    </StackPanel>
-                </StackPanel>
-            </ScrollViewer>
-        </Border>
+            <GridSplitter Grid.Column="1" Width="14" HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                          Background="Transparent" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns"
+                          Cursor="SizeWE" Visibility="{Binding HasSelection, Converter={StaticResource B2V}}" />
 
-        <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Center" VerticalAlignment="Stretch"
-                      Background="LightGray" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns"
-                      Cursor="SizeWE" Visibility="{Binding HasSelection, Converter={StaticResource B2V}}" />
-
-        <DataGrid Grid.Column="0" ItemsSource="{Binding Rows}" SelectedItem="{Binding Selected}" AutoGenerateColumns="False"
-                  IsReadOnly="True" HeadersVisibility="Column" CanUserAddRows="False" SelectionMode="Single"
-                  RowHeight="46" GridLinesVisibility="Horizontal" MinWidth="420" HorizontalScrollBarVisibility="Auto">
-            <DataGrid.Columns>
-                <DataGridTemplateColumn Header="" Width="56">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Grid Width="38" Height="38">
-                                <Ellipse Fill="#FF3B5BA9" />
-                                <TextBlock Text="{Binding Initial}" Foreground="White" FontWeight="Bold" FontSize="16"
-                                           HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                <Ellipse>
-                                    <Ellipse.Fill>
-                                        <ImageBrush ImageSource="{Binding Photo}" Stretch="UniformToFill" />
-                                    </Ellipse.Fill>
-                                </Ellipse>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Header="ID" Binding="{Binding MemberCode}" Width="60" />
-                <DataGridTextColumn Header="Name" Binding="{Binding FullName}" Width="160" />
-                <DataGridTextColumn Header="Phone" Binding="{Binding Phone}" Width="120" />
-                <DataGridTextColumn Header="Rank" Binding="{Binding Rank}" Width="100" />
-                <DataGridTextColumn Header="R/N" Binding="{Binding RollRegNo}" Width="100" />
-                <DataGridTextColumn Header="Unit" Binding="{Binding Unit}" Width="100" />
-                <DataGridTextColumn Header="Clubs" Binding="{Binding Clubs}" Width="170" />
-                <DataGridTextColumn Header="Badge" Binding="{Binding Badge}" Width="70" />
-                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="90" />
-                <DataGridTextColumn Header="Registered" Binding="{Binding Registered}" Width="110" />
-            </DataGrid.Columns>
-        </DataGrid>
+            <!-- Table -->
+            <Border Grid.Column="0" Style="{StaticResource Card}" CornerRadius="16" Padding="0">
+                <DataGrid ItemsSource="{Binding Rows}" SelectedItem="{Binding Selected}" AutoGenerateColumns="False"
+                          IsReadOnly="True" HeadersVisibility="Column" CanUserAddRows="False" SelectionMode="Single"
+                          RowHeight="52" BorderThickness="0" MinWidth="420" HorizontalScrollBarVisibility="Auto" Margin="0,6,0,6">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="" Width="60">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid Width="38" Height="38">
+                                        <Ellipse Fill="#DBE6FF" />
+                                        <TextBlock Text="{Binding Initial}" Foreground="#1E40AF" FontWeight="Bold" FontSize="16"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        <Ellipse>
+                                            <Ellipse.Fill>
+                                                <ImageBrush ImageSource="{Binding Photo}" Stretch="UniformToFill" />
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="ID" Binding="{Binding MemberCode}" Width="64" />
+                        <DataGridTextColumn Header="Name" Binding="{Binding FullName}" Width="170">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock"><Setter Property="FontWeight" Value="SemiBold" /></Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Phone" Binding="{Binding Phone}" Width="130" />
+                        <DataGridTextColumn Header="Rank" Binding="{Binding Rank}" Width="100" />
+                        <DataGridTextColumn Header="R/N" Binding="{Binding RollRegNo}" Width="100" />
+                        <DataGridTextColumn Header="Unit" Binding="{Binding Unit}" Width="100" />
+                        <DataGridTextColumn Header="Clubs" Binding="{Binding Clubs}" Width="180" />
+                        <DataGridTemplateColumn Header="Badge" Width="90">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border>
+                                        <Border.Style>
+                                            <Style TargetType="Border" BasedOn="{StaticResource Pill}">
+                                                <Setter Property="Background" Value="#F1F5F9" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Badge}" Value="Pro"><Setter Property="Background" Value="#FEF3C7" /></DataTrigger>
+                                                    <DataTrigger Binding="{Binding Badge}" Value="Medium"><Setter Property="Background" Value="#DBE6FF" /></DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="{Binding Badge}" FontSize="12" FontWeight="SemiBold" Foreground="#334155" />
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Status" Width="110">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border>
+                                        <Border.Style>
+                                            <Style TargetType="Border" BasedOn="{StaticResource Pill}">
+                                                <Setter Property="Background" Value="{StaticResource DangerSoftBrush}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Active"><Setter Property="Background" Value="{StaticResource SuccessSoftBrush}" /></DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="{Binding Status}" FontSize="12" FontWeight="SemiBold" Foreground="#334155" />
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Registered" Binding="{Binding Registered}" Width="120" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
         </Grid>
     </DockPanel>
 </UserControl>
-

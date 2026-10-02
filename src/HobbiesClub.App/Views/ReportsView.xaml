@@ -4,69 +4,118 @@
              xmlns:helpers="clr-namespace:HobbiesClub.App.Helpers">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="B2V" />
+        <Style x:Key="Label" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}" />
+            <Setter Property="Margin" Value="0,0,0,6" />
+        </Style>
+        <Style x:Key="FilterBox" TargetType="StackPanel">
+            <Setter Property="Margin" Value="0,0,14,12" />
+        </Style>
+        <Style x:Key="Bold" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style x:Key="TypeCell" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Foreground" Value="{StaticResource DangerBrush}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Type}" Value="CHECK-IN">
+                    <Setter Property="Foreground" Value="{StaticResource SuccessBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
+
     <DockPanel>
-        <WrapPanel DockPanel.Dock="Top" Margin="0,0,0,8">
-            <TextBlock Text="Report" VerticalAlignment="Center" Margin="0,0,6,0" />
-            <ComboBox ItemsSource="{Binding ReportTypes}" SelectedItem="{Binding ReportType}" Width="170" Padding="4" />
-            <TextBlock Text="From" VerticalAlignment="Center" Margin="14,0,6,0" />
-            <DatePicker SelectedDate="{Binding From}" Width="130" />
-            <TextBlock Text="To" VerticalAlignment="Center" Margin="12,0,6,0" />
-            <DatePicker SelectedDate="{Binding To}" Width="130" />
-            <ComboBox ItemsSource="{Binding Clubs}" SelectedItem="{Binding Club}" DisplayMemberPath="Name"
-                      Width="150" Margin="12,0,0,0" Padding="4" />
-            <TextBlock Text="Member" VerticalAlignment="Center" Margin="12,0,6,0" />
-            <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" Width="150" Padding="4"
-                     ToolTip="Name, Member ID or phone (empty = all)" />
-            <Button Content="Generate" Command="{Binding GenerateCommand}" Padding="14,4" Margin="12,0,0,0" FontWeight="SemiBold" />
-            <Button Content="Export to Excel (CSV)" Command="{Binding ExportCsvCommand}" Padding="14,4" Margin="8,0,0,0" />
-        </WrapPanel>
+        <!-- Title -->
+        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,16">
+            <TextBlock Text="Reports" FontSize="28" FontWeight="Bold" />
+            <TextBlock Text="Attendance for any period, export to Excel" Foreground="{StaticResource MutedTextBrush}" Margin="0,4,0,0" />
+        </StackPanel>
 
-        <TextBlock DockPanel.Dock="Top" Text="{Binding Summary}" Foreground="Gray" Margin="0,0,0,4" />
-        <TextBlock DockPanel.Dock="Top" Text="{Binding Error}" helpers:AutoHide.Seconds="6" Foreground="Firebrick" TextWrapping="Wrap" />
-        <TextBlock DockPanel.Dock="Top" Text="{Binding Message}" helpers:AutoHide.Seconds="6" Foreground="SeaGreen" TextWrapping="Wrap" Margin="0,0,0,6" />
+        <!-- Filters -->
+        <Border DockPanel.Dock="Top" Style="{StaticResource Card}" CornerRadius="16" Padding="20,16,20,4" Margin="0,0,0,12">
+            <WrapPanel>
+                <StackPanel Style="{StaticResource FilterBox}">
+                    <TextBlock Text="Report" Style="{StaticResource Label}" />
+                    <ComboBox ItemsSource="{Binding ReportTypes}" SelectedItem="{Binding ReportType}" Width="190" Height="42"
+                              VerticalContentAlignment="Center" Padding="10,0" />
+                </StackPanel>
+                <StackPanel Style="{StaticResource FilterBox}">
+                    <TextBlock Text="From" Style="{StaticResource Label}" />
+                    <DatePicker SelectedDate="{Binding From}" Width="150" Height="42" VerticalContentAlignment="Center" />
+                </StackPanel>
+                <StackPanel Style="{StaticResource FilterBox}">
+                    <TextBlock Text="To" Style="{StaticResource Label}" />
+                    <DatePicker SelectedDate="{Binding To}" Width="150" Height="42" VerticalContentAlignment="Center" />
+                </StackPanel>
+                <StackPanel Style="{StaticResource FilterBox}">
+                    <TextBlock Text="Club" Style="{StaticResource Label}" />
+                    <ComboBox ItemsSource="{Binding Clubs}" SelectedItem="{Binding Club}" DisplayMemberPath="Name"
+                              Width="170" Height="42" VerticalContentAlignment="Center" Padding="10,0" />
+                </StackPanel>
+                <StackPanel Style="{StaticResource FilterBox}">
+                    <TextBlock Text="Member (optional)" Style="{StaticResource Label}" />
+                    <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" Width="190" Height="42"
+                             ToolTip="Name, Member ID or phone (empty = all)" />
+                </StackPanel>
+                <StackPanel Style="{StaticResource FilterBox}" Orientation="Horizontal" VerticalAlignment="Bottom">
+                    <Button Content="Generate" Command="{Binding GenerateCommand}" Style="{StaticResource PrimaryButton}" Height="42" Padding="22,0" />
+                    <Button Content="Export to Excel" Command="{Binding ExportCsvCommand}" Height="42" Padding="18,0" Margin="10,0,0,0" />
+                </StackPanel>
+            </WrapPanel>
+        </Border>
 
-        <Grid>
-            <DataGrid ItemsSource="{Binding LogRows}" Visibility="{Binding IsLog, Converter={StaticResource B2V}}"
-                      AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" CanUserAddRows="False"
-                      GridLinesVisibility="Horizontal" RowHeight="28">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="120" />
-                    <DataGridTextColumn Header="Time" Binding="{Binding Time}" Width="90" />
-                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60" />
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="170" />
-                    <DataGridTextColumn Header="Club" Binding="{Binding Club}" Width="130" />
-                    <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="100" />
-                    <DataGridTextColumn Header="Method" Binding="{Binding Method}" Width="100" />
-                    <DataGridTextColumn Header="Note" Binding="{Binding Note}" Width="*" />
-                </DataGrid.Columns>
-            </DataGrid>
+        <!-- Summary + messages -->
+        <TextBlock DockPanel.Dock="Top" Text="{Binding Summary}" Foreground="{StaticResource MutedTextBrush}" FontWeight="SemiBold" Margin="4,0,0,4" />
+        <TextBlock DockPanel.Dock="Top" Text="{Binding Error}" helpers:AutoHide.Seconds="6" Foreground="{StaticResource DangerBrush}" TextWrapping="Wrap" Margin="4,0,0,0" />
+        <TextBlock DockPanel.Dock="Top" Text="{Binding Message}" helpers:AutoHide.Seconds="6" Foreground="{StaticResource SuccessBrush}" TextWrapping="Wrap" Margin="4,0,0,8" />
 
-            <DataGrid ItemsSource="{Binding MemberRows}" Visibility="{Binding IsMember, Converter={StaticResource B2V}}"
-                      AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" CanUserAddRows="False"
-                      GridLinesVisibility="Horizontal" RowHeight="28">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60" />
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="170" />
-                    <DataGridTextColumn Header="Clubs" Binding="{Binding Clubs}" Width="180" />
-                    <DataGridTextColumn Header="Visits" Binding="{Binding Visits}" Width="70" />
-                    <DataGridTextColumn Header="Total time" Binding="{Binding TotalTime}" Width="100" />
-                    <DataGridTextColumn Header="Average per visit" Binding="{Binding AverageTime}" Width="130" />
-                    <DataGridTextColumn Header="Last visit" Binding="{Binding LastVisit}" Width="*" />
-                </DataGrid.Columns>
-            </DataGrid>
+        <!-- Results -->
+        <Border Style="{StaticResource Card}" CornerRadius="16" Padding="0">
+            <Grid Margin="0,6,0,6">
+                <DataGrid ItemsSource="{Binding LogRows}" Visibility="{Binding IsLog, Converter={StaticResource B2V}}"
+                          AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" CanUserAddRows="False"
+                          RowHeight="44" BorderThickness="0">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="130" />
+                        <DataGridTextColumn Header="Time" Binding="{Binding Time}" Width="100" />
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="70" />
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="190" ElementStyle="{StaticResource Bold}" />
+                        <DataGridTextColumn Header="Club" Binding="{Binding Club}" Width="150" />
+                        <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="120" ElementStyle="{StaticResource TypeCell}" />
+                        <DataGridTextColumn Header="Method" Binding="{Binding Method}" Width="110" />
+                        <DataGridTextColumn Header="Note" Binding="{Binding Note}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
 
-            <DataGrid ItemsSource="{Binding DailyRows}" Visibility="{Binding IsDaily, Converter={StaticResource B2V}}"
-                      AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" CanUserAddRows="False"
-                      GridLinesVisibility="Horizontal" RowHeight="28">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="160" />
-                    <DataGridTextColumn Header="Members" Binding="{Binding Members}" Width="90" />
-                    <DataGridTextColumn Header="Check-ins" Binding="{Binding CheckIns}" Width="90" />
-                    <DataGridTextColumn Header="Check-outs" Binding="{Binding CheckOuts}" Width="90" />
-                    <DataGridTextColumn Header="Check-ins by club" Binding="{Binding ByClub}" Width="*" />
-                </DataGrid.Columns>
-            </DataGrid>
-        </Grid>
+                <DataGrid ItemsSource="{Binding MemberRows}" Visibility="{Binding IsMember, Converter={StaticResource B2V}}"
+                          AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" CanUserAddRows="False"
+                          RowHeight="44" BorderThickness="0">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="70" />
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="190" ElementStyle="{StaticResource Bold}" />
+                        <DataGridTextColumn Header="Clubs" Binding="{Binding Clubs}" Width="200" />
+                        <DataGridTextColumn Header="Visits" Binding="{Binding Visits}" Width="80" />
+                        <DataGridTextColumn Header="Total time" Binding="{Binding TotalTime}" Width="110" />
+                        <DataGridTextColumn Header="Average per visit" Binding="{Binding AverageTime}" Width="140" />
+                        <DataGridTextColumn Header="Last visit" Binding="{Binding LastVisit}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <DataGrid ItemsSource="{Binding DailyRows}" Visibility="{Binding IsDaily, Converter={StaticResource B2V}}"
+                          AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" CanUserAddRows="False"
+                          RowHeight="44" BorderThickness="0">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="180" ElementStyle="{StaticResource Bold}" />
+                        <DataGridTextColumn Header="Members" Binding="{Binding Members}" Width="100" />
+                        <DataGridTextColumn Header="Check-ins" Binding="{Binding CheckIns}" Width="100" />
+                        <DataGridTextColumn Header="Check-outs" Binding="{Binding CheckOuts}" Width="100" />
+                        <DataGridTextColumn Header="Check-ins by club" Binding="{Binding ByClub}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
     </DockPanel>
 </UserControl>

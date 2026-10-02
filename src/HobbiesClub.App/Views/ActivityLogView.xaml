@@ -1,28 +1,71 @@
 ﻿<UserControl x:Class="HobbiesClub.App.Views.ActivityLogView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <Style x:Key="Label" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}" />
+            <Setter Property="Margin" Value="0,0,0,6" />
+        </Style>
+        <Style x:Key="FilterBox" TargetType="StackPanel">
+            <Setter Property="Margin" Value="0,0,14,12" />
+        </Style>
+    </UserControl.Resources>
     <DockPanel>
-        <WrapPanel DockPanel.Dock="Top" Margin="0,0,0,10">
-            <TextBlock Text="From" VerticalAlignment="Center" Margin="0,0,6,0" />
-            <DatePicker SelectedDate="{Binding From}" Width="130" />
-            <TextBlock Text="To" VerticalAlignment="Center" Margin="12,0,6,0" />
-            <DatePicker SelectedDate="{Binding To}" Width="130" />
-            <ComboBox ItemsSource="{Binding ActionOptions}" SelectedItem="{Binding ActionFilter}" Width="220"
-                      Margin="12,0,0,0" Padding="4" />
-            <TextBlock Text="User" VerticalAlignment="Center" Margin="12,0,6,0" />
-            <TextBox Text="{Binding UserSearch, UpdateSourceTrigger=PropertyChanged}" Width="140" Padding="4" />
-            <Button Content="Refresh" Command="{Binding LoadCommand}" Padding="10,4" Margin="12,0,0,0" />
-            <TextBlock Text="{Binding Summary}" Foreground="Gray" VerticalAlignment="Center" Margin="16,0,0,0" />
-        </WrapPanel>
+        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,16">
+            <TextBlock Text="Activity log" FontSize="28" FontWeight="Bold" />
+            <TextBlock Text="Every admin action, newest first" Foreground="{StaticResource MutedTextBrush}" Margin="0,4,0,0" />
+        </StackPanel>
 
-        <DataGrid ItemsSource="{Binding Rows}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
-                  CanUserAddRows="False" GridLinesVisibility="Horizontal" RowHeight="30">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Time" Binding="{Binding Time}" Width="200" />
-                <DataGridTextColumn Header="User" Binding="{Binding User}" Width="120" />
-                <DataGridTextColumn Header="Action" Binding="{Binding Action}" Width="220" />
-                <DataGridTextColumn Header="Details" Binding="{Binding Details}" Width="*" />
-            </DataGrid.Columns>
-        </DataGrid>
+        <Border DockPanel.Dock="Top" Style="{StaticResource Card}" CornerRadius="16" Padding="20,16,20,4" Margin="0,0,0,12">
+            <WrapPanel>
+                <StackPanel Style="{StaticResource FilterBox}">
+                    <TextBlock Text="From" Style="{StaticResource Label}" />
+                    <DatePicker SelectedDate="{Binding From}" Width="150" Height="42" VerticalContentAlignment="Center" />
+                </StackPanel>
+                <StackPanel Style="{StaticResource FilterBox}">
+                    <TextBlock Text="To" Style="{StaticResource Label}" />
+                    <DatePicker SelectedDate="{Binding To}" Width="150" Height="42" VerticalContentAlignment="Center" />
+                </StackPanel>
+                <StackPanel Style="{StaticResource FilterBox}">
+                    <TextBlock Text="Action" Style="{StaticResource Label}" />
+                    <ComboBox ItemsSource="{Binding ActionOptions}" SelectedItem="{Binding ActionFilter}" Width="230" Height="42"
+                              VerticalContentAlignment="Center" Padding="10,0" />
+                </StackPanel>
+                <StackPanel Style="{StaticResource FilterBox}">
+                    <TextBlock Text="User" Style="{StaticResource Label}" />
+                    <TextBox Text="{Binding UserSearch, UpdateSourceTrigger=PropertyChanged}" Width="170" Height="42" />
+                </StackPanel>
+                <StackPanel Style="{StaticResource FilterBox}" Orientation="Horizontal" VerticalAlignment="Bottom">
+                    <Button Content="Refresh" Command="{Binding LoadCommand}" Style="{StaticResource PrimaryButton}" Height="42" Padding="22,0" />
+                    <TextBlock Text="{Binding Summary}" Foreground="{StaticResource MutedTextBrush}" FontWeight="SemiBold"
+                               VerticalAlignment="Center" Margin="16,0,0,0" />
+                </StackPanel>
+            </WrapPanel>
+        </Border>
+
+        <Border Style="{StaticResource Card}" CornerRadius="16" Padding="0">
+            <DataGrid ItemsSource="{Binding Rows}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
+                      CanUserAddRows="False" RowHeight="46" BorderThickness="0" Margin="0,6,0,6">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Time" Binding="{Binding Time}" Width="210" />
+                    <DataGridTextColumn Header="User" Binding="{Binding User}" Width="140">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock"><Setter Property="FontWeight" Value="SemiBold" /></Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTemplateColumn Header="Action" Width="250">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="#DBE6FF" CornerRadius="999" Padding="10,3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Action}" FontSize="12" FontWeight="SemiBold" Foreground="#1E40AF" />
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Details" Binding="{Binding Details}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
     </DockPanel>
 </UserControl>

@@ -1,39 +1,98 @@
-﻿<UserControl xmlns:helpers="clr-namespace:HobbiesClub.App.Helpers" x:Class="HobbiesClub.App.Views.BackupView"
+﻿<UserControl x:Class="HobbiesClub.App.Views.BackupView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:helpers="clr-namespace:HobbiesClub.App.Helpers">
     <DockPanel>
-        <Border DockPanel.Dock="Top" BorderBrush="{Binding StatusBrush}" BorderThickness="2" Padding="14,10" Margin="0,0,0,10">
-            <StackPanel>
-                <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusBrush}" FontSize="18" FontWeight="SemiBold" />
-                <TextBlock Text="{Binding FolderText}" Foreground="Gray" Margin="0,4,0,0" TextWrapping="Wrap" />
-                <TextBlock Text="{Binding ExternalText}" Foreground="{Binding ExternalBrush}" FontWeight="SemiBold" Margin="0,6,0,0" TextWrapping="Wrap" />
+        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,16">
+            <TextBlock Text="Backup" FontSize="28" FontWeight="Bold" />
+            <TextBlock Text="Daily automatic backups, kept for 30 days" Foreground="{StaticResource MutedTextBrush}" Margin="0,4,0,0" />
+        </StackPanel>
+
+        <!-- Status cards -->
+        <Grid DockPanel.Dock="Top" Margin="0,0,0,14">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Style="{StaticResource Card}" CornerRadius="16" Padding="22,18" BorderBrush="{Binding StatusBrush}">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,14,0,0">
+                        <Button Content="Backup now" Command="{Binding BackupNowCommand}" IsEnabled="{Binding IsIdle}"
+                                Style="{StaticResource PrimaryButton}" Height="42" Padding="20,0" />
+                        <Button Content="Open folder" Command="{Binding OpenFolderCommand}" Height="42" Padding="18,0" Margin="10,0,0,0" />
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="Last backup" FontSize="13" Foreground="{StaticResource MutedTextBrush}" />
+                        <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusBrush}" FontSize="17" FontWeight="Bold" TextWrapping="Wrap" Margin="0,6,0,0" />
+                        <TextBlock Text="{Binding FolderText}" Foreground="{StaticResource MutedTextBrush}" FontSize="12" TextWrapping="Wrap" Margin="0,6,0,0" />
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <Border Grid.Column="2" Style="{StaticResource Card}" CornerRadius="16" Padding="22,18" BorderBrush="{Binding ExternalBrush}">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,14,0,0">
+                        <Button Content="Choose folder" Command="{Binding ChooseExternalFolderCommand}" Height="42" Padding="18,0" />
+                        <Button Content="Remove" Command="{Binding ClearExternalFolderCommand}" Height="42" Padding="18,0" Margin="10,0,0,0" />
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="Safe copy folder (USB / cloud)" FontSize="13" Foreground="{StaticResource MutedTextBrush}" />
+                        <TextBlock Text="{Binding ExternalText}" Foreground="{Binding ExternalBrush}" FontSize="14" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,6,0,0" />
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+        </Grid>
+
+        <!-- Actions -->
+        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button Content="Restore selected" Command="{Binding RestoreSelectedCommand}" IsEnabled="{Binding IsIdle}"
+                        Style="{StaticResource DangerButton}" Height="42" Padding="18,0" />
+                <Button Content="Restore from file..." Command="{Binding RestoreFromFileCommand}" IsEnabled="{Binding IsIdle}"
+                        Style="{StaticResource DangerButton}" Height="42" Padding="18,0" Margin="10,0,0,0" />
             </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Copy to USB / folder" Command="{Binding CopyToFolderCommand}" Height="42" Padding="18,0" />
+                <Button Content="Refresh" Command="{Binding LoadCommand}" Height="42" Padding="18,0" Margin="10,0,0,0" />
+            </StackPanel>
+        </DockPanel>
+
+        <TextBlock DockPanel.Dock="Top" Text="{Binding Error}" helpers:AutoHide.Seconds="6" Foreground="{StaticResource DangerBrush}" TextWrapping="Wrap" Margin="4,0,0,4" />
+        <TextBlock DockPanel.Dock="Top" Text="{Binding Message}" helpers:AutoHide.Seconds="6" Foreground="{StaticResource SuccessBrush}" TextWrapping="Wrap" Margin="4,0,0,8" />
+
+        <!-- History -->
+        <Border Style="{StaticResource Card}" CornerRadius="16" Padding="0">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Text="Backup history" FontSize="17" FontWeight="Bold" Margin="20,16,20,10" />
+                <DataGrid ItemsSource="{Binding Rows}" SelectedItem="{Binding Selected}" AutoGenerateColumns="False" IsReadOnly="True"
+                          HeadersVisibility="Column" CanUserAddRows="False" SelectionMode="Single" RowHeight="44" BorderThickness="0" Margin="0,0,0,6">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Time" Binding="{Binding Time}" Width="220">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock"><Setter Property="FontWeight" Value="SemiBold" /></Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Type" Binding="{Binding Kind}" Width="190" />
+                        <DataGridTextColumn Header="Size" Binding="{Binding Size}" Width="100" />
+                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="260">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}" />
+                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Status}" Value="OK">
+                                            <Setter Property="Foreground" Value="{StaticResource SuccessBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="File" Binding="{Binding FileName}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
         </Border>
-
-        <WrapPanel DockPanel.Dock="Top" Margin="0,0,0,8">
-            <Button Content="Backup now" Command="{Binding BackupNowCommand}" IsEnabled="{Binding IsIdle}" Padding="14,6" Margin="0,0,8,6" FontWeight="SemiBold" />
-            <Button Content="Copy to USB / folder" Command="{Binding CopyToFolderCommand}" Padding="14,6" Margin="0,0,8,6" />
-            <Button Content="Open backups folder" Command="{Binding OpenFolderCommand}" Padding="14,6" Margin="0,0,24,6" />
-            <Button Content="Choose safe copy folder..." Command="{Binding ChooseExternalFolderCommand}" Padding="14,6" Margin="0,0,8,6" />
-            <Button Content="Remove safe copy folder" Command="{Binding ClearExternalFolderCommand}" Padding="14,6" Margin="0,0,24,6" />
-            <Button Content="Restore selected" Command="{Binding RestoreSelectedCommand}" IsEnabled="{Binding IsIdle}" Padding="14,6" Margin="0,0,8,6" Foreground="Firebrick" />
-            <Button Content="Restore from file..." Command="{Binding RestoreFromFileCommand}" IsEnabled="{Binding IsIdle}" Padding="14,6" Margin="0,0,8,6" Foreground="Firebrick" />
-            <Button Content="Refresh" Command="{Binding LoadCommand}" Padding="14,6" Margin="0,0,8,6" />
-        </WrapPanel>
-
-        <TextBlock DockPanel.Dock="Top" Text="{Binding Error}" helpers:AutoHide.Seconds="6" Foreground="Firebrick" TextWrapping="Wrap" Margin="0,0,0,4" />
-        <TextBlock DockPanel.Dock="Top" Text="{Binding Message}" helpers:AutoHide.Seconds="6" Foreground="SeaGreen" TextWrapping="Wrap" Margin="0,0,0,6" />
-
-        <DataGrid ItemsSource="{Binding Rows}" SelectedItem="{Binding Selected}" AutoGenerateColumns="False" IsReadOnly="True"
-                  HeadersVisibility="Column" CanUserAddRows="False" SelectionMode="Single" GridLinesVisibility="Horizontal" RowHeight="30">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Time" Binding="{Binding Time}" Width="200" />
-                <DataGridTextColumn Header="Type" Binding="{Binding Kind}" Width="180" />
-                <DataGridTextColumn Header="Size" Binding="{Binding Size}" Width="90" />
-                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="260" />
-                <DataGridTextColumn Header="File" Binding="{Binding FileName}" Width="*" />
-            </DataGrid.Columns>
-        </DataGrid>
     </DockPanel>
 </UserControl>
-
