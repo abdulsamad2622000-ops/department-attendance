@@ -87,11 +87,25 @@ public class AttendanceServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task Other_club_within_one_minute_is_rejected()
+    {
+        var m = await AddMember("03001111111", 1, 2);
+        await _attendance.MarkAsync(m.Id, 1, VerificationMethod.Pin);
+
+        _clock.Now = _clock.Now.AddSeconds(20);
+        var other = await _attendance.MarkAsync(m.Id, 2, VerificationMethod.Pin);
+
+        Assert.Equal(AttendanceStatus.TooSoon, other.Status);
+        Assert.Equal(1, _db.AttendanceLogs.Count());
+    }
+
+    [Fact]
     public async Task Toggle_is_tracked_separately_per_club()
     {
         var m = await AddMember("03001111111", 1, 2);
 
         var ai = await _attendance.MarkAsync(m.Id, 1, VerificationMethod.Pin);
+        _clock.Now = _clock.Now.AddMinutes(2);
         var hobbies = await _attendance.MarkAsync(m.Id, 2, VerificationMethod.Pin);
 
         Assert.Equal(AttendanceType.CheckIn, ai.Type);
@@ -162,5 +176,6 @@ public class AttendanceServiceTests : IDisposable
         Assert.Single(log);
     }
 }
+
 
 
