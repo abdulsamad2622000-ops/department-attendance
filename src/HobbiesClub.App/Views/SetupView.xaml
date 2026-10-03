@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="HobbiesClub.App.Views.SetupView"
+﻿<UserControl x:Class="HobbiesClub.App.Views.SetupView" Background="{StaticResource NavyGradient}" Foreground="White"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:views="clr-namespace:HobbiesClub.App.Views"
@@ -17,7 +17,7 @@
                 <Border Width="48" Height="48" CornerRadius="13" Background="{StaticResource PrimaryBrush}">
                     <TextBlock Text="H&amp;AI" Foreground="White" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Border>
-                <TextBlock Text="Hobbies Club &amp; AI Club" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="12,0,0,0" />
+                <TextBlock Text="Fleet Hobbies &amp; AI Club" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="12,0,0,0" />
             </StackPanel>
 
             <Border Style="{StaticResource Card}" Width="460" Padding="36" CornerRadius="18">
@@ -45,3 +45,6 @@
         </StackPanel>
     </ScrollViewer>
 </UserControl>
+
+
+

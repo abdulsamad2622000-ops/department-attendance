@@ -14,7 +14,7 @@
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Margin="0,0,0,16">
             <TextBlock Text="Activity log" FontSize="28" FontWeight="Bold" />
-            <TextBlock Text="Every admin action, newest first" Foreground="{StaticResource MutedTextBrush}" Margin="0,4,0,0" />
+            <TextBlock Text="Every admin action, newest first" Foreground="#9FB3D1" Margin="0,4,0,0" />
         </StackPanel>
 
         <Border DockPanel.Dock="Top" Style="{StaticResource Card}" CornerRadius="16" Padding="20,16,20,4" Margin="0,0,0,12">
@@ -57,7 +57,7 @@
                     <DataGridTemplateColumn Header="Action" Width="250">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Border Background="#DBE6FF" CornerRadius="999" Padding="10,3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                <Border Background="#D3DEEF" CornerRadius="999" Padding="10,3" HorizontalAlignment="Left" VerticalAlignment="Center">
                                     <TextBlock Text="{Binding Action}" FontSize="12" FontWeight="SemiBold" Foreground="#1E40AF" />
                                 </Border>
                             </DataTemplate>
@@ -69,3 +69,5 @@
         </Border>
     </DockPanel>
 </UserControl>
+
+

@@ -109,6 +109,12 @@ public class AttendanceService
             await _db.SaveChangesAsync();
         }
 
+        // 1-minute guard applies to the member across all clubs, not only this one.
+        var lastAny = await _db.AttendanceLogs.Where(a => a.MemberId == memberId)
+            .OrderByDescending(a => a.Timestamp).ThenByDescending(a => a.Id).FirstOrDefaultAsync();
+        if (lastAny is not null && now - lastAny.Timestamp < MinGap)
+            return new AttendanceResult(AttendanceStatus.TooSoon, member, club.Name, RetryAfter: lastAny.Timestamp + MinGap);
+
         var last = await LastLogAsync(memberId, clubId);
         if (last is not null && now - last.Timestamp < MinGap)
             return new AttendanceResult(AttendanceStatus.TooSoon, member, club.Name, RetryAfter: last.Timestamp + MinGap);
@@ -282,4 +288,5 @@ public class AttendanceService
         return (total, monthVisits, recent);
     }
 }
+
 

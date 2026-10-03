@@ -15,8 +15,8 @@ public class StepStateConverter : IValueConverter
     private static readonly Brush Current = Freeze(new SolidColorBrush(Color.FromRgb(0x25, 0x63, 0xEB)));
     private static readonly Brush Todo = Freeze(new SolidColorBrush(Color.FromRgb(0xE2, 0xE8, 0xF0)));
     private static readonly Brush TodoText = Freeze(new SolidColorBrush(Color.FromRgb(0x47, 0x55, 0x69)));
-    private static readonly Brush Dark = Freeze(new SolidColorBrush(Color.FromRgb(0x0F, 0x17, 0x2A)));
-    private static readonly Brush Muted = Freeze(new SolidColorBrush(Color.FromRgb(0x64, 0x74, 0x8B)));
+    private static readonly Brush Dark = Freeze(new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0xFF)));
+    private static readonly Brush Muted = Freeze(new SolidColorBrush(Color.FromRgb(0x9F, 0xB3, 0xD1)));
 
     private static Brush Freeze(SolidColorBrush b) { b.Freeze(); return b; }
 
@@ -41,3 +41,5 @@ public class StepStateConverter : IValueConverter
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
         throw new NotSupportedException();
 }
+
+

@@ -2,9 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- ===== Colors ===== -->
-    <SolidColorBrush x:Key="PrimaryBrush" Color="#2563EB" />
-    <SolidColorBrush x:Key="PrimarySoftBrush" Color="#EAF1FF" />
-    <SolidColorBrush x:Key="BackgroundBrush" Color="#F5F7FB" />
+    <SolidColorBrush x:Key="PrimaryBrush" Color="#0B2A55" />
+    <SolidColorBrush x:Key="GoldBrush" Color="#C9A227" />
+    <SolidColorBrush x:Key="NavyDeepBrush" Color="#071A33" />
+    <SolidColorBrush x:Key="PrimarySoftBrush" Color="#DCE4F2" />
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#E9EEF6" />
     <SolidColorBrush x:Key="CardBrush" Color="#FFFFFF" />
     <SolidColorBrush x:Key="BorderBrushLight" Color="#E6E9F0" />
     <SolidColorBrush x:Key="TextBrush" Color="#0F172A" />
@@ -16,6 +18,8 @@
     <SolidColorBrush x:Key="DangerBrush" Color="#B91C1C" />
     <SolidColorBrush x:Key="DangerSoftBrush" Color="#FEE2E2" />
 
+    <LinearGradientBrush x:Key="NavyGradient" StartPoint="0,0" EndPoint="1,1"><GradientStop Color="#071A33" Offset="0" /><GradientStop Color="#0B2A55" Offset="0.6" /><GradientStop Color="#0E3263" Offset="1" /></LinearGradientBrush>
+
     <!-- ===== Card ===== -->
     <Style x:Key="Card" TargetType="Border">
         <Setter Property="Background" Value="{StaticResource CardBrush}" />
@@ -23,6 +27,7 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="14" />
         <Setter Property="Padding" Value="16" />
+        <Setter Property="TextElement.Foreground" Value="{StaticResource TextBrush}" />
     </Style>
 
     <!-- ===== Buttons ===== -->
@@ -53,7 +58,7 @@
                             <Setter TargetName="Bd" Property="Opacity" Value="0.72" />
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="#2563EB" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="#0B2A55" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="Bd" Property="Opacity" Value="0.45" />
@@ -92,7 +97,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="#2563EB" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="#0B2A55" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="Bd" Property="Background" Value="#F1F5F9" />
@@ -119,7 +124,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="#2563EB" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="#0B2A55" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -185,7 +190,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="#EAF1FF" />
+                <Setter Property="Background" Value="#DCE4F2" />
                 <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
             </Trigger>
         </Style.Triggers>
@@ -209,7 +214,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="#EAF1FF" />
+                            <Setter TargetName="Bd" Property="Background" Value="#DCE4F2" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -223,4 +228,9 @@
         </Style.Triggers>
     </Style>
 </ResourceDictionary>
+
+
+
+
+
 

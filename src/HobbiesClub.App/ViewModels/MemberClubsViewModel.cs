@@ -59,6 +59,14 @@ public partial class MemberClubsViewModel : ObservableObject
     [ObservableProperty] private Brush _badgeBrush = Brushes.Gray;
     [ObservableProperty] private string _message = string.Empty;
     [ObservableProperty] private bool _hasJoinCards;
+    [ObservableProperty] private string _rank = string.Empty;
+    [ObservableProperty] private string _rollRegNo = string.Empty;
+    [ObservableProperty] private string _unit = string.Empty;
+    [ObservableProperty] private string _phone = string.Empty;
+    [ObservableProperty] private string _clubsText = string.Empty;
+    [ObservableProperty] private bool _isDetailsOpen;
+
+    partial void OnIsDetailsOpenChanged(bool value) => ResetIdle();
 
     public static Brush BadgeBrushFor(MemberBadge badge) => badge switch
     {
@@ -88,6 +96,10 @@ public partial class MemberClubsViewModel : ObservableObject
         MemberCode = $"Member ID {mem.MemberCode}";
         BadgeText = mem.Badge.ToString().ToUpperInvariant();
         BadgeBrush = BadgeBrushFor(mem.Badge);
+        Rank = string.IsNullOrWhiteSpace(mem.Rank) ? "-" : mem.Rank;
+        RollRegNo = string.IsNullOrWhiteSpace(mem.RollRegNo) ? "-" : mem.RollRegNo;
+        Unit = string.IsNullOrWhiteSpace(mem.Unit) ? "-" : mem.Unit;
+        Phone = string.IsNullOrWhiteSpace(mem.Phone) ? "-" : mem.Phone;
 
         Cards.Clear();
         var clubs = await attendance.GetMemberClubsAsync(_memberId);
@@ -107,6 +119,7 @@ public partial class MemberClubsViewModel : ObservableObject
             });
         }
 
+        ClubsText = string.Join(", ", Cards.Select(c => c.Name));
         JoinCards.Clear();
         foreach (var c in await members.GetJoinableClubsAsync(_memberId))
             JoinCards.Add(new JoinClubCard { ClubId = c.Id, Name = c.Name });
@@ -154,6 +167,7 @@ public partial class MemberClubsViewModel : ObservableObject
         _shell.NavigateTo(new KioskViewModel(_shell, string.Empty));
     }
 }
+
 
 
 

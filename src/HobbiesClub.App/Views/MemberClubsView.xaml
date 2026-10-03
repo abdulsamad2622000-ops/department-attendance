@@ -11,13 +11,13 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bd" Background="White" BorderBrush="#E2E8F0" BorderThickness="1.5" CornerRadius="20" Padding="24,20">
+                        <Border x:Name="Bd" Background="White" BorderBrush="#1E4A80" BorderThickness="2" CornerRadius="20" Padding="24,20">
+                            <Border.Effect><DropShadowEffect BlurRadius="24" ShadowDepth="4" Opacity="0.35" Color="#000000" /></Border.Effect>
                             <ContentPresenter />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bd" Property="BorderBrush" Value="#2563EB" />
-                                <Setter TargetName="Bd" Property="Background" Value="#F8FAFF" />
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#C9A227" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -32,103 +32,177 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Grid>
-                            <Rectangle x:Name="Dash" Stroke="#94A3B8" StrokeThickness="1.5" StrokeDashArray="5 4"
-                                       Fill="#F8FAFC" RadiusX="20" RadiusY="20" />
+                            <Rectangle x:Name="Dash" Stroke="#4A6FA5" StrokeThickness="1.5" StrokeDashArray="5 4" Fill="#0E3263" RadiusX="20" RadiusY="20" />
                             <ContentPresenter Margin="24,20" />
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Dash" Property="Stroke" Value="#2563EB" />
-                                <Setter TargetName="Dash" Property="Fill" Value="#F8FAFF" />
+                                <Setter TargetName="Dash" Property="Stroke" Value="#C9A227" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="ProfileToggle" TargetType="ToggleButton">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="Bd" Background="Transparent" CornerRadius="16" Padding="10,8">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Bd" Property="Background" Value="#12386E" /></Trigger>
+                            <Trigger Property="IsChecked" Value="True"><Setter TargetName="Bd" Property="Background" Value="#12386E" /></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="Tile" TargetType="Border">
+            <Setter Property="Background" Value="#E9EEF6" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="14,10" />
+            <Setter Property="Margin" Value="5" />
+        </Style>
+        <Style x:Key="TileLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="#475569" />
+        </Style>
+        <Style x:Key="TileValue" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="#0F172A" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
     </UserControl.Resources>
 
-    <Grid Margin="40,28">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#071A33" Offset="0" />
+                <GradientStop Color="#0B2A55" Offset="0.6" />
+                <GradientStop Color="#0E3263" Offset="1" />
+            </LinearGradientBrush>
+        </Grid.Background>
 
-        <!-- Member header -->
-        <DockPanel Grid.Row="0">
-            <Button DockPanel.Dock="Right" Content="Done" Command="{Binding DoneCommand}" Style="{StaticResource PrimaryButton}"
-                    Height="48" Width="140" FontSize="16" VerticalAlignment="Center" />
-            <StackPanel Orientation="Horizontal">
-                <Grid Width="72" Height="72">
-                    <Ellipse Fill="#DBE6FF" />
-                    <Ellipse Visibility="{Binding HasPhoto, Converter={StaticResource B2V}}">
-                        <Ellipse.Fill><ImageBrush ImageSource="{Binding Photo}" Stretch="UniformToFill" /></Ellipse.Fill>
-                    </Ellipse>
-                    <TextBlock Text="{Binding Initial}" Foreground="{StaticResource PrimaryBrush}" FontSize="30" FontWeight="Bold"
-                               HorizontalAlignment="Center" VerticalAlignment="Center" />
-                </Grid>
-                <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding FullName}" FontSize="26" FontWeight="Bold" />
-                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
-                        <Border CornerRadius="999" Padding="10,3" Background="{Binding BadgeBrush}" VerticalAlignment="Center">
-                            <TextBlock Text="{Binding BadgeText}" Foreground="White" FontWeight="SemiBold" FontSize="12" />
-                        </Border>
-                        <TextBlock Text="{Binding MemberCode}" Foreground="{StaticResource MutedTextBrush}" FontSize="15"
-                                   VerticalAlignment="Center" Margin="10,0,0,0" />
-                    </StackPanel>
-                </StackPanel>
-            </StackPanel>
-        </DockPanel>
+        <Grid Margin="40,28">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,24,0,0">
-            <StackPanel HorizontalAlignment="Center">
-                <TextBlock Text="Your clubs" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,8,0,6" />
-                <ItemsControl ItemsSource="{Binding Cards}" HorizontalAlignment="Center">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate><WrapPanel HorizontalAlignment="Center" /></ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button Style="{StaticResource ClubCard}"
-                                    Command="{Binding DataContext.OpenClubCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                    CommandParameter="{Binding}">
-                                <StackPanel>
-                                    <TextBlock Text="{Binding Name}" FontSize="26" FontWeight="Bold" Foreground="{StaticResource TextBrush}" />
-                                    <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusBrush}" FontSize="16" FontWeight="SemiBold" Margin="0,6,0,12" />
-                                    <TextBlock Text="{Binding MonthText}" FontSize="15" Foreground="{StaticResource TextBrush}" />
-                                    <TextBlock Text="{Binding LastText}" FontSize="13" Foreground="{StaticResource MutedTextBrush}" Margin="0,2,0,14" />
-                                    <TextBlock Text="Tap for details  →" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource PrimaryBrush}" />
+            <DockPanel Grid.Row="0">
+                <Button DockPanel.Dock="Right" Content="Done" Command="{Binding DoneCommand}" Style="{StaticResource PrimaryButton}"
+                        Background="#C9A227" BorderBrush="#C9A227" Foreground="#071A33" Height="48" Width="140" FontSize="16" VerticalAlignment="Center" />
+
+                <Grid HorizontalAlignment="Left">
+                    <ToggleButton x:Name="Profile" Style="{StaticResource ProfileToggle}" IsChecked="{Binding IsDetailsOpen, Mode=TwoWay}">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Width="72" Height="72">
+                                <Ellipse Fill="#D3DEEF" Stroke="#C9A227" StrokeThickness="2" />
+                                <Ellipse Margin="2" Visibility="{Binding HasPhoto, Converter={StaticResource B2V}}">
+                                    <Ellipse.Fill><ImageBrush ImageSource="{Binding Photo}" Stretch="UniformToFill" /></Ellipse.Fill>
+                                </Ellipse>
+                                <TextBlock Text="{Binding Initial}" Foreground="#0B2A55" FontSize="30" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Grid>
+                            <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding FullName}" FontSize="26" FontWeight="Bold" Foreground="White" />
+                                    <TextBlock Text="▾" FontSize="20" Foreground="#C9A227" VerticalAlignment="Center" Margin="10,2,0,0" />
                                 </StackPanel>
-                            </Button>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                                <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                    <Border CornerRadius="999" Padding="10,3" Background="{Binding BadgeBrush}" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding BadgeText}" Foreground="White" FontWeight="SemiBold" FontSize="12" />
+                                    </Border>
+                                    <TextBlock Text="{Binding MemberCode}" Foreground="#C7D2E5" FontSize="15" VerticalAlignment="Center" Margin="10,0,0,0" />
+                                    <TextBlock Text="· Tap for details" Foreground="#9FB3D1" FontSize="13" VerticalAlignment="Center" Margin="8,0,0,0" />
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </ToggleButton>
 
-                <StackPanel Visibility="{Binding HasJoinCards, Converter={StaticResource B2V}}" Margin="0,20,0,0">
-                    <TextBlock Text="Other clubs" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,6" />
-                    <ItemsControl ItemsSource="{Binding JoinCards}" HorizontalAlignment="Center">
+                    <Popup IsOpen="{Binding IsDetailsOpen, Mode=TwoWay}" PlacementTarget="{Binding ElementName=Profile}" Placement="Bottom"
+                           StaysOpen="False" AllowsTransparency="True" PopupAnimation="Fade" VerticalOffset="8">
+                        <Border Background="White" CornerRadius="20" Padding="24" Width="460" Margin="0,0,16,16">
+                            <Border.Effect><DropShadowEffect BlurRadius="30" ShadowDepth="6" Opacity="0.4" Color="#000000" /></Border.Effect>
+                            <StackPanel>
+                                <Grid Width="110" Height="110" HorizontalAlignment="Center">
+                                    <Ellipse Fill="#D3DEEF" Stroke="#C9A227" StrokeThickness="3" />
+                                    <Ellipse Margin="3" Visibility="{Binding HasPhoto, Converter={StaticResource B2V}}">
+                                        <Ellipse.Fill><ImageBrush ImageSource="{Binding Photo}" Stretch="UniformToFill" /></Ellipse.Fill>
+                                    </Ellipse>
+                                    <TextBlock Text="{Binding Initial}" Foreground="#0B2A55" FontSize="44" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Grid>
+                                <TextBlock Text="{Binding FullName}" FontSize="24" FontWeight="Bold" Foreground="#0B2A55" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Margin="0,12,0,6" />
+                                <Border CornerRadius="999" Padding="12,4" Background="{Binding BadgeBrush}" HorizontalAlignment="Center">
+                                    <TextBlock Text="{Binding BadgeText}" Foreground="White" FontWeight="SemiBold" FontSize="12" />
+                                </Border>
+                                <UniformGrid Columns="2" Margin="-5,16,-5,0">
+                                    <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Member ID" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding MemberCode}" Style="{StaticResource TileValue}" /></StackPanel></Border>
+                                    <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Rank" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Rank}" Style="{StaticResource TileValue}" /></StackPanel></Border>
+                                    <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="R/N" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding RollRegNo}" Style="{StaticResource TileValue}" /></StackPanel></Border>
+                                    <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Unit" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Unit}" Style="{StaticResource TileValue}" /></StackPanel></Border>
+                                    <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Phone" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Phone}" Style="{StaticResource TileValue}" /></StackPanel></Border>
+                                    <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Clubs" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding ClubsText}" Style="{StaticResource TileValue}" /></StackPanel></Border>
+                                </UniformGrid>
+                            </StackPanel>
+                        </Border>
+                    </Popup>
+                </Grid>
+            </DockPanel>
+
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,24,0,0">
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock Text="Your clubs" FontSize="22" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,8,0,6" />
+                    <ItemsControl ItemsSource="{Binding Cards}" HorizontalAlignment="Center">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate><WrapPanel HorizontalAlignment="Center" /></ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Button Style="{StaticResource JoinCard}"
-                                        Command="{Binding DataContext.JoinClubCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                <Button Style="{StaticResource ClubCard}"
+                                        Command="{Binding DataContext.OpenClubCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                         CommandParameter="{Binding}">
                                     <StackPanel>
-                                        <TextBlock Text="{Binding Name}" FontSize="26" FontWeight="Bold" Foreground="#475569" />
-                                        <TextBlock Text="You are not a member yet" FontSize="15" Foreground="#64748B" Margin="0,6,0,14" />
-                                        <TextBlock Text="+ Join this club" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource PrimaryBrush}" />
+                                        <TextBlock Text="{Binding Name}" FontSize="26" FontWeight="Bold" Foreground="#0B2A55" />
+                                        <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusBrush}" FontSize="16" FontWeight="SemiBold" Margin="0,6,0,12" />
+                                        <TextBlock Text="{Binding MonthText}" FontSize="15" Foreground="#0F172A" />
+                                        <TextBlock Text="{Binding LastText}" FontSize="13" Foreground="#475569" Margin="0,2,0,14" />
+                                        <TextBlock Text="Tap for details  →" FontSize="14" FontWeight="SemiBold" Foreground="#0B2A55" />
                                     </StackPanel>
                                 </Button>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                </StackPanel>
 
-                <TextBlock Text="{Binding Message}" helpers:AutoHide.Seconds="6" Foreground="{StaticResource DangerBrush}" FontSize="16"
-                           HorizontalAlignment="Center" Margin="0,12,0,0" TextWrapping="Wrap" />
-            </StackPanel>
-        </ScrollViewer>
+                    <StackPanel Visibility="{Binding HasJoinCards, Converter={StaticResource B2V}}" Margin="0,20,0,0">
+                        <TextBlock Text="Other clubs" FontSize="22" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,6" />
+                        <ItemsControl ItemsSource="{Binding JoinCards}" HorizontalAlignment="Center">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate><WrapPanel HorizontalAlignment="Center" /></ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Style="{StaticResource JoinCard}"
+                                            Command="{Binding DataContext.JoinClubCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Name}" FontSize="26" FontWeight="Bold" Foreground="White" />
+                                            <TextBlock Text="You are not a member yet" FontSize="15" Foreground="#9FB3D1" Margin="0,6,0,14" />
+                                            <TextBlock Text="+ Join this club" FontSize="15" FontWeight="SemiBold" Foreground="#C9A227" />
+                                        </StackPanel>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <TextBlock Text="{Binding Message}" helpers:AutoHide.Seconds="6" Foreground="#FCA5A5" FontSize="16"
+                               HorizontalAlignment="Center" Margin="0,12,0,0" TextWrapping="Wrap" />
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </UserControl>

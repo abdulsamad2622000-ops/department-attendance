@@ -1,5 +1,5 @@
 ﻿#define AppName "Hobbies Club Attendance"
-#define AppVersion "1.0.1"
+#define AppVersion "1.0.2"
 #define AppExe "HobbiesClub.App.exe"
 
 [Setup]
@@ -41,4 +41,5 @@ Name: "{commonstartup}\Hobbies Club"; Filename: "{app}\{#AppExe}"; Tasks: startu
 
 [Run]
 Filename: "{app}\{#AppExe}"; Description: "Open Hobbies Club now"; Flags: nowait postinstall skipifsilent
+
 

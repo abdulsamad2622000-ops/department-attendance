@@ -7,7 +7,7 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="B2V" />
         <Style x:Key="Tile" TargetType="Border">
-            <Setter Property="Background" Value="#F5F7FB" />
+            <Setter Property="Background" Value="#E9EEF6" />
             <Setter Property="CornerRadius" Value="12" />
             <Setter Property="Padding" Value="14,10" />
             <Setter Property="Margin" Value="5" />
@@ -87,3 +87,4 @@
         </StackPanel>
     </Border>
 </Window>
+

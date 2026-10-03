@@ -5,26 +5,21 @@
              xmlns:helpers="clr-namespace:HobbiesClub.App.Helpers"
              xmlns:app="clr-namespace:HobbiesClub.App">
     <UserControl.Resources>
-        <!-- Underline inputs (also used inside PasswordField) -->
         <Style TargetType="TextBox">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="#0F172A" />
-            <Setter Property="BorderBrush" Value="#CBD5E1" />
+            <Setter Property="BorderBrush" Value="#B8C4D6" />
             <Setter Property="BorderThickness" Value="0,0,0,1.5" />
             <Setter Property="Padding" Value="0,6" />
             <Setter Property="FontSize" Value="16" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
-                        <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}">
-                            <ScrollViewer x:Name="PART_ContentHost" Focusable="False" VerticalAlignment="Center"
-                                          HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="False" VerticalAlignment="Center" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsKeyboardFocused" Value="True">
-                                <Setter TargetName="Bd" Property="BorderBrush" Value="#2563EB" />
-                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Bd" Property="BorderBrush" Value="#C9A227" /></Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -33,193 +28,355 @@
         <Style TargetType="PasswordBox">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="#0F172A" />
-            <Setter Property="BorderBrush" Value="#CBD5E1" />
+            <Setter Property="BorderBrush" Value="#B8C4D6" />
             <Setter Property="BorderThickness" Value="0,0,0,1.5" />
             <Setter Property="Padding" Value="0,6" />
             <Setter Property="FontSize" Value="16" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="PasswordBox">
-                        <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}">
-                            <ScrollViewer x:Name="PART_ContentHost" Focusable="False" VerticalAlignment="Center"
-                                          HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="False" VerticalAlignment="Center" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsKeyboardFocused" Value="True">
-                                <Setter TargetName="Bd" Property="BorderBrush" Value="#2563EB" />
-                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Bd" Property="BorderBrush" Value="#C9A227" /></Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="Line" TargetType="Path">
-            <Setter Property="StrokeStartLineCap" Value="Round" />
-            <Setter Property="StrokeEndLineCap" Value="Round" />
-            <Setter Property="StrokeLineJoin" Value="Round" />
-        </Style>
     </UserControl.Resources>
 
-    <Grid>
-        <Grid.Background>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#EEF2FF" Offset="0" />
-                <GradientStop Color="#F5F7FB" Offset="0.55" />
-                <GradientStop Color="#EDE9FE" Offset="1" />
-            </LinearGradientBrush>
-        </Grid.Background>
+    <Grid Background="#071A33">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="11*" />
+            <ColumnDefinition Width="9*" />
+        </Grid.ColumnDefinitions>
 
-        <Border Background="White" CornerRadius="28" MaxWidth="1120" MaxHeight="660" Margin="48">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="40" ShadowDepth="6" Opacity="0.12" Color="#1E3A8A" />
-            </Border.Effect>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="6*" />
-                    <ColumnDefinition Width="5*" />
-                </Grid.ColumnDefinitions>
+        <!-- ================= Animated naval scene ================= -->
+        <Viewbox Grid.Column="0" Stretch="UniformToFill">
+            <Canvas Width="800" Height="600" ClipToBounds="True">
+                <Canvas.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <!-- sea -->
+                                <DoubleAnimation Storyboard.TargetName="Wave1" Storyboard.TargetProperty="X" From="0" To="-120" Duration="0:0:5" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="Wave2" Storyboard.TargetProperty="X" From="-120" To="0" Duration="0:0:7" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="Sparkle1" Storyboard.TargetProperty="Opacity" From="0" To="0.9" Duration="0:0:1.2" AutoReverse="True" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="Sparkle2" Storyboard.TargetProperty="Opacity" From="0.9" To="0" Duration="0:0:1.7" AutoReverse="True" RepeatBehavior="Forever" />
+                                <!-- clouds -->
+                                <DoubleAnimation Storyboard.TargetName="Cloud1" Storyboard.TargetProperty="X" From="-200" To="900" Duration="0:1:20" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="Cloud2" Storyboard.TargetProperty="X" From="300" To="1000" Duration="0:1:00" RepeatBehavior="Forever" />
+                                <!-- warship -->
+                                <DoubleAnimation Storyboard.TargetName="ShipMove" Storyboard.TargetProperty="X" From="-30" To="40" Duration="0:0:14" AutoReverse="True" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="ShipBob" Storyboard.TargetProperty="Y" From="-3" To="3" Duration="0:0:2.2" AutoReverse="True" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="ShipRoll" Storyboard.TargetProperty="Angle" From="-1.5" To="1.5" Duration="0:0:3" AutoReverse="True" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="Radar" Storyboard.TargetProperty="ScaleX" From="1" To="0.12" Duration="0:0:0.9" AutoReverse="True" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="FlagWave" Storyboard.TargetProperty="AngleY" From="-7" To="7" Duration="0:0:0.8" AutoReverse="True" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="Wake" Storyboard.TargetProperty="Opacity" From="0.25" To="0.6" Duration="0:0:1.1" AutoReverse="True" RepeatBehavior="Forever" />
+                                <!-- far ship -->
+                                <DoubleAnimation Storyboard.TargetName="FarShip" Storyboard.TargetProperty="X" From="0" To="-60" Duration="0:0:30" AutoReverse="True" RepeatBehavior="Forever" />
+                                <!-- lighthouse beam -->
+                                <DoubleAnimation Storyboard.TargetName="Beam" Storyboard.TargetProperty="Angle" From="-35" To="35" Duration="0:0:4" AutoReverse="True" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="Lamp" Storyboard.TargetProperty="Opacity" From="0.6" To="1" Duration="0:0:0.6" AutoReverse="True" RepeatBehavior="Forever" />
+                                <!-- drones + helicopter -->
+                                <DoubleAnimation Storyboard.TargetName="Drone1X" Storyboard.TargetProperty="X" From="-80" To="880" Duration="0:0:16" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="Drone1Y" Storyboard.TargetProperty="Y" From="-6" To="6" Duration="0:0:1.4" AutoReverse="True" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="Drone2X" Storyboard.TargetProperty="X" From="880" To="-80" Duration="0:0:22" BeginTime="0:0:4" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="Drone2Y" Storyboard.TargetProperty="Y" From="5" To="-5" Duration="0:0:1.8" AutoReverse="True" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="HeliX" Storyboard.TargetProperty="X" From="900" To="-150" Duration="0:0:26" BeginTime="0:0:3" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="Rotor" Storyboard.TargetProperty="ScaleX" From="1" To="0.1" Duration="0:0:0.12" AutoReverse="True" RepeatBehavior="Forever" />
+                                <!-- submarine + sonar -->
+                                <DoubleAnimation Storyboard.TargetName="SubX" Storyboard.TargetProperty="X" From="860" To="-280" Duration="0:0:28" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="SonarS" Storyboard.TargetProperty="ScaleX" From="0.2" To="2.4" Duration="0:0:2.5" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="SonarS" Storyboard.TargetProperty="ScaleY" From="0.2" To="2.4" Duration="0:0:2.5" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="Sonar" Storyboard.TargetProperty="Opacity" From="0.7" To="0" Duration="0:0:2.5" RepeatBehavior="Forever" />
+                                <!-- sky -->
+                                <DoubleAnimation Storyboard.TargetName="Stars1" Storyboard.TargetProperty="Opacity" From="0.3" To="1" Duration="0:0:1.6" AutoReverse="True" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="Stars2" Storyboard.TargetProperty="Opacity" From="1" To="0.25" Duration="0:0:2.3" AutoReverse="True" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="Glow" Storyboard.TargetProperty="Opacity" From="0.25" To="0.45" Duration="0:0:3" AutoReverse="True" RepeatBehavior="Forever" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Canvas.Triggers>
 
-                <!-- Illustration (original, drawn in XAML) -->
-                <Border Grid.Column="0" CornerRadius="28,0,0,28" Margin="0">
-                    <Border.Background>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="#F8FAFF" Offset="0" />
-                            <GradientStop Color="#EEF2FF" Offset="1" />
+                <!-- sky -->
+                <Rectangle Width="800" Height="600">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#050F22" Offset="0" />
+                            <GradientStop Color="#0B2A55" Offset="0.45" />
+                            <GradientStop Color="#16467F" Offset="0.62" />
                         </LinearGradientBrush>
-                    </Border.Background>
-                    <Viewbox Margin="40">
-                        <Canvas Width="480" Height="430">
-                            <!-- platforms -->
-                            <Ellipse Canvas.Left="40" Canvas.Top="300" Width="400" Height="120" Fill="#E0E7FF" />
-                            <Ellipse Canvas.Left="150" Canvas.Top="330" Width="200" Height="60" Fill="#C7D2FE" />
+                    </Rectangle.Fill>
+                </Rectangle>
 
-                            <!-- soft decorative tiles -->
-                            <Border Canvas.Left="10" Canvas.Top="20" Width="46" Height="46" CornerRadius="10" Background="#E9D5FF" Opacity="0.6" />
-                            <Border Canvas.Left="420" Canvas.Top="250" Width="40" Height="40" CornerRadius="10" Background="#BFDBFE" Opacity="0.7" />
-                            <Border Canvas.Left="20" Canvas.Top="250" Width="30" Height="30" CornerRadius="8" Background="#DDD6FE" Opacity="0.7" />
+                <!-- moon (inside the visible area) -->
+                <Ellipse x:Name="Glow" Canvas.Left="400" Canvas.Top="40" Width="140" Height="140" Fill="#C9D8F0" Opacity="0.3">
+                    <Ellipse.Effect><BlurEffect Radius="40" /></Ellipse.Effect>
+                </Ellipse>
+                <Ellipse Canvas.Left="438" Canvas.Top="78" Width="64" Height="64" Fill="#E8EEF8" />
+                <Ellipse Canvas.Left="452" Canvas.Top="92" Width="10" Height="10" Fill="#D5DEEC" />
+                <Ellipse Canvas.Left="474" Canvas.Top="112" Width="7" Height="7" Fill="#D5DEEC" />
 
-                            <!-- kiosk device -->
-                            <Border Canvas.Left="175" Canvas.Top="40" Width="140" Height="280" CornerRadius="24">
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                        <GradientStop Color="#60A5FA" Offset="0" />
-                                        <GradientStop Color="#2563EB" Offset="1" />
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                                <Border.Effect>
-                                    <DropShadowEffect BlurRadius="24" ShadowDepth="6" Opacity="0.25" Color="#1E3A8A" />
-                                </Border.Effect>
-                                <StackPanel Margin="18,26">
-                                    <Grid Width="68" Height="68" HorizontalAlignment="Center">
-                                        <Ellipse Fill="White" Opacity="0.25" />
-                                        <Ellipse Width="44" Height="44" Fill="White" />
-                                        <Path Style="{StaticResource Line}" Data="M-8,0 L-2,6 L9,-6" Stroke="#2563EB" StrokeThickness="4"
-                                              HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
-                                    </Grid>
-                                    <StackPanel Margin="0,30,0,0">
-                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
-                                            <Ellipse Width="14" Height="14" Fill="White" Opacity="0.9" />
-                                            <Border Width="62" Height="6" CornerRadius="3" Background="White" Opacity="0.8" Margin="10,4,0,0" />
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
-                                            <Ellipse Width="14" Height="14" Fill="White" Opacity="0.9" />
-                                            <Border Width="50" Height="6" CornerRadius="3" Background="#FBCFE8" Margin="10,4,0,0" />
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Ellipse Width="14" Height="14" Fill="White" Opacity="0.9" />
-                                            <Border Width="70" Height="6" CornerRadius="3" Background="White" Opacity="0.8" Margin="10,4,0,0" />
-                                        </StackPanel>
-                                    </StackPanel>
-                                </StackPanel>
-                            </Border>
+                <!-- stars -->
+                <Canvas x:Name="Stars1">
+                    <Ellipse Canvas.Left="180" Canvas.Top="60" Width="3" Height="3" Fill="White" />
+                    <Ellipse Canvas.Left="250" Canvas.Top="110" Width="2" Height="2" Fill="White" />
+                    <Ellipse Canvas.Left="340" Canvas.Top="40" Width="3" Height="3" Fill="White" />
+                    <Ellipse Canvas.Left="560" Canvas.Top="130" Width="2" Height="2" Fill="White" />
+                    <Ellipse Canvas.Left="620" Canvas.Top="60" Width="2" Height="2" Fill="White" />
+                </Canvas>
+                <Canvas x:Name="Stars2">
+                    <Ellipse Canvas.Left="200" Canvas.Top="170" Width="2" Height="2" Fill="White" />
+                    <Ellipse Canvas.Left="290" Canvas.Top="180" Width="3" Height="3" Fill="White" />
+                    <Ellipse Canvas.Left="380" Canvas.Top="110" Width="2" Height="2" Fill="White" />
+                    <Ellipse Canvas.Left="590" Canvas.Top="30" Width="3" Height="3" Fill="White" />
+                    <Ellipse Canvas.Left="160" Canvas.Top="230" Width="2" Height="2" Fill="White" />
+                </Canvas>
 
-                            <!-- chart card -->
-                            <Border Canvas.Left="40" Canvas.Top="70" Width="120" Height="90" CornerRadius="16" Background="#DBEAFE">
-                                <Border.Effect><DropShadowEffect BlurRadius="16" ShadowDepth="3" Opacity="0.12" Color="#1E3A8A" /></Border.Effect>
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,16">
-                                    <Border Width="14" Height="22" CornerRadius="4" Background="#93C5FD" Margin="4,0" VerticalAlignment="Bottom" />
-                                    <Border Width="14" Height="38" CornerRadius="4" Background="#60A5FA" Margin="4,0" VerticalAlignment="Bottom" />
-                                    <Border Width="14" Height="30" CornerRadius="4" Background="#3B82F6" Margin="4,0" VerticalAlignment="Bottom" />
-                                    <Border Width="14" Height="50" CornerRadius="4" Background="#2563EB" Margin="4,0" VerticalAlignment="Bottom" />
-                                </StackPanel>
-                            </Border>
+                <!-- clouds -->
+                <Canvas Canvas.Top="70" Opacity="0.14">
+                    <Canvas.RenderTransform><TranslateTransform x:Name="Cloud1" /></Canvas.RenderTransform>
+                    <Ellipse Width="120" Height="36" Fill="#C7D2E5" />
+                    <Ellipse Canvas.Left="30" Canvas.Top="-16" Width="70" Height="40" Fill="#C7D2E5" />
+                </Canvas>
+                <Canvas Canvas.Top="190" Opacity="0.1">
+                    <Canvas.RenderTransform><TranslateTransform x:Name="Cloud2" /></Canvas.RenderTransform>
+                    <Ellipse Width="160" Height="40" Fill="#C7D2E5" />
+                    <Ellipse Canvas.Left="50" Canvas.Top="-18" Width="80" Height="44" Fill="#C7D2E5" />
+                </Canvas>
 
-                            <!-- member ID card -->
-                            <Border Canvas.Left="330" Canvas.Top="100" Width="120" Height="86" CornerRadius="16" Background="#EDE9FE">
-                                <Border.Effect><DropShadowEffect BlurRadius="16" ShadowDepth="3" Opacity="0.12" Color="#4C1D95" /></Border.Effect>
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
-                                    <Grid Width="40" Height="40">
-                                        <Ellipse Fill="#C4B5FD" />
-                                        <Ellipse Width="14" Height="14" Fill="White" VerticalAlignment="Top" Margin="0,8,0,0" />
-                                        <Border Width="24" Height="10" CornerRadius="5,5,0,0" Background="White" VerticalAlignment="Bottom" Margin="0,0,0,7" />
-                                    </Grid>
-                                    <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
-                                        <Border Width="42" Height="6" CornerRadius="3" Background="#8B5CF6" />
-                                        <Border Width="30" Height="6" CornerRadius="3" Background="#C4B5FD" Margin="0,6,0,0" HorizontalAlignment="Left" />
-                                    </StackPanel>
-                                </StackPanel>
-                            </Border>
+                <!-- helicopter -->
+                <Canvas Canvas.Top="115">
+                    <Canvas.RenderTransform><TranslateTransform x:Name="HeliX" /></Canvas.RenderTransform>
+                    <Path Fill="#9FB3D1" Data="M0,0 C0,-9 10,-12 22,-12 L30,-12 C38,-12 42,-6 42,0 C42,6 36,8 28,8 L10,8 C4,8 0,5 0,0 Z" />
+                    <Path Stroke="#9FB3D1" StrokeThickness="3" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Data="M40,-2 L78,-6 M78,-12 V0" />
+                    <Path Stroke="#9FB3D1" StrokeThickness="2" Data="M8,8 V14 M30,8 V14 M2,14 H38" />
+                    <Path Stroke="#9FB3D1" StrokeThickness="1.5" Data="M24,-12 V-17" />
+                    <Rectangle Canvas.Left="-6" Canvas.Top="-19" Width="60" Height="2.5" Fill="#C7D2E5" RenderTransformOrigin="0.5,0.5">
+                        <Rectangle.RenderTransform><ScaleTransform x:Name="Rotor" /></Rectangle.RenderTransform>
+                    </Rectangle>
+                    <Ellipse Canvas.Left="6" Canvas.Top="-6" Width="10" Height="7" Fill="#F5D76E" Opacity="0.8" />
+                </Canvas>
 
-                            <!-- check bubble -->
-                            <Grid Canvas.Left="350" Canvas.Top="30" Width="48" Height="48">
-                                <Ellipse Fill="#DCFCE7" />
-                                <Path Style="{StaticResource Line}" Data="M-7,0 L-2,5 L8,-5" Stroke="#16A34A" StrokeThickness="3.5"
-                                      HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </Grid>
+                <!-- drones -->
+                <Canvas Canvas.Top="160">
+                    <Canvas.RenderTransform>
+                        <TransformGroup><TranslateTransform x:Name="Drone1X" /><TranslateTransform x:Name="Drone1Y" /></TransformGroup>
+                    </Canvas.RenderTransform>
+                    <Path Data="M-14,0 H14 M-10,-5 H-20 M10,-5 H20 M-12,-5 V0 M12,-5 V0" Stroke="#C7D2E5" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" />
+                    <Ellipse Canvas.Left="-6" Canvas.Top="-3" Width="12" Height="7" Fill="#C7D2E5" />
+                    <Ellipse Canvas.Left="-1.5" Canvas.Top="4" Width="3" Height="3" Fill="#EF4444" />
+                </Canvas>
+                <Canvas Canvas.Top="230">
+                    <Canvas.RenderTransform>
+                        <TransformGroup><ScaleTransform ScaleX="0.75" ScaleY="0.75" /><TranslateTransform x:Name="Drone2X" /><TranslateTransform x:Name="Drone2Y" /></TransformGroup>
+                    </Canvas.RenderTransform>
+                    <Path Data="M-14,0 H14 M-10,-5 H-20 M10,-5 H20 M-12,-5 V0 M12,-5 V0" Stroke="#9FB3D1" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" />
+                    <Ellipse Canvas.Left="-6" Canvas.Top="-3" Width="12" Height="7" Fill="#9FB3D1" />
+                </Canvas>
 
-                            <!-- clock bubble -->
-                            <Grid Canvas.Left="70" Canvas.Top="200" Width="54" Height="54">
-                                <Ellipse Fill="White" Stroke="#BFDBFE" StrokeThickness="2" />
-                                <Path Style="{StaticResource Line}" Data="M0,-12 L0,0 L9,6" Stroke="#2563EB" StrokeThickness="3"
-                                      HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </Grid>
+                <!-- lighthouse on rocks -->
+                <Canvas Canvas.Left="150" Canvas.Top="345">
+                    <Path Fill="#0A1A33" Data="M-20,0 C-10,-14 10,-18 30,-14 C48,-10 60,-4 70,0 Z" />
+                    <Canvas Canvas.Left="12" Canvas.Top="-110">
+                        <Canvas.RenderTransform><RotateTransform x:Name="Beam" CenterX="12" CenterY="12" /></Canvas.RenderTransform>
+                        <Path Data="M12,12 L340,-30 L340,54 Z" Opacity="0.35">
+                            <Path.Fill>
+                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                    <GradientStop Color="#FFF6C8" Offset="0" />
+                                    <GradientStop Color="#00FFF6C8" Offset="1" />
+                                </LinearGradientBrush>
+                            </Path.Fill>
+                        </Path>
+                    </Canvas>
+                    <Path Fill="#E8EEF8" Data="M14,-12 L18,-96 L32,-96 L36,-12 Z" />
+                    <Path Fill="#B91C1C" Data="M15.4,-40 L16,-54 L34,-54 L34.6,-40 Z M16.8,-68 L17.3,-80 L32.7,-80 L33.2,-68 Z" />
+                    <Rectangle Canvas.Left="14" Canvas.Top="-100" Width="22" Height="5" Fill="#13294B" />
+                    <Ellipse x:Name="Lamp" Canvas.Left="18" Canvas.Top="-112" Width="14" Height="12" Fill="#FFE58A" />
+                    <Path Fill="#13294B" Data="M16,-112 L25,-122 L34,-112 Z" />
+                </Canvas>
 
-                            <!-- plus bubble -->
-                            <Grid Canvas.Left="330" Canvas.Top="220" Width="40" Height="40">
-                                <Ellipse Fill="#E0E7FF" />
-                                <Path Style="{StaticResource Line}" Data="M-6,0 H6 M0,-6 V6" Stroke="#6366F1" StrokeThickness="3"
-                                      HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </Grid>
-                        </Canvas>
-                    </Viewbox>
-                </Border>
+                <!-- far ship -->
+                <Canvas Canvas.Left="560" Canvas.Top="330">
+                    <Canvas.RenderTransform><TranslateTransform x:Name="FarShip" /></Canvas.RenderTransform>
+                    <Path Fill="#0A2346" Data="M0,0 L10,8 L90,8 L100,0 Z M25,0 V-8 H45 V-16 H58 V-8 H75 L80,0 Z M51,-16 V-28" Stroke="#0A2346" StrokeThickness="1.5" />
+                </Canvas>
 
-                <!-- Sign in -->
-                <Grid Grid.Column="1" Margin="56,48">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+                <!-- back wave -->
+                <Path Canvas.Top="335" Opacity="0.85"
+                      Data="M0,10 Q30,0 60,10 T120,10 T180,10 T240,10 T300,10 T360,10 T420,10 T480,10 T540,10 T600,10 T660,10 T720,10 T780,10 T840,10 T900,10 T960,10 L960,300 L0,300 Z">
+                    <Path.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#123E73" Offset="0" />
+                            <GradientStop Color="#061632" Offset="1" />
+                        </LinearGradientBrush>
+                    </Path.Fill>
+                    <Path.RenderTransform><TranslateTransform x:Name="Wave2" /></Path.RenderTransform>
+                </Path>
 
-                    <StackPanel Grid.Row="0" VerticalAlignment="Center" MaxWidth="380">
-                        <TextBlock FontSize="40" FontWeight="Bold" Foreground="#0F172A" LineHeight="48">Hello,<LineBreak />Welcome back</TextBlock>
-                        <TextBlock Text="Sign in to manage Hobbies Club &amp; AI Club" FontSize="15" Foreground="{StaticResource MutedTextBrush}"
-                                   TextWrapping="Wrap" Margin="0,10,0,32" />
+                <!-- warship -->
+                <Canvas Canvas.Left="250" Canvas.Top="345">
+                    <Canvas.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform x:Name="ShipRoll" CenterX="140" CenterY="0" />
+                            <TranslateTransform x:Name="ShipMove" />
+                            <TranslateTransform x:Name="ShipBob" />
+                        </TransformGroup>
+                    </Canvas.RenderTransform>
+                    <!-- wake -->
+                    <Canvas x:Name="Wake" Opacity="0.4">
+                        <Path Stroke="White" StrokeThickness="3" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Data="M282,26 Q320,22 360,30 M282,30 Q330,34 380,32" />
+                        <Ellipse Canvas.Left="300" Canvas.Top="24" Width="16" Height="5" Fill="White" />
+                        <Ellipse Canvas.Left="335" Canvas.Top="28" Width="12" Height="4" Fill="White" />
+                    </Canvas>
+                    <!-- hull -->
+                    <Path Fill="#0A1A33" Data="M0,0 L30,30 L250,30 L285,0 Z" />
+                    <Path Stroke="#C9A227" StrokeThickness="2" Data="M14,14 L270,14" Opacity="0.8" />
+                    <!-- superstructure -->
+                    <Path Fill="#13294B" Data="M70,0 L70,-22 L110,-22 L110,-40 L150,-40 L150,-22 L190,-22 L205,0 Z" />
+                    <Path Fill="#0A1A33" Data="M118,-40 L122,-52 L140,-52 L144,-40 Z" />
+                    <Path Stroke="#C7D2E5" StrokeThickness="2" Data="M131,-52 V-90 M118,-78 H144 M123,-66 H139" />
+                    <Ellipse Canvas.Left="122" Canvas.Top="-100" Width="18" Height="9" Fill="#C7D2E5" RenderTransformOrigin="0.5,0.5">
+                        <Ellipse.RenderTransform><ScaleTransform x:Name="Radar" /></Ellipse.RenderTransform>
+                    </Ellipse>
+                    <!-- gun -->
+                    <Path Fill="#13294B" Data="M30,0 L30,-10 L52,-10 L52,0 Z" />
+                    <Path Stroke="#13294B" StrokeThickness="3" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Data="M34,-6 L8,-14" />
+                    <!-- windows -->
+                    <Path Stroke="#F5D76E" StrokeThickness="2.5" StrokeDashArray="1.2 2.4" Data="M118,-30 H146 M80,-11 H185" Opacity="0.9" />
+                    <!-- Pakistan flag -->
+                    <Path Stroke="#C7D2E5" StrokeThickness="1.5" Data="M250,0 V-34" />
+                    <Canvas Canvas.Left="251" Canvas.Top="-34">
+                        <Canvas.RenderTransform><SkewTransform x:Name="FlagWave" CenterX="0" CenterY="9" /></Canvas.RenderTransform>
+                        <Rectangle Width="7" Height="18" Fill="White" />
+                        <Rectangle Canvas.Left="7" Width="21" Height="18" Fill="#01411C" />
+                        <Ellipse Canvas.Left="12" Canvas.Top="4" Width="10" Height="10" Fill="White" />
+                        <Ellipse Canvas.Left="14.5" Canvas.Top="3" Width="10" Height="10" Fill="#01411C" />
+                        <Path Fill="White" Data="M22.5,6.2 L23.1,7.6 L24.6,7.6 L23.4,8.5 L23.9,10 L22.5,9.1 L21.1,10 L21.6,8.5 L20.4,7.6 L21.9,7.6 Z" />
+                    </Canvas>
+                </Canvas>
 
-                        <TextBlock Text="Username" FontSize="13" Foreground="#64748B" />
-                        <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Height="40" Margin="0,2,0,22" />
+                <!-- front wave -->
+                <Path Canvas.Top="370"
+                      Data="M0,8 Q30,0 60,8 T120,8 T180,8 T240,8 T300,8 T360,8 T420,8 T480,8 T540,8 T600,8 T660,8 T720,8 T780,8 T840,8 T900,8 T960,8 L960,260 L0,260 Z">
+                    <Path.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#0E3563" Offset="0" />
+                            <GradientStop Color="#040D1F" Offset="1" />
+                        </LinearGradientBrush>
+                    </Path.Fill>
+                    <Path.RenderTransform><TranslateTransform x:Name="Wave1" /></Path.RenderTransform>
+                </Path>
 
-                        <TextBlock Text="Password" FontSize="13" Foreground="#64748B" />
-                        <views:PasswordField Password="{Binding Password, Mode=TwoWay}" Margin="0,2,0,16" />
+                <!-- sparkles on the water -->
+                <Canvas x:Name="Sparkle1">
+                    <Ellipse Canvas.Left="200" Canvas.Top="392" Width="18" Height="2" Fill="#C7D2E5" />
+                    <Ellipse Canvas.Left="430" Canvas.Top="410" Width="24" Height="2" Fill="#C7D2E5" />
+                    <Ellipse Canvas.Left="610" Canvas.Top="398" Width="14" Height="2" Fill="#C7D2E5" />
+                </Canvas>
+                <Canvas x:Name="Sparkle2">
+                    <Ellipse Canvas.Left="300" Canvas.Top="420" Width="20" Height="2" Fill="#C7D2E5" />
+                    <Ellipse Canvas.Left="520" Canvas.Top="388" Width="16" Height="2" Fill="#C7D2E5" />
+                    <Ellipse Canvas.Left="460" Canvas.Top="440" Width="22" Height="2" Fill="#C7D2E5" />
+                </Canvas>
 
-                        <TextBlock Text="{Binding Error}" helpers:AutoHide.Seconds="6" Foreground="{StaticResource DangerBrush}"
-                                   TextWrapping="Wrap" Margin="0,0,0,10" />
+                <!-- submarine -->
+                <Canvas Canvas.Top="510">
+                    <Canvas.RenderTransform><TranslateTransform x:Name="SubX" /></Canvas.RenderTransform>
+                    <Ellipse x:Name="Sonar" Canvas.Left="60" Canvas.Top="-30" Width="60" Height="60" Stroke="#4FA3E0" StrokeThickness="1.5" RenderTransformOrigin="0.5,0.5">
+                        <Ellipse.RenderTransform><ScaleTransform x:Name="SonarS" /></Ellipse.RenderTransform>
+                    </Ellipse>
+                    <Path Fill="#123E73" Opacity="0.95" Data="M0,0 C0,-14 20,-18 60,-18 L170,-18 C195,-18 205,-8 205,0 C205,8 195,18 170,18 L60,18 C20,18 0,14 0,0 Z" />
+                    <Path Fill="#123E73" Data="M80,-18 L88,-38 L122,-38 L126,-18 Z" />
+                    <Path Stroke="#123E73" StrokeThickness="3" Data="M106,-38 V-54 H114" />
+                    <Path Fill="#0B2A55" Data="M205,0 L222,-12 L222,12 Z" />
+                    <Ellipse Canvas.Left="30" Canvas.Top="-4" Width="6" Height="6" Fill="#F5D76E" Opacity="0.8" />
+                    <Ellipse Canvas.Left="46" Canvas.Top="-4" Width="6" Height="6" Fill="#F5D76E" Opacity="0.8" />
+                    <Ellipse Canvas.Left="62" Canvas.Top="-4" Width="6" Height="6" Fill="#F5D76E" Opacity="0.8" />
+                </Canvas>
+            </Canvas>
+        </Viewbox>
 
-                        <Button Content="Login" Command="{Binding LoginCommand}" IsDefault="True"
-                                Style="{StaticResource PrimaryButton}" Height="50" FontSize="16" />
+        <StackPanel Grid.Column="0" VerticalAlignment="Bottom" Margin="48,0,0,40">
+            <TextBlock Text="Learn  ·  Create  ·  Explore  ·  Build Together" Foreground="#C7D2E5" FontSize="16" />
+        </StackPanel>
+
+        <!-- ================= Sign-in ================= -->
+        <Grid Grid.Column="1">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#0B2A55" Offset="0" />
+                    <GradientStop Color="#071A33" Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Border x:Name="LoginCard" Background="White" CornerRadius="24" Padding="44,36" Margin="48" MaxWidth="460" VerticalAlignment="Center" Opacity="0">
+                <Border.RenderTransform><TranslateTransform x:Name="CardShift" Y="24" /></Border.RenderTransform>
+                <Border.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="LoginCard" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.7" />
+                                <DoubleAnimation Storyboard.TargetName="CardShift" Storyboard.TargetProperty="Y" From="24" To="0" Duration="0:0:0.7">
+                                    <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut" /></DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Border.Triggers>
+                <Border.Effect><DropShadowEffect BlurRadius="40" ShadowDepth="8" Opacity="0.35" Color="#000000" /></Border.Effect>
+                <StackPanel>
+                    <Border Width="104" Height="104" CornerRadius="52" Background="#071A33" HorizontalAlignment="Center" BorderBrush="#C9A227" BorderThickness="3">
+                        <Ellipse Margin="6">
+                            <Ellipse.Fill><ImageBrush ImageSource="/Assets/navy-logo.png" Stretch="UniformToFill" /></Ellipse.Fill>
+                        </Ellipse>
+                    </Border>
+                    <TextBlock Text="Fleet Hobbies &amp; AI Club" FontSize="30" FontWeight="Bold" Foreground="#0B2A55"
+                               HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Margin="0,16,0,4" />
+                    <TextBlock Text="MEMBER MANAGEMENT SYSTEM" FontSize="12" FontWeight="SemiBold" Foreground="#64748B"
+                               HorizontalAlignment="Center" Margin="0,0,0,6" />
+                    <Border Height="3" Width="60" Background="#C9A227" CornerRadius="2" HorizontalAlignment="Center" Margin="0,4,0,26" />
+
+                    <TextBlock Text="Username" FontSize="13" Foreground="#64748B" />
+                    <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Height="40" Margin="0,2,0,20" />
+
+                    <TextBlock Text="Password" FontSize="13" Foreground="#64748B" />
+                    <views:PasswordField Password="{Binding Password, Mode=TwoWay}" Margin="0,2,0,14" />
+
+                    <TextBlock Text="{Binding Error}" helpers:AutoHide.Seconds="6" Foreground="{StaticResource DangerBrush}" TextWrapping="Wrap" Margin="0,0,0,10" />
+
+                    <Button Content="LOGIN" Command="{Binding LoginCommand}" IsDefault="True" Style="{StaticResource PrimaryButton}" Height="52" FontSize="16" />
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,22,0,0">
+                        <Ellipse Width="9" Height="9" Fill="#16A34A" VerticalAlignment="Center" />
+                        <TextBlock Text="Offline System" Foreground="#166534" FontWeight="SemiBold" FontSize="13" Margin="6,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
+                    <TextBlock Text="Authorized Personnel Only" Foreground="#64748B" FontSize="12" HorizontalAlignment="Center" Margin="0,4,0,0" />
+                    <TextBlock Text="{x:Static app:AppInfo.VersionText}" Foreground="#94A3B8" FontSize="11" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                </StackPanel>
+            </Border>
 
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Border Width="28" Height="28" CornerRadius="8" Background="{StaticResource PrimaryBrush}">
-                            <TextBlock Text="H&amp;AI" Foreground="White" FontWeight="Bold" FontSize="9"
-                                       HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Border>
-                        <TextBlock Text="Hobbies Club &amp; AI Club" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
-                        <TextBlock Text="{x:Static app:AppInfo.VersionText}" FontSize="12" Foreground="#64748B" VerticalAlignment="Center" Margin="12,0,0,0" />
+            <!-- status bar with live clock -->
+            <Border Grid.Row="1" Background="#061632" BorderBrush="#12386E" BorderThickness="0,1,0,0" Padding="24,12">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Ellipse Width="8" Height="8" Fill="#22C55E" VerticalAlignment="Center" />
+                        <TextBlock Text="Offline System" Foreground="#C7D2E5" FontSize="13" Margin="6,0,0,0" />
                     </StackPanel>
-                </Grid>
-            </Grid>
-        </Border>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Now, Source={x:Static helpers:LiveClock.Instance}, StringFormat='dddd, dd MMM yyyy'}" Foreground="#C7D2E5" FontSize="13" />
+                        <TextBlock Text="  ·  " Foreground="#4A6FA5" FontSize="13" />
+                        <TextBlock Text="{Binding Now, Source={x:Static helpers:LiveClock.Instance}, StringFormat='hh:mm:ss tt'}" Foreground="#C9A227" FontSize="13" FontWeight="SemiBold" />
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>

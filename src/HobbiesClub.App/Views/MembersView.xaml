@@ -29,7 +29,7 @@
         <!-- Title -->
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,16">
             <TextBlock Text="Members" FontSize="28" FontWeight="Bold" VerticalAlignment="Bottom" />
-            <TextBlock Text="{Binding Summary}" Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Bottom" Margin="14,0,0,5" />
+            <TextBlock Text="{Binding Summary}" Foreground="#9FB3D1" VerticalAlignment="Bottom" Margin="14,0,0,5" />
         </StackPanel>
 
         <!-- Toolbar -->
@@ -63,7 +63,7 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="0,0,10,0">
                         <Grid Width="104" Height="104" HorizontalAlignment="Center">
-                            <Ellipse Fill="#DBE6FF" />
+                            <Ellipse Fill="#D3DEEF" />
                             <TextBlock Text="{Binding Selected.Initial}" Foreground="{StaticResource PrimaryBrush}" FontWeight="Bold" FontSize="40"
                                        HorizontalAlignment="Center" VerticalAlignment="Center" />
                             <Ellipse>
@@ -75,7 +75,7 @@
                         <TextBlock Text="{Binding Selected.FullName}" FontSize="20" FontWeight="Bold"
                                    HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Margin="0,10,0,6" />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Border Style="{StaticResource Pill}" Background="#DBE6FF">
+                            <Border Style="{StaticResource Pill}" Background="#D3DEEF">
                                 <TextBlock FontSize="12" FontWeight="SemiBold" Foreground="#1E40AF"><Run Text="ID " /><Run Text="{Binding Selected.MemberCode, Mode=OneWay}" /></TextBlock>
                             </Border>
                             <Border Margin="6,0,0,0">
@@ -172,7 +172,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid Width="38" Height="38">
-                                        <Ellipse Fill="#DBE6FF" />
+                                        <Ellipse Fill="#D3DEEF" />
                                         <TextBlock Text="{Binding Initial}" Foreground="#1E40AF" FontWeight="Bold" FontSize="16"
                                                    HorizontalAlignment="Center" VerticalAlignment="Center" />
                                         <Ellipse>
@@ -204,7 +204,7 @@
                                                 <Setter Property="Background" Value="#F1F5F9" />
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding Badge}" Value="Pro"><Setter Property="Background" Value="#FEF3C7" /></DataTrigger>
-                                                    <DataTrigger Binding="{Binding Badge}" Value="Medium"><Setter Property="Background" Value="#DBE6FF" /></DataTrigger>
+                                                    <DataTrigger Binding="{Binding Badge}" Value="Medium"><Setter Property="Background" Value="#D3DEEF" /></DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
                                         </Border.Style>
@@ -237,3 +237,5 @@
         </Grid>
     </DockPanel>
 </UserControl>
+
+

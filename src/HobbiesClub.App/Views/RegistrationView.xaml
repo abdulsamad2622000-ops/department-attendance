@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="HobbiesClub.App.Views.RegistrationView"
+﻿<UserControl x:Class="HobbiesClub.App.Views.RegistrationView" Background="{StaticResource NavyGradient}" Foreground="White"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:helpers="clr-namespace:HobbiesClub.App.Helpers">
@@ -34,7 +34,7 @@
         <!-- Header -->
         <Grid Grid.Row="0">
             <Button Content="Cancel" Command="{Binding BackCommand}" Height="44" Padding="18,0" HorizontalAlignment="Left" />
-            <TextBlock Text="New member registration" FontSize="16" Foreground="{StaticResource MutedTextBrush}"
+            <TextBlock Text="New member registration" FontSize="16" Foreground="#C7D2E5"
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
         </Grid>
 
@@ -208,3 +208,6 @@
         </ScrollViewer>
     </Grid>
 </UserControl>
+
+
+
