@@ -26,3 +26,6 @@ Backups/
 # Spike / test images
 /*.jpg
 /*.png
+
+# app images are part of the source
+!src/HobbiesClub.App/Assets/*.png
