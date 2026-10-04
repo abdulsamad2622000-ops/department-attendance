@@ -81,7 +81,7 @@ public partial class KioskViewModel : ObservableObject
         {
             var svc = sp.GetRequiredService<IFaceService>();
             if (svc is FakeFaceService fake) fake.NextTemplate = await DevPickTemplateAsync(db, type);
-            captured = await svc.CaptureTemplateAsync();
+            captured = HobbiesClub.App.Views.FaceScanDialog.Scan(svc, "Face check-in", false);
         }
         else
         {
@@ -163,6 +163,7 @@ public partial class KioskViewModel : ObservableObject
         Status = "Incorrect Super Admin password.";
     }
 }
+
 
 
 

@@ -32,7 +32,7 @@ public static class AppHost
         services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
 
         // Fake implementations until the hardware arrives. Real ones will be swapped in here.
-        services.AddSingleton<IFingerprintService, FakeFingerprintService>();
+        if (Environment.GetEnvironmentVariable("HOBBIES_FAKE_FINGER") == "1") services.AddSingleton<IFingerprintService, FakeFingerprintService>(); else services.AddSingleton<IFingerprintService, HobbiesClub.Biometrics.SecuGenFingerprintService>();
         // Real camera by default. Set HOBBIES_FAKE_FACE=1 to develop without a camera.
         if (Environment.GetEnvironmentVariable("HOBBIES_FAKE_FACE") == "1")
             services.AddSingleton<IFaceService, FakeFaceService>();
@@ -52,3 +52,5 @@ public static class AppHost
         return services.BuildServiceProvider();
     }
 }
+
+

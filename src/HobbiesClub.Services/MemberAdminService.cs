@@ -114,6 +114,26 @@ public class MemberAdminService
         return new OperationResult(true);
     }
 
+    /// <summary>Replaces all fingerprints of a member with the fingers given (position 0-9).</summary>
+    public async Task<OperationResult> ReenrollFingersAsync(int memberId, IReadOnlyDictionary<int, byte[]> fingers, string actorUsername, int? actorUserId)
+    {
+        await using var tx = await _db.Database.BeginTransactionAsync();
+        var r = await _bio.SetFingerprintsAsync(memberId, fingers);
+        if (!r.Succeeded)
+        {
+            await tx.RollbackAsync();
+            _db.ChangeTracker.Clear();
+            return r;
+        }
+
+        var member = await _db.Members.FindAsync(memberId);
+        var names = string.Join(", ", fingers.Keys.Order().Select(HobbiesClub.Core.FingerNames.Name));
+        AddAudit(actorUserId, actorUsername, "FingersReenrolled", $"Member {member?.MemberCode}: {names}");
+        await _db.SaveChangesAsync();
+        await tx.CommitAsync();
+        return new OperationResult(true);
+    }
+
     /// <summary>Edits the basic details of a member.</summary>
     public async Task<OperationResult> UpdateDetailsAsync(int memberId, string fullName, string phone, string rank, string rollRegNo, string unit, string actorUsername, int? actorUserId)
     {
@@ -147,4 +167,5 @@ public class MemberAdminService
             Details = details
         });
 }
+
 

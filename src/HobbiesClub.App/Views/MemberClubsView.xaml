@@ -1,7 +1,8 @@
 ﻿<UserControl x:Class="HobbiesClub.App.Views.MemberClubsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:helpers="clr-namespace:HobbiesClub.App.Helpers">
+             xmlns:helpers="clr-namespace:HobbiesClub.App.Helpers"
+             xmlns:views="clr-namespace:HobbiesClub.App.Views">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="B2V" />
         <Style x:Key="ClubCard" TargetType="Button">
@@ -147,6 +148,11 @@
                                     <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Phone" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Phone}" Style="{StaticResource TileValue}" /></StackPanel></Border>
                                     <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Clubs" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding ClubsText}" Style="{StaticResource TileValue}" /></StackPanel></Border>
                                 </UniformGrid>
+                                <TextBlock Text="Fingerprints" FontSize="12" Foreground="#475569" Margin="5,14,0,4" />
+                                <Border Background="#0E3263" CornerRadius="14" Padding="12,10">
+                                    <views:HandsControl RegisteredFingers="{Binding FingerIndexes}" Height="140" />
+                                </Border>
+                                <TextBlock Text="{Binding FingersText}" FontSize="13" FontWeight="SemiBold" Foreground="#0F172A" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,8,0,0" />
                             </StackPanel>
                         </Border>
                     </Popup>
@@ -206,3 +212,4 @@
         </Grid>
     </Grid>
 </UserControl>
+

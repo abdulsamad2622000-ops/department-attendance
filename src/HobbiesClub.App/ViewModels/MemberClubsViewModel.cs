@@ -65,6 +65,8 @@ public partial class MemberClubsViewModel : ObservableObject
     [ObservableProperty] private string _phone = string.Empty;
     [ObservableProperty] private string _clubsText = string.Empty;
     [ObservableProperty] private bool _isDetailsOpen;
+    [ObservableProperty] private IReadOnlyList<int> _fingerIndexes = Array.Empty<int>();
+    [ObservableProperty] private string _fingersText = string.Empty;
 
     partial void OnIsDetailsOpenChanged(bool value) => ResetIdle();
 
@@ -120,6 +122,11 @@ public partial class MemberClubsViewModel : ObservableObject
         }
 
         ClubsText = string.Join(", ", Cards.Select(c => c.Name));
+        var fingerIdx = await db.BiometricTemplates.AsNoTracking()
+            .Where(t => t.MemberId == _memberId && t.Type == BiometricType.Fingerprint && t.FingerIndex != null)
+            .Select(t => t.FingerIndex!.Value).ToListAsync();
+        FingerIndexes = fingerIdx;
+        FingersText = fingerIdx.Count == 0 ? "No fingerprints registered" : string.Join(", ", fingerIdx.Order().Select(HobbiesClub.Core.FingerNames.Name));
         JoinCards.Clear();
         foreach (var c in await members.GetJoinableClubsAsync(_memberId))
             JoinCards.Add(new JoinClubCard { ClubId = c.Id, Name = c.Name });
@@ -167,6 +174,7 @@ public partial class MemberClubsViewModel : ObservableObject
         _shell.NavigateTo(new KioskViewModel(_shell, string.Empty));
     }
 }
+
 
 
 

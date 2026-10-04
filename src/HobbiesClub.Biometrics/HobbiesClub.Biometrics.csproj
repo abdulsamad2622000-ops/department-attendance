@@ -18,5 +18,14 @@
   <ItemGroup>
     <None Include="FaceModels\**" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="SecuGen.FDxSDKPro.DotNet.Windows">
+      <HintPath>SecuGen\SecuGen.FDxSDKPro.DotNet.Windows.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <None Include="SecuGen\*.dll" CopyToOutputDirectory="PreserveNewest" Link="%(Filename)%(Extension)" />
+  </ItemGroup>
 </Project>
+
+
 

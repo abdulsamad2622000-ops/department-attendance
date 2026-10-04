@@ -297,45 +297,30 @@ public partial class MembersViewModel : ObservableObject
         {
             var face = sp.GetRequiredService<IFaceService>();
             if (face is FakeFaceService ff) ff.NextTemplate = Guid.NewGuid().ToByteArray();
-            var template = await face.CaptureTemplateAsync();
+            var template = HobbiesClub.App.Views.FaceScanDialog.Scan(face, $"Re-enroll face · {m.FullName}", true);
             if (template is null || template.Length == 0)
                 return new HobbiesClub.Core.Models.OperationResult(false, "Face capture failed. Try again.");
             return await sp.GetRequiredService<MemberAdminService>()
                 .ReenrollFaceAsync(m.Id, template, face.LastCapturedPhotoJpeg, ActorUsername, ActorId);
         }, "Face re-enrolled.");
     }
-    [RelayCommand]
+            [RelayCommand]
     private async Task ReenrollFingersAsync()
     {
         if (Selected is not { } m) return;
+        var fp = App.Services.GetRequiredService<IFingerprintService>();
+        var fingers = HobbiesClub.App.Views.FingerEnrollDialog.Enroll(fp, $"Re-enroll fingerprints · {m.FullName}", "The fingers you register here replace the old ones.");
+        if (fingers is not { Count: > 0 }) return;
 
-        if (System.Windows.MessageBox.Show($"Place the FIRST finger of {m.FullName} on the scanner, then press OK.",
-                "Re-enroll fingerprints", System.Windows.MessageBoxButton.OKCancel) != System.Windows.MessageBoxResult.OK)
-            return;
+        await Run(sp => sp.GetRequiredService<MemberAdminService>().ReenrollFingersAsync(m.Id, fingers, ActorUsername, ActorId), "Fingerprints re-enrolled.");
 
-        await Run(async sp =>
-        {
-            var fp = sp.GetRequiredService<IFingerprintService>();
-
-            if (fp is FakeFingerprintService f1Fake) f1Fake.NextTemplate = Guid.NewGuid().ToByteArray();
-            var first = await fp.CaptureTemplateAsync();
-            if (first is not { Length: > 0 })
-                return new HobbiesClub.Core.Models.OperationResult(false, "First finger scan failed. Try again.");
-
-            if (System.Windows.MessageBox.Show("Now place a DIFFERENT finger on the scanner, then press OK.",
-                    "Re-enroll fingerprints", System.Windows.MessageBoxButton.OKCancel) != System.Windows.MessageBoxResult.OK)
-                return new HobbiesClub.Core.Models.OperationResult(false, "Cancelled. Old fingerprints were kept.");
-
-            if (fp is FakeFingerprintService f2Fake) f2Fake.NextTemplate = Guid.NewGuid().ToByteArray();
-            var second = await fp.CaptureTemplateAsync();
-            if (second is not { Length: > 0 })
-                return new HobbiesClub.Core.Models.OperationResult(false, "Second finger scan failed. Try again.");
-
-            return await sp.GetRequiredService<MemberAdminService>()
-                .ReenrollFingersAsync(m.Id, first, second, ActorUsername, ActorId);
-        }, "Fingerprints re-enrolled.");
+        if (string.IsNullOrEmpty(ActionError))
+            System.Windows.MessageBox.Show($"{fingers.Count} fingerprint(s) of {m.FullName} were saved.", "Fingerprints saved",
+                System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+        else
+            System.Windows.MessageBox.Show(ActionError, "Fingerprints not saved",
+                System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
     }
 }
-
 
 

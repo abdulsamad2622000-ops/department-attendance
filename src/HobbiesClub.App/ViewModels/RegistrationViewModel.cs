@@ -18,6 +18,7 @@ public partial class RegistrationViewModel : ObservableObject
     private byte[]? _photo;
     private byte[]? _f1;
     private byte[]? _f2;
+    private Dictionary<int, byte[]> _fingers = new();
 
     public RegistrationViewModel(ShellViewModel shell) => _shell = shell;
 
@@ -122,7 +123,7 @@ public partial class RegistrationViewModel : ObservableObject
         {
             var faceSvc = sp.GetRequiredService<IFaceService>();
             if (faceSvc is FakeFaceService ff) ff.NextTemplate = Guid.NewGuid().ToByteArray();
-            var t = await faceSvc.CaptureTemplateAsync();
+            var t = HobbiesClub.App.Views.FaceScanDialog.Scan(faceSvc, "Register your face", true);
             if (t is null || t.Length == 0) { Message = "Face capture failed. Try again."; return; }
             _face = t;
             _photo = faceSvc.LastCapturedPhotoJpeg;
@@ -131,19 +132,9 @@ public partial class RegistrationViewModel : ObservableObject
         }
 
         var fpSvc = sp.GetRequiredService<IFingerprintService>();
-        if (fpSvc is FakeFingerprintService fp) fp.NextTemplate = Guid.NewGuid().ToByteArray();
-        var scan = await fpSvc.CaptureTemplateAsync();
-        if (scan is null || scan.Length == 0) { Message = "Fingerprint scan failed. Try again."; return; }
-
-        if (Step == 6)
-        {
-            _f1 = scan;
-            Step = 7;
-            return;
-        }
-
-        if (_f1 is not null && fpSvc.IsMatch(scan, _f1)) { Message = "Use a different finger."; return; }
-        _f2 = scan;
+        var fingers = HobbiesClub.App.Views.FingerEnrollDialog.Enroll(fpSvc, "Register fingerprints", "Tap a finger, then place it on the scanner. Register as many as you like (2 or more recommended).");
+        if (fingers is not { Count: > 0 }) { Message = "Register at least one finger to finish."; return; }
+        _fingers = fingers;
         await SaveAsync(sp);
     }
 
@@ -160,7 +151,7 @@ public partial class RegistrationViewModel : ObservableObject
             FullName.Trim(), Phone, clubs, _pin, _photo, RegistrationSource.SelfService,
             Rank.Trim(), RollRegNo.Trim(), Unit.Trim());
 
-        var result = await bio.RegisterMemberAsync(members, request, _face!, _f1!, _f2!);
+        var result = await bio.RegisterMemberAsync(members, request, _face!, _fingers);
 
         if (!result.Succeeded)
         {
@@ -177,6 +168,9 @@ public partial class RegistrationViewModel : ObservableObject
     [RelayCommand]
     private void Back() => _shell.NavigateTo(new KioskViewModel(_shell, string.Empty));
 }
+
+
+
 
 
 
