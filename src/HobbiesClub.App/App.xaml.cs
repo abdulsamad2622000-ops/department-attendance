@@ -23,7 +23,7 @@ public partial class App : Application
             DispatcherUnhandledException += (_, args) =>
             {
                 Log.Error(args.Exception, "Unhandled UI exception");
-                MessageBox.Show("Something went wrong. Details were written to the log.", "Hobbies Club",
+                MessageBox.Show("Something went wrong. Details were written to the log.", "Fleet UMS Hobby Club & AI Center",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 args.Handled = true;
             };
@@ -51,7 +51,7 @@ public partial class App : Application
         catch (Exception ex)
         {
             Log.Fatal(ex, "Startup failed");
-            MessageBox.Show("The app could not start:\n" + ex.Message, "Hobbies Club",
+            MessageBox.Show("The app could not start:\n" + ex.Message, "Fleet UMS Hobby Club & AI Center",
                 MessageBoxButton.OK, MessageBoxImage.Error);
             Shutdown(1);
         }
@@ -64,3 +64,5 @@ public partial class App : Application
         base.OnExit(e);
     }
 }
+
+

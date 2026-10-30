@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <Version>1.0.3</Version>
+    <Version>1.8.3</Version>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
@@ -37,7 +37,28 @@
       <Private>true</Private>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Ships\*.*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Backgrounds\kiosk-bg.jpg" />
+  </ItemGroup>
 </Project>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

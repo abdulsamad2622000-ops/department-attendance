@@ -9,7 +9,7 @@ public partial class RegistrationView : UserControl
 {
     public RegistrationView()
     {
-        InitializeComponent();
+        InitializeComponent(); var hcTimer = new System.Windows.Threading.DispatcherTimer { Interval = System.TimeSpan.FromSeconds(1) }; System.EventHandler hcTick = (_, _) => { DateLine.Text = System.DateTime.Now.ToString("dddd, dd MMMM yyyy"); ClockLine.Text = System.DateTime.Now.ToString("hh:mm:ss tt"); }; hcTimer.Tick += hcTick; Loaded += (_, _) => { hcTick(this, System.EventArgs.Empty); hcTimer.Start(); }; Unloaded += (_, _) => hcTimer.Stop();
         Focusable = true;
         PreviewKeyDown += OnPreviewKeyDown;
         DataContextChanged += (_, e) =>
@@ -44,3 +44,4 @@ public partial class RegistrationView : UserControl
         e.Handled = true;
     }
 }
+

@@ -10,9 +10,21 @@ public partial class PasswordField : UserControl
         nameof(Password), typeof(string), typeof(PasswordField),
         new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnPasswordChanged));
 
+    public static readonly DependencyProperty PlaceholderProperty = DependencyProperty.Register(
+        nameof(Placeholder), typeof(string), typeof(PasswordField), new PropertyMetadata(string.Empty));
+
+    public string Placeholder
+    {
+        get => (string)GetValue(PlaceholderProperty);
+        set => SetValue(PlaceholderProperty, value);
+    }
+
+    private void UpdateHint() =>
+        Hint.Visibility = string.IsNullOrEmpty(HiddenBox.Password) ? Visibility.Visible : Visibility.Collapsed;
+
     private bool _updating;
 
-    public PasswordField() => InitializeComponent();
+    public PasswordField() { InitializeComponent(); Loaded += (_, _) => UpdateHint(); }
 
     public string Password
     {
@@ -29,6 +41,7 @@ public partial class PasswordField : UserControl
         var value = e.NewValue as string ?? string.Empty;
         if (field.HiddenBox.Password != value) field.HiddenBox.Password = value;
         if (field.VisibleBox.Text != value) field.VisibleBox.Text = value;
+        field.UpdateHint();
         field._updating = false;
     }
 
@@ -38,6 +51,7 @@ public partial class PasswordField : UserControl
         _updating = true;
         VisibleBox.Text = HiddenBox.Password;
         Password = HiddenBox.Password;
+        UpdateHint();
         _updating = false;
     }
 
@@ -47,6 +61,7 @@ public partial class PasswordField : UserControl
         _updating = true;
         HiddenBox.Password = VisibleBox.Text;
         Password = VisibleBox.Text;
+        UpdateHint();
         _updating = false;
     }
 
@@ -67,3 +82,4 @@ public partial class PasswordField : UserControl
         }
     }
 }
+

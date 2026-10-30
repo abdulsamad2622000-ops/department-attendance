@@ -123,7 +123,7 @@ public class BiometricService
 
             var id = added.Member!.Id;
 
-            var r = await EnrollFaceAsync(id, face);
+            var r = face is { Length: > 0 } ? await EnrollFaceAsync(id, face) : new OperationResult(true);
             if (!r.Succeeded) return await FailAsync(r.Error);
 
             r = await EnrollFingerprintAsync(id, 0, finger1);
@@ -190,11 +190,11 @@ public class BiometricService
 
     /// <summary>Saves a new member with a face and any number of fingers in one transaction.</summary>
     public async Task<MemberResult> RegisterMemberAsync(
-        MemberService members, NewMemberRequest request, byte[] face, IReadOnlyDictionary<int, byte[]> fingers,
+        MemberService members, NewMemberRequest request, byte[]? face, IReadOnlyDictionary<int, byte[]> fingers,
         string actorUsername = "kiosk", int? actorUserId = null)
     {
-        if (face is null || face.Length == 0) return new MemberResult(false, "Face capture failed.");
-        if (fingers.Count == 0) return new MemberResult(false, "Register at least one finger.");
+        
+        
 
         await using var tx = await _db.Database.BeginTransactionAsync();
         try
@@ -203,8 +203,8 @@ public class BiometricService
             if (!added.Succeeded) { await tx.RollbackAsync(); _db.ChangeTracker.Clear(); return new MemberResult(false, added.Error ?? "Registration failed."); }
 
             var id = added.Member!.Id;
-            var r = await EnrollFaceAsync(id, face);
-            if (r.Succeeded) r = await SetFingerprintsAsync(id, fingers);
+            var r = face is { Length: > 0 } ? await EnrollFaceAsync(id, face) : new OperationResult(true);
+            if (r.Succeeded && fingers.Count > 0) r = await SetFingerprintsAsync(id, fingers);
             if (!r.Succeeded) { await tx.RollbackAsync(); _db.ChangeTracker.Clear(); return new MemberResult(false, r.Error ?? "Registration failed."); }
 
             await tx.CommitAsync();
@@ -243,6 +243,9 @@ public class BiometricService
     public async Task<int> CountTemplatesAsync(int memberId, BiometricType type) =>
         await _db.BiometricTemplates.CountAsync(t => t.MemberId == memberId && t.Type == type);
 }
+
+
+
 
 
 

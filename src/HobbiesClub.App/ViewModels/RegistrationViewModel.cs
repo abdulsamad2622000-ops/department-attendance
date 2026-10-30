@@ -25,7 +25,7 @@ public partial class RegistrationViewModel : ObservableObject
     public string[] Keys { get; } = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "Del", "0", "OK" };
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsDetails), nameof(IsClubs), nameof(IsPin), nameof(IsBiometric), nameof(IsSaved), nameof(ShowNext), nameof(Prompt), nameof(ScanLabel))]
+    [NotifyPropertyChangedFor(nameof(IsDetails), nameof(IsClubs), nameof(IsPin), nameof(IsBiometric), nameof(IsSaved), nameof(ShowNext), nameof(Prompt), nameof(ScanLabel), nameof(IsFaceStep), nameof(IsFingerStep))]
     private int _step = 1;
 
     [ObservableProperty] private string _fullName = string.Empty;
@@ -44,6 +44,36 @@ public partial class RegistrationViewModel : ObservableObject
     public bool IsPin => Step == 3 || Step == 4;
     public bool IsBiometric => Step >= 5 && Step <= 7;
     public bool IsSaved => Step == 8;
+    public bool IsFaceStep => Step == 5;
+    public bool IsFingerStep => Step == 6 || Step == 7;
+    private bool _fingersSkipped;
+
+    [RelayCommand]
+    private async Task SkipFingersAsync()
+    {
+        var warn = _faceSkipped ? "\n\nThe face was also skipped, so this member will check in with PIN only." : string.Empty;
+        var ok = System.Windows.MessageBox.Show(
+            "Skip the fingerprints?\n\nThe admin can add them later from Members." + warn,
+            "Skip fingerprints", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question);
+        if (ok != System.Windows.MessageBoxResult.Yes) return;
+        _fingers = new(); _fingersSkipped = true;
+        Message = string.Empty;
+        using var scope = App.Services.CreateScope();
+        await SaveAsync(scope.ServiceProvider);
+    }
+    private bool _faceSkipped;
+
+    [RelayCommand]
+    private void SkipFace()
+    {
+        var ok = System.Windows.MessageBox.Show(
+            "Skip the face scan?\n\nThe member will check in with fingerprint or PIN.\nThe admin can add the face later from Members.",
+            "Skip face", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question);
+        if (ok != System.Windows.MessageBoxResult.Yes) return;
+        _face = null; _photo = null; _faceSkipped = true;
+        Message = string.Empty;
+        Step = 6;
+    }
     public bool ShowNext => Step == 1 || Step == 2;
 
     public string Prompt => Step switch
@@ -87,11 +117,11 @@ public partial class RegistrationViewModel : ObservableObject
         {
             case 1:
                 if (string.IsNullOrWhiteSpace(FullName)) { Message = "Name is required."; return; }
-                if (MemberService.NormalizePhone(Phone).Length < 10) { Message = "Phone number is not valid."; return; }
-                if (string.IsNullOrWhiteSpace(Rank)) { Message = "Rank is required."; return; }
-                if (string.IsNullOrWhiteSpace(RollRegNo)) { Message = "R/N is required."; return; }
-                if (string.IsNullOrWhiteSpace(Unit)) { Message = "Unit is required."; return; }
-                if (await members.IsPhoneTakenAsync(Phone)) { Message = "This phone number is already registered."; return; }
+//                if (MemberService.NormalizePhone(Phone).Length < 10) { Message = "Phone number is not valid."; return; }
+//                if (string.IsNullOrWhiteSpace(Rank)) { Message = HobbiesClub.App.Helpers.FieldLabelsSource.Instance.Rank + " is required."; return; }
+//                if (string.IsNullOrWhiteSpace(RollRegNo)) { Message = "R/N is required."; return; }
+//                if (string.IsNullOrWhiteSpace(Unit)) { Message = HobbiesClub.App.Helpers.FieldLabelsSource.Instance.Unit + " is required."; return; }
+//                if (await members.IsPhoneTakenAsync(Phone)) { Message = "This phone number is already registered."; return; }
                 Step = 2;
                 break;
             case 2:
@@ -125,7 +155,7 @@ public partial class RegistrationViewModel : ObservableObject
             if (faceSvc is FakeFaceService ff) ff.NextTemplate = Guid.NewGuid().ToByteArray();
             var t = HobbiesClub.App.Views.FaceScanDialog.Scan(faceSvc, "Register your face", true);
             if (t is null || t.Length == 0) { Message = "Face capture failed. Try again."; return; }
-            _face = t;
+            _face = t; _faceSkipped = false;
             _photo = faceSvc.LastCapturedPhotoJpeg;
             Step = 6;
             return;
@@ -133,8 +163,8 @@ public partial class RegistrationViewModel : ObservableObject
 
         var fpSvc = sp.GetRequiredService<IFingerprintService>();
         var fingers = HobbiesClub.App.Views.FingerEnrollDialog.Enroll(fpSvc, "Register fingerprints", "Tap a finger, then place it on the scanner. Register as many as you like (2 or more recommended).");
-        if (fingers is not { Count: > 0 }) { Message = "Register at least one finger to finish."; return; }
-        _fingers = fingers;
+        if (fingers is not { Count: > 0 }) { Message = "No finger was registered. Scan again, or tap Skip for now."; return; }
+        _fingers = fingers; _fingersSkipped = false;
         await SaveAsync(sp);
     }
 
@@ -151,23 +181,34 @@ public partial class RegistrationViewModel : ObservableObject
             FullName.Trim(), Phone, clubs, _pin, _photo, RegistrationSource.SelfService,
             Rank.Trim(), RollRegNo.Trim(), Unit.Trim());
 
-        var result = await bio.RegisterMemberAsync(members, request, _face!, _fingers);
+        var result = await bio.RegisterMemberAsync(members, request, _face, _fingers);
 
         if (!result.Succeeded)
         {
-            _face = null; _f1 = null; _f2 = null;
+            _face = null; _f1 = null; _f2 = null; _faceSkipped = false; _fingersSkipped = false;
             Step = 5;
             Message = (result.Error ?? "Registration failed.") + " Nothing was saved. Scan again.";
             return;
         }
 
-        SavedText = $"Registered: {FullName.Trim()}. Member ID {result.Member!.MemberCode}. You can now mark attendance with your PIN, face or fingerprint.";
+        SavedText = (_faceSkipped && _fingersSkipped)
+            ? $"Registered: {FullName.Trim()}. Face and fingerprints not added yet, ask the admin to add them later. You can mark attendance with your PIN."
+            : _fingersSkipped
+            ? $"Registered: {FullName.Trim()}. Fingerprints not added yet, ask the admin to add them later. You can mark attendance with your PIN or face."
+            : _faceSkipped
+            ? $"Registered: {FullName.Trim()}. Face not added yet, ask the admin to add it later. You can mark attendance with your PIN or fingerprint."
+            : $"Registered: {FullName.Trim()}. You can now mark attendance with your PIN, face or fingerprint.";
         Step = 8;
     }
 
     [RelayCommand]
     private void Back() => _shell.NavigateTo(new KioskViewModel(_shell, string.Empty));
 }
+
+
+
+
+
 
 
 

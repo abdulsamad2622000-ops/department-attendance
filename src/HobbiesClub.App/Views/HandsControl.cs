@@ -12,7 +12,7 @@ public class HandsControl : UserControl
 {
     private static readonly Brush NormalFill = Make(0x1E, 0x4A, 0x80), NormalEdge = Make(0x4A, 0x6F, 0xA5);
     private static readonly Brush RegFill = Make(0x16, 0xA3, 0x4A), RegEdge = Make(0x86, 0xEF, 0xAC);
-    private static readonly Brush SelFill = Make(0xC9, 0xA2, 0x27);
+    private static readonly Brush SelFill = Make(0x3B, 0x82, 0xF6);
     private static Brush Make(byte r, byte g, byte b) { var x = new SolidColorBrush(Color.FromRgb(r, g, b)); x.Freeze(); return x; }
 
     public static readonly DependencyProperty RegisteredFingersProperty = DependencyProperty.Register(
@@ -127,3 +127,4 @@ public class HandsControl : UserControl
         }
     }
 }
+

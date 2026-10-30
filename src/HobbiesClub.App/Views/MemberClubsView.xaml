@@ -18,7 +18,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bd" Property="BorderBrush" Value="#C9A227" />
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#3B82F6" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -38,7 +38,7 @@
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Dash" Property="Stroke" Value="#C9A227" />
+                                <Setter TargetName="Dash" Property="Stroke" Value="#3B82F6" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -96,13 +96,13 @@
 
             <DockPanel Grid.Row="0">
                 <Button DockPanel.Dock="Right" Content="Done" Command="{Binding DoneCommand}" Style="{StaticResource PrimaryButton}"
-                        Background="#C9A227" BorderBrush="#C9A227" Foreground="#071A33" Height="48" Width="140" FontSize="16" VerticalAlignment="Center" />
+                        Background="#2563EB" BorderBrush="#2563EB" Foreground="White" Height="48" Width="140" FontSize="16" VerticalAlignment="Center" />
 
                 <Grid HorizontalAlignment="Left">
                     <ToggleButton x:Name="Profile" Style="{StaticResource ProfileToggle}" IsChecked="{Binding IsDetailsOpen, Mode=TwoWay}">
                         <StackPanel Orientation="Horizontal">
                             <Grid Width="72" Height="72">
-                                <Ellipse Fill="#D3DEEF" Stroke="#C9A227" StrokeThickness="2" />
+                                <Ellipse Fill="#D3DEEF" Stroke="#3B82F6" StrokeThickness="2" />
                                 <Ellipse Margin="2" Visibility="{Binding HasPhoto, Converter={StaticResource B2V}}">
                                     <Ellipse.Fill><ImageBrush ImageSource="{Binding Photo}" Stretch="UniformToFill" /></Ellipse.Fill>
                                 </Ellipse>
@@ -111,13 +111,13 @@
                             <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="{Binding FullName}" FontSize="26" FontWeight="Bold" Foreground="White" />
-                                    <TextBlock Text="▾" FontSize="20" Foreground="#C9A227" VerticalAlignment="Center" Margin="10,2,0,0" />
+                                    <TextBlock Text="▾" FontSize="20" Foreground="#3B82F6" VerticalAlignment="Center" Margin="10,2,0,0" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
-                                    <Border CornerRadius="999" Padding="10,3" Background="{Binding BadgeBrush}" VerticalAlignment="Center">
+                                    <Border CornerRadius="6" Padding="10,4" Background="{Binding BadgeBrush}" VerticalAlignment="Center">
                                         <TextBlock Text="{Binding BadgeText}" Foreground="White" FontWeight="SemiBold" FontSize="12" />
                                     </Border>
-                                    <TextBlock Text="{Binding MemberCode}" Foreground="#C7D2E5" FontSize="15" VerticalAlignment="Center" Margin="10,0,0,0" />
+                                    <TextBlock Visibility="Collapsed" Text="{Binding MemberCode}" Foreground="#C7D2E5" FontSize="15" VerticalAlignment="Center" Margin="10,0,0,0" />
                                     <TextBlock Text="· Tap for details" Foreground="#9FB3D1" FontSize="13" VerticalAlignment="Center" Margin="8,0,0,0" />
                                 </StackPanel>
                             </StackPanel>
@@ -130,18 +130,18 @@
                             <Border.Effect><DropShadowEffect BlurRadius="30" ShadowDepth="6" Opacity="0.4" Color="#000000" /></Border.Effect>
                             <StackPanel>
                                 <Grid Width="110" Height="110" HorizontalAlignment="Center">
-                                    <Ellipse Fill="#D3DEEF" Stroke="#C9A227" StrokeThickness="3" />
+                                    <Ellipse Fill="#D3DEEF" Stroke="#3B82F6" StrokeThickness="3" />
                                     <Ellipse Margin="3" Visibility="{Binding HasPhoto, Converter={StaticResource B2V}}">
                                         <Ellipse.Fill><ImageBrush ImageSource="{Binding Photo}" Stretch="UniformToFill" /></Ellipse.Fill>
                                     </Ellipse>
                                     <TextBlock Text="{Binding Initial}" Foreground="#0B2A55" FontSize="44" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                 </Grid>
                                 <TextBlock Text="{Binding FullName}" FontSize="24" FontWeight="Bold" Foreground="#0B2A55" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Margin="0,12,0,6" />
-                                <Border CornerRadius="999" Padding="12,4" Background="{Binding BadgeBrush}" HorizontalAlignment="Center">
+                                <Border CornerRadius="6" Padding="12,4" Background="{Binding BadgeBrush}" HorizontalAlignment="Center">
                                     <TextBlock Text="{Binding BadgeText}" Foreground="White" FontWeight="SemiBold" FontSize="12" />
                                 </Border>
                                 <UniformGrid Columns="2" Margin="-5,16,-5,0">
-                                    <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Member ID" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding MemberCode}" Style="{StaticResource TileValue}" /></StackPanel></Border>
+                                    <Border Style="{StaticResource Tile}" Visibility="Collapsed"><StackPanel><TextBlock Text="Member ID" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding MemberCode}" Style="{StaticResource TileValue}" /></StackPanel></Border>
                                     <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Rank" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Rank}" Style="{StaticResource TileValue}" /></StackPanel></Border>
                                     <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="R/N" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding RollRegNo}" Style="{StaticResource TileValue}" /></StackPanel></Border>
                                     <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Unit" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Unit}" Style="{StaticResource TileValue}" /></StackPanel></Border>
@@ -197,7 +197,7 @@
                                         <StackPanel>
                                             <TextBlock Text="{Binding Name}" FontSize="26" FontWeight="Bold" Foreground="White" />
                                             <TextBlock Text="You are not a member yet" FontSize="15" Foreground="#9FB3D1" Margin="0,6,0,14" />
-                                            <TextBlock Text="+ Join this club" FontSize="15" FontWeight="SemiBold" Foreground="#C9A227" />
+                                            <TextBlock Text="+ Join this club" FontSize="15" FontWeight="SemiBold" Foreground="#93C5FD" />
                                         </StackPanel>
                                     </Button>
                                 </DataTemplate>
@@ -212,4 +212,7 @@
         </Grid>
     </Grid>
 </UserControl>
+
+
+
 

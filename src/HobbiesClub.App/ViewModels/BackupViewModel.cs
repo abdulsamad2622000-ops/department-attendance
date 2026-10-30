@@ -240,7 +240,7 @@ public partial class BackupViewModel : ObservableObject
     private async Task RestoreFromFileAsync()
     {
         Clear();
-        var dlg = new OpenFileDialog { Title = "Choose a backup file", Filter = "Hobbies Club backup (*.db)|*.db" };
+        var dlg = new OpenFileDialog { Title = "Choose a backup file", Filter = "Fleet UMS Hobby Club backup (*.db)|*.db" };
         if (dlg.ShowDialog() != true) return;
         await RestoreAsync(dlg.FileName, Path.GetFileName(dlg.FileName));
     }
@@ -283,3 +283,4 @@ public partial class BackupViewModel : ObservableObject
         Application.Current.Shutdown();
     }
 }
+

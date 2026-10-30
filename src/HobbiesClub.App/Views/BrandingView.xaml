@@ -1,0 +1,289 @@
+﻿<UserControl x:Class="HobbiesClub.App.Views.BrandingView" Foreground="{StaticResource TextBrush}"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:views="clr-namespace:HobbiesClub.App.Views"
+             xmlns:app="clr-namespace:HobbiesClub.App">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BrandB2V" />
+        <Style x:Key="BLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}" />
+            <Setter Property="Margin" Value="0,0,0,6" />
+        </Style>
+        <Style x:Key="BHint" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="BBox" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Height" Value="38" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+        <Style x:Key="BPwd" TargetType="PasswordBox">
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Padding" Value="10,0" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="BorderBrush" Value="#CBD5E1" />
+            <Setter Property="Margin" Value="0,0,0,12" />
+        </Style>
+        <Style x:Key="BCard" TargetType="Border" BasedOn="{StaticResource Card}">
+            <Setter Property="CornerRadius" Value="16" />
+            <Setter Property="Padding" Value="20,18" />
+            <Setter Property="Margin" Value="0,0,0,14" />
+        </Style>
+        <Style x:Key="BTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="17" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+    <DockPanel x:Name="MainArea">
+        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+            <Button DockPanel.Dock="Right" Content="Change password" Click="ChangePwd_Click" Height="38" Padding="16,0" VerticalAlignment="Top" />
+            <StackPanel>
+                <TextBlock Text="Branding" FontSize="28" FontWeight="Bold" />
+                <TextBlock Text="Change pictures, logos and text. Check the live preview, then press Save &amp; apply." Foreground="{StaticResource MutedTextBrush}" Margin="0,4,0,0" />
+                <TextBlock x:Name="Msg" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,8,0,0" />
+            </StackPanel>
+        </DockPanel>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="460" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Margin="0,0,8,0">
+                    <!-- Backgrounds -->
+                    <Border Style="{StaticResource BCard}">
+                        <StackPanel>
+                            <TextBlock Text="Background pictures" Style="{StaticResource BTitle}" />
+                            <TextBlock Text="Recommended: 1920 x 1080 pixels, landscape, JPG or PNG." Style="{StaticResource BHint}" Margin="0,-6,0,12" />
+                            <DockPanel Margin="0,0,0,12">
+                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                    <Button Content="Choose picture" Click="LoginBg_Choose" Height="36" Padding="12,0" Margin="0,0,8,0" />
+                                    <Button Content="Reset" Click="LoginBg_Reset" Height="36" Padding="12,0" />
+                                </StackPanel>
+                                <TextBlock Text="Login screen" VerticalAlignment="Center" FontWeight="SemiBold" />
+                            </DockPanel>
+                            <DockPanel>
+                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                    <Button Content="Choose picture" Click="KioskBg_Choose" Height="36" Padding="12,0" Margin="0,0,8,0" />
+                                    <Button Content="Reset" Click="KioskBg_Reset" Height="36" Padding="12,0" />
+                                </StackPanel>
+                                <TextBlock Text="Kiosk screen" VerticalAlignment="Center" FontWeight="SemiBold" />
+                            </DockPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Right side -->
+                    <Border Style="{StaticResource BCard}">
+                        <StackPanel>
+                            <TextBlock Text="Right side (with the login card)" Style="{StaticResource BTitle}" />
+                            <TextBlock Text="This logo, heading and paragraph are also shown at the top of the kiosk, admin, register and PIN screens." Style="{StaticResource BHint}" Margin="0,-6,0,12" />
+                            <DockPanel Margin="0,0,0,12">
+                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                    <Button Content="Choose picture" Click="Logo_Choose" Height="36" Padding="12,0" Margin="0,0,8,0" />
+                                    <Button Content="Reset" Click="Logo_Reset" Height="36" Padding="12,0" />
+                                </StackPanel>
+                                <TextBlock Text="Logo" VerticalAlignment="Center" FontWeight="SemiBold" />
+                            </DockPanel>
+                            <TextBlock Text="Heading" Style="{StaticResource BLabel}" />
+                            <TextBox Text="{Binding Heading, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BBox}" MaxLength="60" />
+                            <TextBlock Text="Paragraph" Style="{StaticResource BLabel}" />
+                            <TextBox Text="{Binding Subtitle, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BBox}" MaxLength="140" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Left side -->
+                    <Border Style="{StaticResource BCard}">
+                        <StackPanel>
+                            <TextBlock Text="Left side (same style, no login card)" Style="{StaticResource BTitle}" />
+                            <CheckBox Content="Show left side" IsChecked="{Binding LeftOn}" Margin="0,0,0,10" FontWeight="SemiBold" />
+                            <CheckBox Content="Show logo" IsChecked="{Binding LeftLogoOn}" Margin="0,0,0,14" />
+                            <DockPanel Margin="0,0,0,12">
+                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                    <Button Content="Choose picture" Click="LeftLogo_Choose" Height="36" Padding="12,0" Margin="0,0,8,0" />
+                                    <Button Content="Reset" Click="LeftLogo_Remove" Height="36" Padding="12,0" />
+                                </StackPanel>
+                                <TextBlock Text="Logo" VerticalAlignment="Center" FontWeight="SemiBold" />
+                            </DockPanel>
+                            <TextBlock Text="Heading" Style="{StaticResource BLabel}" />
+                            <TextBox Text="{Binding LeftHeading, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BBox}" MaxLength="60" />
+                            <TextBlock Text="Paragraph" Style="{StaticResource BLabel}" />
+                            <TextBox Text="{Binding LeftSubtitle, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BBox}" MaxLength="140" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Footer -->
+                    <Border Style="{StaticResource BCard}">
+                        <StackPanel>
+                            <TextBlock Text="Footer points (up to 5)" Style="{StaticResource BTitle}" />
+                            <UniformGrid Columns="2">
+                                <TextBox Text="{Binding Footer1, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BBox}" Margin="0,0,6,8" MaxLength="30" />
+                                <TextBox Text="{Binding Footer2, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BBox}" Margin="6,0,0,8" MaxLength="30" />
+                                <TextBox Text="{Binding Footer3, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BBox}" Margin="0,0,6,8" MaxLength="30" />
+                                <TextBox Text="{Binding Footer4, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BBox}" Margin="6,0,0,8" MaxLength="30" />
+                                <TextBox Text="{Binding Footer5, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BBox}" Margin="0,0,6,8" MaxLength="30" />
+                            </UniformGrid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <DockPanel Grid.Column="2">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Live preview" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" />
+                    <TextBlock Text="  (not applied until you press Save &amp; apply)" Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Center" />
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,14,0,0">
+                    <Button Content="Save &amp; apply" Click="Save_Click" Style="{StaticResource PrimaryButton}" Height="44" Padding="24,0" Margin="0,0,10,0" />
+                    <Button Content="Discard changes" Click="Discard_Click" Height="44" Padding="18,0" Margin="0,0,10,0" />
+                    <Button Content="Reset all to default" Click="ResetAll_Click" Height="44" Padding="18,0" />
+                </StackPanel>
+                <Border CornerRadius="12" ClipToBounds="True" BorderBrush="#CBD5E1" BorderThickness="1" Background="#0B2A55" VerticalAlignment="Top">
+                    <Viewbox Stretch="Uniform">
+                        <Grid Width="1920" Height="1080">
+<Grid ClipToBounds="True">
+    <views:ShipSlideshow />
+    <Image Source="{Binding LoginBackground}" Stretch="UniformToFill" Visibility="{Binding HasCustomLoginBg, Converter={StaticResource BrandB2V}}" />
+    <Rectangle>
+        <Rectangle.Fill>
+            <LinearGradientBrush StartPoint="1,0" EndPoint="0,0">
+                <GradientStop Color="#D9071A33" Offset="0" />
+                <GradientStop Color="#80071A33" Offset="0.3" />
+                <GradientStop Color="#00071A33" Offset="0.55" />
+            </LinearGradientBrush>
+        </Rectangle.Fill>
+    </Rectangle>
+    <Rectangle Visibility="{Binding ShowLeft, Converter={StaticResource BrandB2V}}">
+        <Rectangle.Fill>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                <GradientStop Color="#D9071A33" Offset="0" />
+                <GradientStop Color="#80071A33" Offset="0.3" />
+                <GradientStop Color="#00071A33" Offset="0.55" />
+            </LinearGradientBrush>
+        </Rectangle.Fill>
+    </Rectangle>
+    <Rectangle Height="120" VerticalAlignment="Bottom">
+        <Rectangle.Fill>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#00071A33" Offset="0" />
+                <GradientStop Color="#CC071A33" Offset="1" />
+            </LinearGradientBrush>
+        </Rectangle.Fill>
+    </Rectangle>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" VerticalAlignment="Center" Margin="90,30,90,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!-- LEFT block: same as the right block, without the login card -->
+            <StackPanel Grid.Column="0" VerticalAlignment="Top" MaxWidth="620" IsHitTestVisible="False" Visibility="{Binding ShowLeft, Converter={StaticResource BrandB2V}}">
+                <Grid HorizontalAlignment="Center" Width="110" Height="110" Visibility="{Binding HasLeftLogo, Converter={StaticResource BrandB2V}}">
+                    <Grid.Effect><DropShadowEffect BlurRadius="24" ShadowDepth="0" Opacity="0.6" Color="#000000" /></Grid.Effect>
+                    <Ellipse Fill="#071A33" Stroke="#C9A227" StrokeThickness="3" />
+                    <Ellipse Margin="6"><Ellipse.Fill><ImageBrush ImageSource="{Binding LeftLogo}" Stretch="Uniform" /></Ellipse.Fill></Ellipse>
+                </Grid>
+                <TextBlock Text="{Binding LeftHeading}" FontSize="36" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Margin="0,16,0,2" Visibility="{Binding HasLeftHeading, Converter={StaticResource BrandB2V}}">
+                    <TextBlock.Effect><DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.7" Color="#000000" /></TextBlock.Effect>
+                </TextBlock>
+                <TextBlock Text="{Binding LeftSubtitle}" FontSize="16" Foreground="#E2E8F0" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Visibility="{Binding HasLeftSubtitle, Converter={StaticResource BrandB2V}}">
+                    <TextBlock.Effect><DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.7" Color="#000000" /></TextBlock.Effect>
+                </TextBlock>
+            </StackPanel>
+
+            <!-- RIGHT block -->
+            <StackPanel Grid.Column="2" VerticalAlignment="Top">
+                <Grid HorizontalAlignment="Center" Width="110" Height="110">
+                    <Grid.Effect><DropShadowEffect BlurRadius="24" ShadowDepth="0" Opacity="0.6" Color="#000000" /></Grid.Effect>
+                    <Ellipse Fill="#071A33" Stroke="#C9A227" StrokeThickness="3" />
+                    <Ellipse Margin="6"><Ellipse.Fill><ImageBrush ImageSource="{Binding LoginLogo}" Stretch="UniformToFill" /></Ellipse.Fill></Ellipse>
+                </Grid>
+                <TextBlock Text="{Binding Heading}" FontSize="36" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" MaxWidth="720" Margin="0,16,0,2" Visibility="{Binding HasHeading, Converter={StaticResource BrandB2V}}">
+                    <TextBlock.Effect><DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.7" Color="#000000" /></TextBlock.Effect>
+                </TextBlock>
+                <TextBlock Text="{Binding Subtitle}" FontSize="16" Foreground="#E2E8F0" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" MaxWidth="720" Visibility="{Binding HasSubtitle, Converter={StaticResource BrandB2V}}" />
+
+                <Border Background="#F2FFFFFF" CornerRadius="16" Padding="36,32" Width="440" Margin="0,26,0,0" HorizontalAlignment="Center">
+                    <StackPanel>
+                        <TextBlock Text="Welcome Back" FontSize="26" FontWeight="Bold" Foreground="#0B2A55" HorizontalAlignment="Center" />
+                        <TextBlock Text="Please login to continue" FontSize="14" Foreground="#64748B" HorizontalAlignment="Center" Margin="0,4,0,24" />
+                        <Border Height="48" CornerRadius="6" Background="#F1F5F9" BorderBrush="#E2E8F0" BorderThickness="1" Margin="0,0,0,14" />
+                        <Border Height="76" CornerRadius="6" Background="#F1F5F9" BorderBrush="#E2E8F0" BorderThickness="1" Margin="0,0,0,14" />
+                        <Border Height="50" CornerRadius="10" Background="#0B2A55"><TextBlock Text="Login" Foreground="White" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
+                        <TextBlock Text="Offline system  &#183;  Authorized personnel only" Foreground="#64748B" FontSize="12" HorizontalAlignment="Center" Margin="0,18,0,0" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="40,0,40,24">
+            <TextBlock Text="{Binding FooterText}" FontSize="14" FontWeight="SemiBold" Foreground="#E2E8F0" HorizontalAlignment="Center" />
+            <TextBlock Text="{x:Static app:AppInfo.VersionText}" FontSize="12" Foreground="#9FB3D1" HorizontalAlignment="Right" VerticalAlignment="Center" />
+        </Grid>
+    </Grid>
+</Grid>
+                        </Grid>
+                    </Viewbox>
+                </Border>
+            </DockPanel>
+        </Grid>
+    </DockPanel>
+
+    <!-- Lock screen -->
+    <Border x:Name="LockPanel" Background="{StaticResource BackgroundBrush}">
+        <Border Style="{StaticResource BCard}" Width="460" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="30,26">
+            <StackPanel>
+                <TextBlock x:Name="LockTitle" FontSize="22" FontWeight="Bold" TextWrapping="Wrap" />
+                <TextBlock x:Name="LockHint" Style="{StaticResource BHint}" Margin="0,6,0,18" />
+
+                <StackPanel x:Name="EnterPanel">
+                    <TextBlock Text="Branding password" Style="{StaticResource BLabel}" />
+                    <PasswordBox x:Name="PwdEnter" Style="{StaticResource BPwd}" KeyDown="PwdEnter_KeyDown" />
+                    <Button Content="Unlock" Click="Unlock_Click" Style="{StaticResource PrimaryButton}" Height="44" />
+                    <Button Content="Forgot password?" Click="Forgot_Click" Background="Transparent" BorderThickness="0" Foreground="{StaticResource MutedTextBrush}" HorizontalAlignment="Center" Margin="0,12,0,0" Padding="8,4" />
+                </StackPanel>
+
+                <StackPanel x:Name="SetPanel">
+                    <TextBlock Text="New password (at least 6 characters)" Style="{StaticResource BLabel}" />
+                    <PasswordBox x:Name="PwdNew1" Style="{StaticResource BPwd}" />
+                    <TextBlock Text="Type it again" Style="{StaticResource BLabel}" />
+                    <PasswordBox x:Name="PwdNew2" Style="{StaticResource BPwd}" />
+                    <Button Content="Save password" Click="SetPwd_Click" Style="{StaticResource PrimaryButton}" Height="44" />
+                    <Button x:Name="SetCancel" Content="Cancel" Click="Back_Click" Background="Transparent" BorderThickness="0" Foreground="{StaticResource MutedTextBrush}" HorizontalAlignment="Center" Margin="0,12,0,0" Padding="8,4" />
+                </StackPanel>
+
+                <StackPanel x:Name="ForgotPanel">
+                    <TextBlock Text="Option A: recovery code" FontWeight="SemiBold" Margin="0,0,0,6" />
+                    <TextBox x:Name="TxtRecovery" Style="{StaticResource BBox}" Margin="0,0,0,14" />
+                    <TextBlock Text="Option B: a Super Admin login" FontWeight="SemiBold" Margin="0,0,0,6" />
+                    <TextBlock Text="Username" Style="{StaticResource BLabel}" />
+                    <TextBox x:Name="TxtAdminUser" Style="{StaticResource BBox}" />
+                    <TextBlock Text="Password" Style="{StaticResource BLabel}" />
+                    <PasswordBox x:Name="PwdAdmin" Style="{StaticResource BPwd}" />
+                    <Button Content="Continue" Click="Recover_Click" Style="{StaticResource PrimaryButton}" Height="44" />
+                    <Button Content="Back" Click="Back_Click" Background="Transparent" BorderThickness="0" Foreground="{StaticResource MutedTextBrush}" HorizontalAlignment="Center" Margin="0,12,0,0" Padding="8,4" />
+                </StackPanel>
+
+                <TextBlock x:Name="LockMsg" Foreground="{StaticResource DangerBrush}" TextWrapping="Wrap" Margin="0,14,0,0" />
+            </StackPanel>
+        </Border>
+    </Border>
+    </Grid>
+</UserControl>
+
+

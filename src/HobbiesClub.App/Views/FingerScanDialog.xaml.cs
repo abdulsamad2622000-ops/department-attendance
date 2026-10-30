@@ -12,7 +12,7 @@ public partial class FingerScanDialog : Window
 {
     public enum Finger { Index, Middle, Any }
 
-    private static readonly Brush Gold = new SolidColorBrush(Color.FromRgb(0xC9, 0xA2, 0x27));
+    private static readonly Brush Gold = new SolidColorBrush(Color.FromRgb(0x3B, 0x82, 0xF6));
     private static readonly Brush Green = new SolidColorBrush(Color.FromRgb(0x86, 0xEF, 0xAC));
     private static readonly Brush Red = new SolidColorBrush(Color.FromRgb(0xFC, 0xA5, 0xA5));
 
@@ -116,3 +116,4 @@ public partial class FingerScanDialog : Window
 
     private void OnCancel(object sender, RoutedEventArgs e) => DialogResult = false;
 }
+

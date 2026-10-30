@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace HobbiesClub.App.ViewModels;
 
-public class MemberRow
+public partial class MemberRow : ObservableObject
 {
     public int Id { get; init; }
     public int MemberCode { get; init; }
@@ -28,6 +28,9 @@ public class MemberRow
     public string Registered { get; init; } = string.Empty;
     public string Initial { get; init; } = string.Empty;
     public ImageSource? Photo { get; init; }
+    public bool FacePending { get; init; }
+    public bool FingersPending { get; init; }
+    [ObservableProperty] private bool _isChecked;
 }
 
 public record ClubItem(int Id, string Name);
@@ -52,7 +55,7 @@ public partial class MembersViewModel : ObservableObject
 
     public ObservableCollection<MemberRow> Rows { get; } = new();
     public ObservableCollection<string> ClubOptions { get; } = new() { AllClubs };
-    public string[] StatusOptions { get; } = { AllStatuses, "Active", "Terminated" };
+    public string[] StatusOptions { get; } = { AllStatuses, "Active", "Terminated", "Face pending", "Fingers pending" };
     public MemberBadge[] BadgeOptions { get; } = { MemberBadge.Basic, MemberBadge.Medium, MemberBadge.Pro };
     public ObservableCollection<ClubItem> MyClubs { get; } = new();
     public ObservableCollection<ClubItem> JoinableClubs { get; } = new();
@@ -76,6 +79,11 @@ public partial class MembersViewModel : ObservableObject
     [ObservableProperty] private string _editRank = string.Empty;
     [ObservableProperty] private string _editRoll = string.Empty;
     [ObservableProperty] private string _editUnit = string.Empty;
+    [ObservableProperty] private string _faceButtonText = "Re-enroll face";
+    [ObservableProperty] private string _fingerButtonText = "Re-enroll fingers";
+    [ObservableProperty] private bool _allChecked;
+    [ObservableProperty] private bool _hasChecked;
+    [ObservableProperty] private string _deleteSelectedText = "Delete selected";
 
     private System.Windows.Threading.DispatcherTimer? _messageTimer;
 
@@ -130,6 +138,10 @@ public partial class MembersViewModel : ObservableObject
         var links = await db.MemberClubs.AsNoTracking()
             .Select(mc => new { mc.MemberId, ClubName = mc.Club.Name }).ToListAsync();
         var members = await db.Members.AsNoTracking().OrderBy(m => m.MemberCode).ToListAsync();
+        var faceIds = (await db.BiometricTemplates.AsNoTracking()
+            .Where(t => t.Type == BiometricType.Face).Select(t => t.MemberId).Distinct().ToListAsync()).ToHashSet();
+        var fingerIds = (await db.BiometricTemplates.AsNoTracking()
+            .Where(t => t.Type == BiometricType.Fingerprint).Select(t => t.MemberId).Distinct().ToListAsync()).ToHashSet();
 
         if (ClubOptions.Count == 1)
             foreach (var c in clubs) ClubOptions.Add(c);
@@ -143,6 +155,8 @@ public partial class MembersViewModel : ObservableObject
             Rank = m.Rank,
             RollRegNo = m.RollRegNo,
             Unit = m.Unit,
+            FacePending = !faceIds.Contains(m.Id),
+            FingersPending = !fingerIds.Contains(m.Id),
             Clubs = string.Join(", ", links.Where(l => l.MemberId == m.Id).Select(l => l.ClubName)),
             Badge = m.Badge.ToString(),
             Status = m.Status == MemberStatus.Active ? "Active" : "Terminated",
@@ -172,7 +186,11 @@ public partial class MembersViewModel : ObservableObject
         if (ClubFilter != AllClubs)
             rows = rows.Where(x => x.Clubs.Split(", ").Contains(ClubFilter));
 
-        if (StatusFilter != AllStatuses)
+        if (StatusFilter == "Face pending")
+            rows = rows.Where(x => x.FacePending && x.Status == "Active");
+        else if (StatusFilter == "Fingers pending")
+            rows = rows.Where(x => x.FingersPending && x.Status == "Active");
+        else if (StatusFilter != AllStatuses)
             rows = rows.Where(x => x.Status == StatusFilter);
 
         Rows.Clear();
@@ -195,6 +213,8 @@ public partial class MembersViewModel : ObservableObject
 
         IsActiveMember = row.Status == "Active";
         IsTerminated = !IsActiveMember;
+        FaceButtonText = row.FacePending ? "Add face" : "Re-enroll face";
+        FingerButtonText = row.FingersPending ? "Add fingers" : "Re-enroll fingers";
 
         using var scope = App.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -321,6 +341,111 @@ public partial class MembersViewModel : ObservableObject
             System.Windows.MessageBox.Show(ActionError, "Fingerprints not saved",
                 System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
     }
+    [RelayCommand]
+    private async Task UploadPhotoAsync()
+    {
+        if (Selected is not { } m) return;
+        var dlg = new Microsoft.Win32.OpenFileDialog
+        {
+            Title = $"Choose a photo for {m.FullName}",
+            Filter = "Pictures (*.jpg;*.jpeg;*.png;*.bmp)|*.jpg;*.jpeg;*.png;*.bmp"
+        };
+        if (dlg.ShowDialog() != true) return;
+
+        byte[] jpeg;
+        try
+        {
+            var bmp = new System.Windows.Media.Imaging.BitmapImage();
+            bmp.BeginInit();
+            bmp.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
+            bmp.UriSource = new Uri(dlg.FileName);
+            bmp.DecodePixelWidth = 600;
+            bmp.EndInit();
+            var enc = new System.Windows.Media.Imaging.JpegBitmapEncoder { QualityLevel = 85 };
+            enc.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(bmp));
+            using var ms = new System.IO.MemoryStream();
+            enc.Save(ms);
+            jpeg = ms.ToArray();
+        }
+        catch
+        {
+            ActionError = "This file could not be read as a picture.";
+            return;
+        }
+
+        await Run(sp => sp.GetRequiredService<MemberAdminService>().SetPhotoAsync(m.Id, jpeg, ActorUsername, ActorId), "Photo saved.");
+    }
+    partial void OnAllCheckedChanged(bool value)
+    {
+        foreach (var r in Rows) r.IsChecked = value;
+        UpdateChecked();
+    }
+
+    [RelayCommand]
+    private void UpdateChecked()
+    {
+        var n = _all.Count(r => r.IsChecked);
+        HasChecked = n > 0;
+        DeleteSelectedText = $"Delete selected ({n})";
+    }
+
+    [RelayCommand]
+    private async Task DeleteMemberAsync()
+    {
+        if (Selected is not { } m) return;
+        var ok = System.Windows.MessageBox.Show(
+            $"Delete {m.FullName} permanently?\n\nThis also deletes all of their attendance history, face, fingerprints and club links.\nA backup is made first, so it can be undone from Backup.",
+            "Delete member", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Warning);
+        if (ok != System.Windows.MessageBoxResult.Yes) return;
+        await DeleteIdsAsync(new List<int> { m.Id }, $"{m.FullName} was");
+    }
+
+    [RelayCommand]
+    private async Task DeleteSelectedAsync()
+    {
+        var ids = _all.Where(r => r.IsChecked).Select(r => r.Id).ToList();
+        if (ids.Count == 0) return;
+        var ok = System.Windows.MessageBox.Show(
+            $"Delete {ids.Count} selected member(s) permanently?\n\nThis also deletes all of their attendance history, face, fingerprints and club links.\nA backup is made first, so it can be undone from Backup.",
+            "Delete selected members", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Warning);
+        if (ok != System.Windows.MessageBoxResult.Yes) return;
+        await DeleteIdsAsync(ids, $"{ids.Count} member(s) were");
+    }
+
+    [RelayCommand]
+    private async Task DeleteAllAsync()
+    {
+        var ids = _all.Select(r => r.Id).ToList();
+        if (ids.Count == 0) return;
+        var typed = PromptDialog.Ask("Delete all members",
+            $"This deletes ALL {ids.Count} members and all attendance history.\nA backup is made first.\n\nType DELETE to confirm:");
+        if (!string.Equals(typed?.Trim(), "DELETE", StringComparison.Ordinal)) return;
+        await DeleteIdsAsync(ids, $"All {ids.Count} members were");
+    }
+
+    private async Task DeleteIdsAsync(List<int> ids, string what)
+    {
+        using var scope = App.Services.CreateScope();
+        var sp = scope.ServiceProvider;
+        var backup = await sp.GetRequiredService<BackupService>().CreateBackupAsync(BackupKind.Manual, ActorUsername, ActorId);
+        if (!backup.Succeeded)
+        {
+            System.Windows.MessageBox.Show("A backup could not be made, so nothing was deleted.\n\n" + backup.Error,
+                "Delete cancelled", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            return;
+        }
+        var r = await sp.GetRequiredService<MemberAdminService>().DeleteMembersAsync(ids, ActorUsername, ActorId);
+        if (!r.Succeeded)
+        {
+            System.Windows.MessageBox.Show(r.Error ?? "Delete failed.", "Delete failed",
+                System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            return;
+        }
+        Selected = null;
+        AllChecked = false;
+        await LoadAsync();
+        UpdateChecked();
+        System.Windows.MessageBox.Show($"{what} deleted.\n\nA backup was made first, so this can be undone from Backup.",
+            "Deleted", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+    }
 }
-
-

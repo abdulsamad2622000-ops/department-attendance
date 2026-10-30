@@ -137,10 +137,11 @@ public class MemberAdminService
     /// <summary>Edits the basic details of a member.</summary>
     public async Task<OperationResult> UpdateDetailsAsync(int memberId, string fullName, string phone, string rank, string rollRegNo, string unit, string actorUsername, int? actorUserId)
     {
+        await MemberService.EnsureDetailFieldsNotUniqueAsync(_db);
         if (string.IsNullOrWhiteSpace(fullName))
             return new OperationResult(false, "Name is required.");
         if (string.IsNullOrWhiteSpace(phone))
-            return new OperationResult(false, "Phone is required.");
+            { }
 
         var member = await _db.Members.FindAsync(memberId);
         if (member is null)
@@ -157,6 +158,48 @@ public class MemberAdminService
         return new OperationResult(true);
     }
 
+    /// <summary>Sets the member profile photo (JPEG) uploaded by an admin.</summary>
+    public async Task<OperationResult> SetPhotoAsync(int memberId, byte[] jpeg, string actorUsername, int? actorUserId)
+    {
+        if (jpeg is not { Length: > 0 }) return new OperationResult(false, "No picture selected.");
+        var member = await _db.Members.FindAsync(memberId);
+        if (member is null) return new OperationResult(false, "Member not found.");
+        member.PhotoJpeg = jpeg;
+        AddAudit(actorUserId, actorUsername, "PhotoUploaded", $"Member {member.MemberCode}");
+        await _db.SaveChangesAsync();
+        return new OperationResult(true);
+    }
+
+    /// <summary>Permanently deletes members with their attendance, biometrics and club links, in one transaction.</summary>
+    public async Task<OperationResult> DeleteMembersAsync(IReadOnlyList<int> ids, string actorUsername, int? actorUserId)
+    {
+        var list = ids.Distinct().ToList();
+        if (list.Count == 0) return new OperationResult(false, "No member selected.");
+        var members = await _db.Members.Where(m => list.Contains(m.Id)).Select(m => new { m.Id, m.MemberCode, m.FullName }).ToListAsync();
+        if (members.Count == 0) return new OperationResult(false, "Member not found.");
+
+        await using var tx = await _db.Database.BeginTransactionAsync();
+        try
+        {
+            await _db.AttendanceLogs.Where(a => list.Contains(a.MemberId)).ExecuteDeleteAsync();
+            await _db.BiometricTemplates.Where(b => list.Contains(b.MemberId)).ExecuteDeleteAsync();
+            await _db.MemberClubs.Where(mc => list.Contains(mc.MemberId)).ExecuteDeleteAsync();
+            await _db.Members.Where(m => list.Contains(m.Id)).ExecuteDeleteAsync();
+
+            var names = string.Join(", ", members.Take(20).Select(m => $"{m.FullName} ({m.MemberCode})"));
+            AddAudit(actorUserId, actorUsername, "MembersDeleted", $"{members.Count} deleted: {names}" + (members.Count > 20 ? " ..." : string.Empty));
+            await _db.SaveChangesAsync();
+            await tx.CommitAsync();
+            return new OperationResult(true);
+        }
+        catch (Exception ex)
+        {
+            await tx.RollbackAsync();
+            _db.ChangeTracker.Clear();
+            return new OperationResult(false, "Delete failed: " + (ex.InnerException?.Message ?? ex.Message));
+        }
+    }
+
     private void AddAudit(int? userId, string username, string action, string? details) =>
         _db.AuditLogs.Add(new AuditLog
         {
@@ -167,5 +210,9 @@ public class MemberAdminService
             Details = details
         });
 }
+
+
+
+
 
 

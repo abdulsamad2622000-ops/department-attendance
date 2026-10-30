@@ -198,7 +198,7 @@ public class BackupService
         }
         catch
         {
-            return new OperationResult(false, "This file is not a valid Hobbies Club backup.");
+            return new OperationResult(false, "This file is not a valid Fleet UMS Hobby Club backup.");
         }
         finally
         {
@@ -242,3 +242,4 @@ public class BackupService
         return new OperationResult(true);
     }
 }
+

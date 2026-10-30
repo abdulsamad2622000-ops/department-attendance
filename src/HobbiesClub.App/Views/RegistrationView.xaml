@@ -22,6 +22,39 @@
             <Setter Property="StrokeLineJoin" Value="Round" />
             <Setter Property="Stroke" Value="{StaticResource PrimaryBrush}" />
         </Style>
+        <Style x:Key="ClubCheck" TargetType="CheckBox">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Margin" Value="0,0,0,12" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Border x:Name="Bd" Background="White" BorderBrush="#E2E8F0" BorderThickness="2" CornerRadius="14" Padding="18,16">
+                            <DockPanel>
+                                <Border x:Name="Tick" DockPanel.Dock="Right" Width="30" Height="30" CornerRadius="15" BorderBrush="#CBD5E1" BorderThickness="2" Background="White" VerticalAlignment="Center">
+                                    <Path x:Name="Mark" Data="M7,12 L10.5,15.5 L17,9" Stroke="White" StrokeThickness="2.6" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" Width="16" Height="16" Stretch="Uniform" Visibility="Collapsed" />
+                                </Border>
+                                <Border Width="50" Height="50" CornerRadius="12" Background="{TemplateBinding Background}" Margin="0,0,16,0">
+                                    <TextBlock Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Foreground="White" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <ContentPresenter VerticalAlignment="Center" TextElement.FontSize="22" TextElement.FontWeight="SemiBold" TextElement.Foreground="#0F172A" />
+                            </DockPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#93C5FD" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#2563EB" />
+                                <Setter TargetName="Bd" Property="Background" Value="#EFF6FF" />
+                                <Setter TargetName="Tick" Property="Background" Value="#16A34A" />
+                                <Setter TargetName="Tick" Property="BorderBrush" Value="#16A34A" />
+                                <Setter TargetName="Mark" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <Grid Margin="40,28">
@@ -31,56 +64,82 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <!-- Background logo -->
+        <Image Grid.RowSpan="3" Margin="-40,-28" Source="{Binding KioskBackground, Source={x:Static helpers:BrandingSource.Instance}}" Stretch="Fill" Opacity="0.15" IsHitTestVisible="False" />
+
         <!-- Header -->
-        <Grid Grid.Row="0">
-            <Button Content="Cancel" Command="{Binding BackCommand}" Height="44" Padding="18,0" HorizontalAlignment="Left" />
-            <TextBlock Text="New member registration" FontSize="16" Foreground="#C7D2E5"
-                       HorizontalAlignment="Center" VerticalAlignment="Center" />
-        </Grid>
+        <StackPanel Grid.Row="0">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
+                    <TextBlock x:Name="DateLine" FontSize="14" Foreground="#C7D2E5" HorizontalAlignment="Right" />
+                    <TextBlock x:Name="ClockLine" FontSize="26" FontWeight="Bold" Foreground="White" HorizontalAlignment="Right" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Border Width="60" Height="60" CornerRadius="30" Background="#071A33" BorderBrush="#C9A227" BorderThickness="2">
+                        <Ellipse Margin="3"><Ellipse.Fill><ImageBrush ImageSource="{Binding LoginLogo, Source={x:Static helpers:BrandingSource.Instance}}" Stretch="UniformToFill" /></Ellipse.Fill></Ellipse>
+                    </Border>
+                    <StackPanel Margin="14,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding HeaderTitle, Source={x:Static helpers:BrandingSource.Instance}}" FontSize="22" FontWeight="Bold" Foreground="White" />
+                        <TextBlock Text="{Binding HeaderSubtitle, Source={x:Static helpers:BrandingSource.Instance}}" FontSize="14" Foreground="#C7D2E5" />
+                    </StackPanel>
+                </StackPanel>
+            </DockPanel>
+            <Button Command="{Binding BackCommand}" Background="Transparent" BorderThickness="0" Foreground="White" Padding="4,6" Margin="0,22,0,0" HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal">
+                    <Path Data="M19,12 H5 M11,6 L5,12 L11,18" Stroke="White" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" Width="22" Height="22" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,12,0" />
+                    <TextBlock Text="New Member Registration" FontSize="22" FontWeight="SemiBold" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
 
         <!-- Progress -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,24,0,24">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,18,0,22">
             <StackPanel.Resources>
                 <Style TargetType="StackPanel">
                     <Setter Property="Orientation" Value="Horizontal" />
-                    <Setter Property="Margin" Value="14,0" />
+                    <Setter Property="Margin" Value="12,0" />
                 </Style>
             </StackPanel.Resources>
             <StackPanel>
-                <Border Width="30" Height="30" CornerRadius="15" Background="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=1-1|fill}">
-                    <TextBlock Text="1" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=1-1|fg}" />
+                <Border Width="34" Height="34" CornerRadius="17" Background="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=1-1|fill}">
+                    <TextBlock Text="1" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=1-1|fg}" />
                 </Border>
-                <TextBlock Text="Details" Margin="8,0,0,0" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=1-1|label}" FontWeight="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=1-1|weight}" />
+                <TextBlock Text="Details" Margin="8,0,0,0" FontSize="15" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=1-1|label}" FontWeight="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=1-1|weight}" />
             </StackPanel>
+            <Rectangle Width="44" Height="2" Fill="#2B5A94" VerticalAlignment="Center" RadiusX="1" RadiusY="1" />
             <StackPanel>
-                <Border Width="30" Height="30" CornerRadius="15" Background="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=2-2|fill}">
-                    <TextBlock Text="2" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=2-2|fg}" />
+                <Border Width="34" Height="34" CornerRadius="17" Background="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=2-2|fill}">
+                    <TextBlock Text="2" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=2-2|fg}" />
                 </Border>
-                <TextBlock Text="Clubs" Margin="8,0,0,0" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=2-2|label}" FontWeight="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=2-2|weight}" />
+                <TextBlock Text="Clubs" Margin="8,0,0,0" FontSize="15" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=2-2|label}" FontWeight="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=2-2|weight}" />
             </StackPanel>
+            <Rectangle Width="44" Height="2" Fill="#2B5A94" VerticalAlignment="Center" RadiusX="1" RadiusY="1" />
             <StackPanel>
-                <Border Width="30" Height="30" CornerRadius="15" Background="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=3-4|fill}">
-                    <TextBlock Text="3" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=3-4|fg}" />
+                <Border Width="34" Height="34" CornerRadius="17" Background="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=3-4|fill}">
+                    <TextBlock Text="3" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=3-4|fg}" />
                 </Border>
-                <TextBlock Text="PIN" Margin="8,0,0,0" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=3-4|label}" FontWeight="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=3-4|weight}" />
+                <TextBlock Text="PIN" Margin="8,0,0,0" FontSize="15" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=3-4|label}" FontWeight="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=3-4|weight}" />
             </StackPanel>
+            <Rectangle Width="44" Height="2" Fill="#2B5A94" VerticalAlignment="Center" RadiusX="1" RadiusY="1" />
             <StackPanel>
-                <Border Width="30" Height="30" CornerRadius="15" Background="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=5-5|fill}">
-                    <TextBlock Text="4" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=5-5|fg}" />
+                <Border Width="34" Height="34" CornerRadius="17" Background="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=5-5|fill}">
+                    <TextBlock Text="4" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=5-5|fg}" />
                 </Border>
-                <TextBlock Text="Face" Margin="8,0,0,0" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=5-5|label}" FontWeight="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=5-5|weight}" />
+                <TextBlock Text="Face" Margin="8,0,0,0" FontSize="15" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=5-5|label}" FontWeight="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=5-5|weight}" />
             </StackPanel>
+            <Rectangle Width="44" Height="2" Fill="#2B5A94" VerticalAlignment="Center" RadiusX="1" RadiusY="1" />
             <StackPanel>
-                <Border Width="30" Height="30" CornerRadius="15" Background="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=6-7|fill}">
-                    <TextBlock Text="5" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=6-7|fg}" />
+                <Border Width="34" Height="34" CornerRadius="17" Background="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=6-7|fill}">
+                    <TextBlock Text="5" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=6-7|fg}" />
                 </Border>
-                <TextBlock Text="Fingerprints" Margin="8,0,0,0" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=6-7|label}" FontWeight="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=6-7|weight}" />
+                <TextBlock Text="Fingerprints" Margin="8,0,0,0" FontSize="15" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=6-7|label}" FontWeight="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=6-7|weight}" />
             </StackPanel>
+            <Rectangle Width="44" Height="2" Fill="#2B5A94" VerticalAlignment="Center" RadiusX="1" RadiusY="1" />
             <StackPanel>
-                <Border Width="30" Height="30" CornerRadius="15" Background="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=8-8|fill}">
-                    <TextBlock Text="6" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=8-8|fg}" />
+                <Border Width="34" Height="34" CornerRadius="17" Background="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=8-8|fill}">
+                    <TextBlock Text="6" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=8-8|fg}" />
                 </Border>
-                <TextBlock Text="Done" Margin="8,0,0,0" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=8-8|label}" FontWeight="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=8-8|weight}" />
+                <TextBlock Text="Done" Margin="8,0,0,0" FontSize="15" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=8-8|label}" FontWeight="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=8-8|weight}" />
             </StackPanel>
         </StackPanel>
 
@@ -92,42 +151,54 @@
 
                     <!-- Details -->
                     <StackPanel Visibility="{Binding IsDetails, Converter={StaticResource B2V}}">
-                        <TextBlock Text="Full name" Style="{StaticResource FieldLabel}" />
-                        <TextBox Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource Field}" />
-                        <TextBlock Text="Phone" Style="{StaticResource FieldLabel}" />
-                        <TextBox Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource Field}" />
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="12" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="12" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0">
-                                <TextBlock Text="Rank" Style="{StaticResource FieldLabel}" />
-                                <TextBox Text="{Binding Rank, UpdateSourceTrigger=PropertyChanged}" MaxLength="50" Style="{StaticResource Field}" />
-                            </StackPanel>
-                            <StackPanel Grid.Column="2">
-                                <TextBlock Text="R/N (Roll / Regiment No.)" Style="{StaticResource FieldLabel}" />
-                                <TextBox Text="{Binding RollRegNo, UpdateSourceTrigger=PropertyChanged}" MaxLength="50" Style="{StaticResource Field}" />
-                            </StackPanel>
-                            <StackPanel Grid.Column="4">
-                                <TextBlock Text="Unit" Style="{StaticResource FieldLabel}" />
-                                <TextBox Text="{Binding Unit, UpdateSourceTrigger=PropertyChanged}" MaxLength="50" Style="{StaticResource Field}" />
-                            </StackPanel>
-                        </Grid>
+                        <TextBlock Text="Step 1 of 6 · Enter member details" FontSize="14" Foreground="{StaticResource MutedTextBrush}" Margin="0,-12,0,20" />
+                        <TextBlock Text="{Binding Name, Source={x:Static helpers:FieldLabelsSource.Instance}}" Style="{StaticResource FieldLabel}" />
+                        <Border Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="10" Height="50" Margin="0,0,0,14">
+                            <DockPanel Margin="14,0,10,0">
+                                <Grid>
+                                    <TextBox Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}"  Background="Transparent" BorderThickness="0" FontSize="16" Height="46" Padding="0" VerticalContentAlignment="Center" />
+                                </Grid>
+                            </DockPanel>
+                        </Border>
+                        <TextBlock Text="{Binding Unit, Source={x:Static helpers:FieldLabelsSource.Instance}}" Style="{StaticResource FieldLabel}" />
+                        <Border Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="10" Height="50" Margin="0,0,0,14">
+                            <DockPanel Margin="14,0,10,0">
+                                <Grid>
+                                    <TextBox Text="{Binding Unit, UpdateSourceTrigger=PropertyChanged}" MaxLength="50" Background="Transparent" BorderThickness="0" FontSize="16" Height="46" Padding="0" VerticalContentAlignment="Center" />
+                                </Grid>
+                            </DockPanel>
+                        </Border>
+                        <TextBlock Text="{Binding Rank, Source={x:Static helpers:FieldLabelsSource.Instance}}" Style="{StaticResource FieldLabel}" />
+                        <Border Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="10" Height="50" Margin="0,0,0,14">
+                            <DockPanel Margin="14,0,10,0">
+                                <Grid>
+                                    <TextBox Text="{Binding Rank, UpdateSourceTrigger=PropertyChanged}" MaxLength="50" Background="Transparent" BorderThickness="0" FontSize="16" Height="46" Padding="0" VerticalContentAlignment="Center" />
+                                </Grid>
+                            </DockPanel>
+                        </Border>
+                        <TextBlock Text="{Binding Roll, Source={x:Static helpers:FieldLabelsSource.Instance}}" Style="{StaticResource FieldLabel}" />
+                        <Border Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="10" Height="50" Margin="0,0,0,14">
+                            <DockPanel Margin="14,0,10,0">
+                                <Grid>
+                                    <TextBox Text="{Binding RollRegNo, UpdateSourceTrigger=PropertyChanged}" MaxLength="50" Background="Transparent" BorderThickness="0" FontSize="16" Height="46" Padding="0" VerticalContentAlignment="Center" />
+                                </Grid>
+                            </DockPanel>
+                        </Border>
+                        <TextBlock Text="{Binding Phone, Source={x:Static helpers:FieldLabelsSource.Instance}}" Style="{StaticResource FieldLabel}" />
+                        <Border Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="10" Height="50" Margin="0,0,0,14">
+                            <DockPanel Margin="14,0,10,0">
+                                <Grid>
+                                    <TextBox Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}"  Background="Transparent" BorderThickness="0" FontSize="16" Height="46" Padding="0" VerticalContentAlignment="Center" />
+                                </Grid>
+                            </DockPanel>
+                        </Border>
                     </StackPanel>
 
                     <!-- Clubs -->
                     <StackPanel Visibility="{Binding IsClubs, Converter={StaticResource B2V}}">
                         <TextBlock Text="Select one or both clubs." Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,14" />
-                        <Border Style="{StaticResource Card}" Padding="20,16" Margin="0,0,0,12">
-                            <CheckBox Content="AI Club" IsChecked="{Binding JoinAi}" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource TextBrush}" />
-                        </Border>
-                        <Border Style="{StaticResource Card}" Padding="20,16">
-                            <CheckBox Content="Hobbies Club" IsChecked="{Binding JoinHobbies}" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource TextBrush}" />
-                        </Border>
+                        <CheckBox Style="{StaticResource ClubCheck}" Content="AI Center" Tag="AI" Background="#7C3AED" IsChecked="{Binding JoinAi}" />
+                        <CheckBox Style="{StaticResource ClubCheck}" Content="Fleet UMS Hobby Club" Tag="UMS" Background="#F59E0B" IsChecked="{Binding JoinHobbies}" />
                     </StackPanel>
 
                     <!-- PIN -->
@@ -151,7 +222,7 @@
 
                     <!-- Face / fingerprints -->
                     <StackPanel Visibility="{Binding IsBiometric, Converter={StaticResource B2V}}" HorizontalAlignment="Center">
-                        <Viewbox Width="96" Height="96" HorizontalAlignment="Center" Margin="0,4,0,12">
+                        <Border Width="150" Height="150" CornerRadius="75" Background="#EFF6FF" BorderBrush="#3B82F6" BorderThickness="3" HorizontalAlignment="Center" Margin="0,4,0,18"><Viewbox Width="72" Height="72" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <Canvas Width="24" Height="24">
                                 <Path>
                                     <Path.Style>
@@ -166,7 +237,7 @@
                                     </Path.Style>
                                 </Path>
                             </Canvas>
-                        </Viewbox>
+                        </Viewbox></Border>
                         <TextBlock FontSize="16" Foreground="{StaticResource MutedTextBrush}" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="0,0,0,18">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
@@ -181,6 +252,8 @@
                         </TextBlock>
                         <Button Content="{Binding ScanLabel}" Command="{Binding ScanCommand}" Style="{StaticResource PrimaryButton}"
                                 FontSize="20" Height="56" Padding="36,0" HorizontalAlignment="Center" />
+                        <Button Content="Skip for now" Command="{Binding SkipFaceCommand}" Background="Transparent" BorderThickness="0" Foreground="{StaticResource MutedTextBrush}" FontSize="15" Padding="12,6" HorizontalAlignment="Center" Margin="0,10,0,0" Visibility="{Binding IsFaceStep, Converter={StaticResource B2V}}" />
+                        <Button Content="Skip for now" Command="{Binding SkipFingersCommand}" Background="Transparent" BorderThickness="0" Foreground="{StaticResource MutedTextBrush}" FontSize="15" Padding="12,6" HorizontalAlignment="Center" Margin="0,10,0,0" Visibility="{Binding IsFingerStep, Converter={StaticResource B2V}}" />
                     </StackPanel>
 
                     <!-- Saved -->
@@ -192,6 +265,7 @@
                                 <Path.RenderTransform><ScaleTransform ScaleX="2.2" ScaleY="2.2" /></Path.RenderTransform>
                             </Path>
                         </Border>
+                        <TextBlock Text="Registration successful" FontSize="24" FontWeight="Bold" Foreground="{StaticResource SuccessBrush}" HorizontalAlignment="Center" Margin="0,0,0,8" />
                         <TextBlock Text="{Binding SavedText}" TextWrapping="Wrap" FontSize="18" TextAlignment="Center" Foreground="{StaticResource TextBrush}" />
                         <Button Content="Done" Command="{Binding BackCommand}" Style="{StaticResource PrimaryButton}"
                                 FontSize="18" Height="52" Width="180" HorizontalAlignment="Center" Margin="0,22,0,0" />
@@ -200,7 +274,7 @@
                     <TextBlock Text="{Binding Message}" helpers:AutoHide.Seconds="6" FontSize="16" Foreground="{StaticResource DangerBrush}"
                                TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,14,0,0" />
 
-                    <Button Content="Next" Command="{Binding NextCommand}" Style="{StaticResource PrimaryButton}"
+                    <Button Content="Next  →" Command="{Binding NextCommand}" Style="{StaticResource PrimaryButton}"
                             FontSize="17" Height="52" Width="160" HorizontalAlignment="Right" Margin="0,18,0,0"
                             Visibility="{Binding ShowNext, Converter={StaticResource B2V}}" />
                 </StackPanel>
@@ -208,6 +282,17 @@
         </ScrollViewer>
     </Grid>
 </UserControl>
+
+
+
+
+
+
+
+
+
+
+
 
 
 

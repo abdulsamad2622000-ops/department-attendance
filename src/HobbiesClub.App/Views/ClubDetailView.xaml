@@ -26,10 +26,10 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <Button Content="Back" Command="{Binding BackCommand}" Height="44" Padding="18,0" HorizontalAlignment="Left" />
+            <Button Content="←  Back" Command="{Binding BackCommand}" Height="44" Padding="18,0" HorizontalAlignment="Left" Background="Transparent" Foreground="White" BorderBrush="#2B5A94" />
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="{Binding FullName}" FontSize="16" Foreground="#C7D2E5" VerticalAlignment="Center" />
-                <Border CornerRadius="999" Padding="10,3" Background="{Binding BadgeBrush}" Margin="10,0,0,0" VerticalAlignment="Center">
+                <TextBlock Text="{Binding FullName}" FontSize="16" Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Center" />
+                <Border CornerRadius="6" Padding="10,4" Background="{Binding BadgeBrush}" Margin="10,0,0,0" VerticalAlignment="Center">
                     <TextBlock Text="{Binding BadgeText}" Foreground="White" FontWeight="SemiBold" FontSize="12" />
                 </Border>
             </StackPanel>
@@ -40,7 +40,7 @@
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,24,0,0">
             <StackPanel MaxWidth="900">
                 <DockPanel Margin="8,0,8,12">
-                    <Border DockPanel.Dock="Right" CornerRadius="999" Padding="14,6" Background="White"
+                    <Border DockPanel.Dock="Right" CornerRadius="6" Padding="14,6" Background="White"
                             BorderBrush="{StaticResource BorderBrushLight}" BorderThickness="1" VerticalAlignment="Center">
                         <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusBrush}" FontWeight="SemiBold" FontSize="14" />
                     </Border>
@@ -103,6 +103,9 @@
         </ScrollViewer>
     </Grid>
 </UserControl>
+
+
+
 
 
 

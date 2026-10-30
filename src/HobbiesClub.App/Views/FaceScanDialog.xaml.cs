@@ -12,7 +12,7 @@ namespace HobbiesClub.App.Views;
 /// <summary>Guided face scan with live camera, face points and look-straight / turn-left / turn-right steps.</summary>
 public partial class FaceScanDialog : Window
 {
-    private static readonly Brush Gold = new SolidColorBrush(Color.FromRgb(0xC9, 0xA2, 0x27));
+    private static readonly Brush Gold = new SolidColorBrush(Color.FromRgb(0x3B, 0x82, 0xF6));
     private static readonly Brush Green = new SolidColorBrush(Color.FromRgb(0x22, 0xC5, 0x5E));
     private static readonly Brush LightGreen = new SolidColorBrush(Color.FromRgb(0x86, 0xEF, 0xAC));
     private static readonly Brush Red = new SolidColorBrush(Color.FromRgb(0xFC, 0xA5, 0xA5));
@@ -157,3 +157,4 @@ public partial class FaceScanDialog : Window
         DialogResult = false;
     }
 }
+

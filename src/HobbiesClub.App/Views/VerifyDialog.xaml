@@ -1,6 +1,7 @@
 ﻿<Window x:Class="HobbiesClub.App.Views.VerifyDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:helpers="clr-namespace:HobbiesClub.App.Helpers"
         Title="Verified" Width="608" SizeToContent="Height"
         WindowStyle="None" AllowsTransparency="True" Background="Transparent"
         WindowStartupLocation="CenterOwner" ResizeMode="NoResize" ShowInTaskbar="False">
@@ -39,16 +40,15 @@
 
             <TextBlock Text="{Binding FullName}" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center"
                        TextAlignment="Center" TextWrapping="Wrap" Margin="0,14,0,8" />
-            <Border CornerRadius="999" Padding="12,4" HorizontalAlignment="Center" Background="{Binding BadgeBrush}">
+            <Border CornerRadius="6" Padding="12,4" HorizontalAlignment="Center" Background="{Binding BadgeBrush}">
                 <TextBlock Text="{Binding BadgeText}" Foreground="White" FontWeight="SemiBold" FontSize="12" />
             </Border>
 
             <UniformGrid Columns="2" Margin="-5,18,-5,0">
-                <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Member ID" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding MemberCode}" Style="{StaticResource TileValue}" /></StackPanel></Border>
-                <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Rank" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Rank}" Style="{StaticResource TileValue}" /></StackPanel></Border>
-                <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="R/N" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding RollRegNo}" Style="{StaticResource TileValue}" /></StackPanel></Border>
-                <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Unit" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Unit}" Style="{StaticResource TileValue}" /></StackPanel></Border>
-                <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Phone" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Phone}" Style="{StaticResource TileValue}" /></StackPanel></Border>
+                <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="{Binding Unit, Source={x:Static helpers:FieldLabelsSource.Instance}}" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Unit}" Style="{StaticResource TileValue}" /></StackPanel></Border>
+                <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="{Binding Rank, Source={x:Static helpers:FieldLabelsSource.Instance}}" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Rank}" Style="{StaticResource TileValue}" /></StackPanel></Border>
+                <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="{Binding Roll, Source={x:Static helpers:FieldLabelsSource.Instance}}" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding RollRegNo}" Style="{StaticResource TileValue}" /></StackPanel></Border>
+                <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="{Binding Phone, Source={x:Static helpers:FieldLabelsSource.Instance}}" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Phone}" Style="{StaticResource TileValue}" /></StackPanel></Border>
                 <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Clubs" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Clubs}" Style="{StaticResource TileValue}" /></StackPanel></Border>
             </UniformGrid>
 
@@ -87,4 +87,6 @@
         </StackPanel>
     </Border>
 </Window>
+
+
 

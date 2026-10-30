@@ -1,6 +1,6 @@
 ﻿<UserControl x:Class="HobbiesClub.App.Views.PinView" Background="{StaticResource NavyGradient}" Foreground="White"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:helpers="clr-namespace:HobbiesClub.App.Helpers">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="B2V" />
         <Style x:Key="Key" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
@@ -50,11 +50,24 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
-            <Button Content="Back" Command="{Binding BackCommand}" Height="44" Padding="18,0" HorizontalAlignment="Left" />
-            <TextBlock Text="Fleet Hobbies &amp; AI Club" FontSize="16" Foreground="#C7D2E5"
-                       HorizontalAlignment="Center" VerticalAlignment="Center" />
-        </Grid>
+        <Image Grid.RowSpan="2" Margin="-40,-28" Source="{Binding KioskBackground, Source={x:Static helpers:BrandingSource.Instance}}" Stretch="Fill" Opacity="0.15" IsHitTestVisible="False" />
+        <DockPanel Grid.Row="0">
+            <Button DockPanel.Dock="Right" Command="{Binding BackCommand}" Height="42" Padding="16,0" VerticalAlignment="Center" Background="Transparent" Foreground="White" BorderBrush="#2B5A94">
+                <StackPanel Orientation="Horizontal">
+                    <Path Data="M19,12 H5 M11,6 L5,12 L11,18" Stroke="White" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" Width="18" Height="18" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
+                    <TextBlock Text="Back" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <StackPanel Orientation="Horizontal">
+                <Border Width="60" Height="60" CornerRadius="30" Background="#071A33" BorderBrush="#C9A227" BorderThickness="2">
+                    <Ellipse Margin="3"><Ellipse.Fill><ImageBrush ImageSource="{Binding LoginLogo, Source={x:Static helpers:BrandingSource.Instance}}" Stretch="UniformToFill" /></Ellipse.Fill></Ellipse>
+                </Border>
+                <StackPanel Margin="14,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding HeaderTitle, Source={x:Static helpers:BrandingSource.Instance}}" FontSize="22" FontWeight="Bold" Foreground="White" />
+                    <TextBlock Text="{Binding HeaderSubtitle, Source={x:Static helpers:BrandingSource.Instance}}" FontSize="14" Foreground="#C7D2E5" />
+                </StackPanel>
+            </StackPanel>
+        </DockPanel>
 
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="{Binding Prompt}" FontSize="34" FontWeight="Bold" HorizontalAlignment="Center"
@@ -90,9 +103,9 @@
                 <Button Content="7" Command="{Binding DigitCommand}" CommandParameter="7" Style="{StaticResource Key}" />
                 <Button Content="8" Command="{Binding DigitCommand}" CommandParameter="8" Style="{StaticResource Key}" />
                 <Button Content="9" Command="{Binding DigitCommand}" CommandParameter="9" Style="{StaticResource Key}" />
-                <Button Content="Delete" Command="{Binding BackspaceCommand}" Style="{StaticResource Key}" FontSize="18" Foreground="{StaticResource MutedTextBrush}" />
+                <Button Content="⌫" Command="{Binding BackspaceCommand}" Style="{StaticResource Key}" FontSize="26" Foreground="{StaticResource MutedTextBrush}" />
                 <Button Content="0" Command="{Binding DigitCommand}" CommandParameter="0" Style="{StaticResource Key}" />
-                <Button Content="OK" Command="{Binding OkCommand}" Style="{StaticResource PrimaryButton}" FontSize="22" Height="76" Margin="6" />
+                <Button Content="OK" Command="{Binding OkCommand}" Style="{StaticResource PrimaryButton}" Background="#16A34A" BorderBrush="#16A34A" FontSize="22" Height="76" Margin="6" />
             </UniformGrid>
 
             <ItemsControl ItemsSource="{Binding Clubs}" Visibility="{Binding ShowClubs, Converter={StaticResource B2V}}" HorizontalAlignment="Center">
@@ -117,6 +130,11 @@
         </StackPanel>
     </Grid>
 </UserControl>
+
+
+
+
+
 
 
 

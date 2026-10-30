@@ -1,5 +1,5 @@
-﻿#define AppName "Hobbies Club Attendance"
-#define AppVersion "1.0.3"
+﻿#define AppName "Fleet UMS Hobby Club Attendance"
+#define AppVersion "1.8.3"
 #define AppExe "HobbiesClub.App.exe"
 
 [Setup]
@@ -8,7 +8,7 @@ AppName={#AppName}
 AppVersion={#AppVersion}
 AppPublisher=NovaStackHub
 DefaultDirName={autopf}\HobbiesClub
-DefaultGroupName=Hobbies Club
+DefaultGroupName=Fleet UMS Hobby Club
 DisableProgramGroupPage=yes
 OutputDir=..\installer-output
 OutputBaseFilename=HobbiesClub-Setup-{#AppVersion}
@@ -34,13 +34,23 @@ Name: "{commonappdata}\HobbiesClub"; Permissions: users-modify; Flags: uninsneve
 Source: "..\publish\HobbiesClub\*"; DestDir: "{app}"; Excludes: "*.pdb"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
-Name: "{group}\Hobbies Club"; Filename: "{app}\{#AppExe}"
-Name: "{group}\Uninstall Hobbies Club"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\Hobbies Club"; Filename: "{app}\{#AppExe}"; Tasks: desktopicon
-Name: "{commonstartup}\Hobbies Club"; Filename: "{app}\{#AppExe}"; Tasks: startup
+Name: "{group}\Fleet UMS Hobby Club"; Filename: "{app}\{#AppExe}"
+Name: "{group}\Uninstall Fleet UMS Hobby Club"; Filename: "{uninstallexe}"
+Name: "{commondesktop}\Fleet UMS Hobby Club"; Filename: "{app}\{#AppExe}"; Tasks: desktopicon
+Name: "{commonstartup}\Fleet UMS Hobby Club"; Filename: "{app}\{#AppExe}"; Tasks: startup
 
 [Run]
-Filename: "{app}\{#AppExe}"; Description: "Open Hobbies Club now"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#AppExe}"; Description: "Open Fleet UMS Hobby Club now"; Flags: nowait postinstall skipifsilent
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -29,3 +29,10 @@ Backups/
 
 # app images are part of the source
 !src/HobbiesClub.App/Assets/*.png
+!src/HobbiesClub.App/Assets/*.jpg
+!src/HobbiesClub.App/Assets/Ships/*
+
+# build output and local scripts
+backup/
+/*.ps1
+TestResults/

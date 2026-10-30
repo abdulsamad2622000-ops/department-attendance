@@ -26,7 +26,6 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="ID" Binding="{Binding MemberCode}" Width="60" />
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="170" />
                     <DataGridTextColumn Header="Club" Binding="{Binding Club}" Width="170" />
                     <DataGridTextColumn Header="Time" Binding="{Binding When}" Width="140" />
@@ -38,4 +37,5 @@
         </Grid>
     </DockPanel>
 </Window>
+
 

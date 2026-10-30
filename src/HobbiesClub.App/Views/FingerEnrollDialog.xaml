@@ -8,7 +8,7 @@
         <Border.Effect><DropShadowEffect BlurRadius="40" ShadowDepth="8" Opacity="0.5" Color="#000000" /></Border.Effect>
         <StackPanel>
             <TextBlock x:Name="TitleText" Text="Register fingerprints" FontSize="24" FontWeight="Bold" Foreground="White" />
-            <TextBlock x:Name="SubtitleText" Text="Tap a finger, then place it on the scanner." FontSize="15" Foreground="#C9A227" Margin="0,4,0,20" />
+            <TextBlock x:Name="SubtitleText" Text="Tap a finger, then place it on the scanner." FontSize="15" Foreground="#93C5FD" Margin="0,4,0,20" />
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -21,7 +21,7 @@
                     <StackPanel>
                         <views:HandsControl x:Name="Hands" Height="250" />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,12,0,0">
-                            <Ellipse Width="10" Height="10" Fill="#C9A227" VerticalAlignment="Center" />
+                            <Ellipse Width="10" Height="10" Fill="#3B82F6" VerticalAlignment="Center" />
                             <TextBlock Text="Selected" Foreground="#C7D2E5" FontSize="12" Margin="6,0,16,0" VerticalAlignment="Center" />
                             <Ellipse Width="10" Height="10" Fill="#16A34A" VerticalAlignment="Center" />
                             <TextBlock Text="Registered" Foreground="#C7D2E5" FontSize="12" Margin="6,0,16,0" VerticalAlignment="Center" />
@@ -43,9 +43,9 @@
                             <Rectangle x:Name="ScanLine" Height="4" VerticalAlignment="Top" Margin="10,0" Visibility="Collapsed">
                                 <Rectangle.Fill>
                                     <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                                        <GradientStop Color="#00C9A227" Offset="0" />
-                                        <GradientStop Color="#FFC9A227" Offset="0.5" />
-                                        <GradientStop Color="#00C9A227" Offset="1" />
+                                        <GradientStop Color="#003B82F6" Offset="0" />
+                                        <GradientStop Color="#FF3B82F6" Offset="0.5" />
+                                        <GradientStop Color="#003B82F6" Offset="1" />
                                     </LinearGradientBrush>
                                 </Rectangle.Fill>
                                 <Rectangle.RenderTransform><TranslateTransform x:Name="ScanShift" /></Rectangle.RenderTransform>
@@ -66,13 +66,14 @@
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button x:Name="RetryButton" Content="Scan again" Width="150" Height="46" Margin="0,0,12,0" Visibility="Collapsed"
-                        Background="Transparent" Foreground="White" BorderBrush="#C9A227" Click="OnRetry" />
+                        Background="Transparent" Foreground="White" BorderBrush="#3B82F6" Click="OnRetry" />
                 <Button x:Name="RemoveButton" Content="Remove finger" Width="150" Height="46" Margin="0,0,12,0" Visibility="Collapsed"
                         Background="Transparent" Foreground="#FCA5A5" BorderBrush="#B91C1C" Click="OnRemove" />
                 <Button x:Name="CancelButton" Content="Cancel" Width="150" Height="46" Margin="0,0,12,0" Background="Transparent" Foreground="White" BorderBrush="#2B5A94" Click="OnCancel" />
                 <Button x:Name="SaveButton" Content="Save (0)" Width="170" Height="46" IsEnabled="False"
-                        Style="{StaticResource PrimaryButton}" Background="#C9A227" BorderBrush="#C9A227" Foreground="#071A33" Click="OnSave" />
+                        Style="{StaticResource PrimaryButton}" Background="#16A34A" BorderBrush="#16A34A" Foreground="White" Click="OnSave" />
             </StackPanel>
         </StackPanel>
     </Border>
 </Window>
+

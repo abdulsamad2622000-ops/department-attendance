@@ -26,8 +26,39 @@ public class MemberService
         _clock = clock;
     }
 
+    private static bool _detailIndexesChecked;
+
+    /// <summary>Detail fields (branch, rank, unit, R/N) may repeat between members: drop any old UNIQUE index on them.</summary>
+    public static async Task EnsureDetailFieldsNotUniqueAsync(AppDbContext db)
+    {
+        if (_detailIndexesChecked) return;
+        await db.Database.OpenConnectionAsync();
+        var conn = db.Database.GetDbConnection();
+        var names = new List<string>();
+        using (var cmd = conn.CreateCommand())
+        {
+            cmd.CommandText = "SELECT name, sql FROM sqlite_master WHERE type='index' AND tbl_name='Members' AND sql IS NOT NULL";
+            using var r = await cmd.ExecuteReaderAsync();
+            while (await r.ReadAsync())
+            {
+                var sql = r.GetString(1);
+                if (sql.Contains("UNIQUE", StringComparison.OrdinalIgnoreCase) &&
+                    (sql.Contains("Phone") || sql.Contains("Rank") || sql.Contains("RollRegNo") || sql.Contains("\"Unit\"")))
+                    names.Add(r.GetString(0));
+            }
+        }
+        foreach (var n in names)
+        {
+            using var drop = conn.CreateCommand();
+            drop.CommandText = "DROP INDEX IF EXISTS \"" + n.Replace("\"", "") + "\"";
+            await drop.ExecuteNonQueryAsync();
+        }
+        _detailIndexesChecked = true;
+    }
+
     public async Task<MemberResult> AddMemberAsync(NewMemberRequest request, string actorUsername = "kiosk", int? actorUserId = null)
     {
+        await EnsureDetailFieldsNotUniqueAsync(_db);
         var name = (request.FullName ?? string.Empty).Trim();
         var phone = NormalizePhone(request.Phone);
         var clubIds = (request.ClubIds ?? Array.Empty<int>()).Distinct().ToList();
@@ -35,7 +66,7 @@ public class MemberService
         if (name.Length == 0)
             return Fail("Full name is required.");
 
-        if (phone.Length < 10)
+        if (false && phone.Length < 10)
             return Fail("Phone number is not valid.");
 
         if (clubIds.Count == 0)
@@ -49,7 +80,7 @@ public class MemberService
             return Fail($"PIN must be exactly {PinLength} digits.");
 
         if (await _db.Members.AnyAsync(m => m.Phone == phone))
-            return Fail("This phone number is already registered.");
+            { }
 
         foreach (var existing in await _db.Members.ToListAsync())
         {
@@ -83,7 +114,8 @@ public class MemberService
         _db.Members.Add(member);
         AddAudit(actorUserId, actorUsername, "MemberAdded", $"Code {member.MemberCode}, {request.Source}");
 
-        await _db.SaveChangesAsync();
+        try { await _db.SaveChangesAsync(); }
+        catch (DbUpdateException ex) { return Fail("Could not save the member: " + (ex.InnerException?.Message ?? ex.Message)); }
         return new MemberResult(true, Member: member);
     }
 
@@ -275,7 +307,7 @@ public class MemberService
         pin is not null && Regex.IsMatch(pin, $"^[0-9]{{{PinLength}}}$");
 
     public static string NormalizePhone(string? phone) =>
-        new string((phone ?? string.Empty).Where(char.IsDigit).ToArray());
+        (phone ?? string.Empty).Trim();
 
     private static MemberResult Fail(string error) => new(false, error);
 
@@ -289,6 +321,9 @@ public class MemberService
             Details = details
         });
 }
+
+
+
 
 
 
