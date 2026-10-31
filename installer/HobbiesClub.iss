@@ -1,5 +1,5 @@
 ﻿#define AppName "Fleet UMS Hobby Club Attendance"
-#define AppVersion "1.8.3"
+#define AppVersion "1.8.5"
 #define AppExe "HobbiesClub.App.exe"
 
 [Setup]
@@ -41,6 +41,7 @@ Name: "{commonstartup}\Fleet UMS Hobby Club"; Filename: "{app}\{#AppExe}"; Tasks
 
 [Run]
 Filename: "{app}\{#AppExe}"; Description: "Open Fleet UMS Hobby Club now"; Flags: nowait postinstall skipifsilent
+
 
 
 

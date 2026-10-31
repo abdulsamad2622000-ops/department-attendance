@@ -82,11 +82,27 @@
                        TextWrapping="Wrap" TextAlignment="Center" Margin="0,12,0,0"
                        Visibility="{Binding HasAutoNote, Converter={StaticResource B2V}}" />
 
-            <Button Content="OK" IsDefault="True" Click="OnOk" Style="{StaticResource PrimaryButton}"
+            <Button x:Name="AddNoteBtn" Content="+ Add note (optional)" Click="OnAddNote" Background="Transparent" BorderThickness="0"
+                    Foreground="{StaticResource PrimaryBrush}" FontSize="15" FontWeight="SemiBold" HorizontalAlignment="Center"
+                    Margin="0,16,0,0" Padding="10,6" Cursor="Hand" />
+
+            <StackPanel x:Name="NotePanel" Visibility="Collapsed" Margin="0,16,0,0">
+                <TextBlock Text="Note" FontSize="13" Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,6" />
+                <TextBox x:Name="NoteBox" Height="70" FontSize="15" TextWrapping="Wrap" AcceptsReturn="False" MaxLength="200"
+                         VerticalContentAlignment="Top" Padding="8" TextChanged="OnNoteTyping" />
+                <TextBlock x:Name="NoteError" Foreground="{StaticResource DangerBrush}" FontSize="13" TextWrapping="Wrap" Margin="0,6,0,0" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,12,0,0">
+                    <Button Content="Skip" Click="OnOk" FontSize="16" Height="50" Width="130" Margin="0,0,12,0" />
+                    <Button Content="Save note" Click="OnSaveNote" Style="{StaticResource PrimaryButton}" FontSize="16" Height="50" Width="160" />
+                </StackPanel>
+            </StackPanel>
+
+            <Button x:Name="OkBtn" Content="OK" IsDefault="True" Click="OnOk" Style="{StaticResource PrimaryButton}"
                     FontSize="16" Width="200" Height="52" HorizontalAlignment="Center" Margin="0,20,0,0" />
         </StackPanel>
     </Border>
 </Window>
+
 
 
 

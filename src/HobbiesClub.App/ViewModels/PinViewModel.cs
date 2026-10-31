@@ -203,7 +203,7 @@ public partial class PinViewModel : ObservableObject
                 return;
             }
 
-            result = await attendance.MarkAsync(_memberId, club.Id, _method, dlg.Result);
+            result = await attendance.MarkAsync(_memberId, club.Id, _method, dlg.Result, dlg.NoteText);
         }
 
         switch (result.Status)
@@ -214,8 +214,12 @@ public partial class PinViewModel : ObservableObject
                     .Where(a => a.MemberId == _memberId)
                     .OrderByDescending(a => a.Timestamp).ThenByDescending(a => a.Id)
                     .Skip(1)
-                    .Select(a => new { a.Type, a.Timestamp, a.IsManualEntry, a.Method, ClubName = a.Club.Name })
+                    .Select(a => new { a.Type, a.Timestamp, a.IsManualEntry, a.Method, a.Note, ClubName = a.Club.Name })
                     .FirstOrDefaultAsync();
+                var currentLogId = await db.AttendanceLogs
+                    .Where(a => a.MemberId == _memberId && a.ClubId == club.Id)
+                    .OrderByDescending(a => a.Timestamp).ThenByDescending(a => a.Id)
+                    .Select(a => a.Id).FirstOrDefaultAsync();
                 var mem = await db.Members.AsNoTracking().FirstAsync(x => x.Id == _memberId);
                 var clubNames = await db.MemberClubs.Where(mc => mc.MemberId == _memberId)
                     .Select(mc => mc.Club.Name).ToListAsync();
@@ -243,7 +247,7 @@ public partial class PinViewModel : ObservableObject
                     Clubs = string.Join(", ", clubNames),
                     PreviousText = previous is null
                         ? string.Empty
-                        : $"{previous.Timestamp:dd MMM yyyy, dddd, hh:mm tt} ({previous.ClubName})" + (previous.IsManualEntry ? " (time entered by member)" : ""),
+                        : $"{previous.Timestamp:dd MMM yyyy, dddd, hh:mm tt} ({previous.ClubName})" + (previous.IsManualEntry ? " (time entered by member" + (string.IsNullOrWhiteSpace(previous.Note) || previous.Note == "Late check-out entered by member" ? "" : ": " + previous.Note) + ")" : ""),
                     PreviousType = previous is null ? string.Empty
                         : (previous.Type == AttendanceType.CheckIn ? "CHECK-IN" : "CHECK-OUT"),
                     PreviousBrush = previous is not null && previous.Type == AttendanceType.CheckIn
@@ -254,12 +258,23 @@ public partial class PinViewModel : ObservableObject
                     AutoNote = result.AutoCheckedOutOf is null ? string.Empty : $"Checked out of {result.AutoCheckedOutOf} automatically.",
                     CurrentTime = (result.Timestamp ?? DateTime.Now).ToString("hh:mm tt") + " - " + (result.Timestamp ?? DateTime.Now).ToString("dddd, dd MMM yyyy"),
                     CurrentBrush = checkedIn ? Brushes.SeaGreen : Brushes.Firebrick,
-                    ClubName = club.Name
+                    ClubName = club.Name,
+                    LogId = currentLogId
                 };
 
                 ShowKeypad = false;
                 ShowClubs = false;
-                new VerifyDialog(info) { Owner = Application.Current.MainWindow }.ShowDialog();
+                
+                try
+                {
+                    
+                    new VerifyDialog(info) { Owner = Application.Current.MainWindow }.ShowDialog();
+                }
+                catch (Exception cardEx)
+                {
+                    
+                    MessageBox.Show("Card error: " + cardEx.Message, "Verify card", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
                 _backTimer?.Stop();
                 _shell.NavigateTo(new MemberClubsViewModel(_shell, _memberId));
                 return;
@@ -293,6 +308,10 @@ public partial class PinViewModel : ObservableObject
         _shell.NavigateTo(new KioskViewModel(_shell, string.Empty));
     }
 }
+
+
+
+
 
 
 

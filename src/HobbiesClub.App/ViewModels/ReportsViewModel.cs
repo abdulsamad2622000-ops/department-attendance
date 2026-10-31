@@ -130,7 +130,7 @@ public partial class ReportsViewModel : ObservableObject
                     Club = r.Club,
                     Type = r.Type == AttendanceType.CheckIn ? "CHECK-IN" : "CHECK-OUT",
                     Method = r.Method.ToString(),
-                    Note = r.IsManualEntry ? "Time entered by member" : string.Empty
+                    Note = r.IsManualEntry ? "Time entered by member" + (string.IsNullOrWhiteSpace(r.Note) || r.Note == "Late check-out entered by member" ? string.Empty : " - " + r.Note) : (r.Note ?? string.Empty)
                 });
             Summary = $"{rows.Count} entries";
         }
@@ -226,3 +226,4 @@ public partial class ReportsViewModel : ObservableObject
         }
     }
 }
+

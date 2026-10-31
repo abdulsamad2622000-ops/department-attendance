@@ -7,6 +7,7 @@ public partial class MissedCheckOutDialog : Window
     private readonly DateTime _checkIn;
 
     public DateTime? Result { get; private set; }
+    public string? NoteText { get; private set; }
 
     public MissedCheckOutDialog(DateTime missedCheckIn, string? clubName = null)
     {
@@ -42,8 +43,10 @@ public partial class MissedCheckOutDialog : Window
             return;
         }
 
+        NoteText = string.IsNullOrWhiteSpace(NoteBox.Text) ? null : NoteBox.Text.Trim();
         Result = value;
         DialogResult = true;
     }
 }
+
 

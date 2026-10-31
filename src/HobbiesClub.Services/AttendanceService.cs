@@ -44,7 +44,7 @@ public class AttendanceService
     ///    any other club they are inside today.
     /// </summary>
     public async Task<AttendanceResult> MarkAsync(
-        int memberId, int clubId, VerificationMethod method, DateTime? missedCheckOutTime = null)
+        int memberId, int clubId, VerificationMethod method, DateTime? missedCheckOutTime = null, string? missedNote = null)
     {
         var member = await _db.Members.FindAsync(memberId);
         if (member is null)
@@ -96,7 +96,7 @@ public class AttendanceService
                 Method = method,
                 Timestamp = leftAt,
                 IsManualEntry = true,
-                Note = "Late check-out entered by member"
+                Note = string.IsNullOrWhiteSpace(missedNote) ? "Late check-out entered by member" : missedNote.Trim()
             });
             _db.AuditLogs.Add(new AuditLog
             {
@@ -104,7 +104,7 @@ public class AttendanceService
                 UserId = null,
                 Username = "kiosk",
                 Action = "LateCheckOutEntered",
-                Details = $"Code {member.MemberCode}, {stale.Club.Name}: check-in {stale.Timestamp:yyyy-MM-dd HH:mm}, left {leftAt:yyyy-MM-dd HH:mm}"
+                Details = $"Code {member.MemberCode}, {stale.Club.Name}: check-in {stale.Timestamp:yyyy-MM-dd HH:mm}, left {leftAt:yyyy-MM-dd HH:mm}" + (string.IsNullOrWhiteSpace(missedNote) ? "" : $", note: {missedNote.Trim()}")
             });
             await _db.SaveChangesAsync();
         }
@@ -288,5 +288,6 @@ public class AttendanceService
         return (total, monthVisits, recent);
     }
 }
+
 
 

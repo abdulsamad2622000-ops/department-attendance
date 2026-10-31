@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HobbiesClub.Services;
 
-public record LogReportRow(DateTime Time, int MemberCode, string Name, string Club, AttendanceType Type, VerificationMethod Method, bool IsManualEntry);
+public record LogReportRow(DateTime Time, int MemberCode, string Name, string Club, AttendanceType Type, VerificationMethod Method, bool IsManualEntry, string? Note = null);
 public record MemberReportRow(int MemberCode, string Name, string Clubs, int Visits, TimeSpan TotalTime, TimeSpan AverageTime, DateTime LastVisit);
 public record DailyReportRow(DateTime Date, int Members, int CheckIns, int CheckOuts, string ByClub);
 
@@ -53,7 +53,7 @@ public class ReportService
         var (logs, members, clubs) = await LoadAsync(from, to, clubId, search);
         return logs.Select(l => new LogReportRow(
             l.Timestamp, members[l.MemberId].MemberCode, members[l.MemberId].FullName,
-            ClubName(clubs, l.ClubId), l.Type, l.Method, l.IsManualEntry)).ToList();
+            ClubName(clubs, l.ClubId), l.Type, l.Method, l.IsManualEntry, l.Note)).ToList();
     }
 
     /// <summary>Visits = check-ins. Time = each check-in paired with the next check-out in the same club.</summary>
@@ -121,3 +121,4 @@ public class ReportService
         return sb.ToString();
     }
 }
+

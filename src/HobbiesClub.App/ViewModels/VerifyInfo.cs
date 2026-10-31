@@ -28,7 +28,9 @@ public class VerifyInfo
     public bool HasAutoNote => AutoNote.Length > 0;
     public Brush CurrentBrush { get; init; } = Brushes.SeaGreen;
     public string ClubName { get; init; } = string.Empty;
+    public int LogId { get; init; }
 }
+
 
 
 
