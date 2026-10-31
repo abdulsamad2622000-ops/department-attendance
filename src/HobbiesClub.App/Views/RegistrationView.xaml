@@ -111,7 +111,7 @@
                 <Border Width="34" Height="34" CornerRadius="17" Background="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=2-2|fill}">
                     <TextBlock Text="2" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=2-2|fg}" />
                 </Border>
-                <TextBlock Text="Clubs" Margin="8,0,0,0" FontSize="15" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=2-2|label}" FontWeight="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=2-2|weight}" />
+                <TextBlock Text="Departments" Margin="8,0,0,0" FontSize="15" VerticalAlignment="Center" Foreground="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=2-2|label}" FontWeight="{Binding Step, Converter={StaticResource StepState}, ConverterParameter=2-2|weight}" />
             </StackPanel>
             <Rectangle Width="44" Height="2" Fill="#2B5A94" VerticalAlignment="Center" RadiusX="1" RadiusY="1" />
             <StackPanel>
@@ -197,8 +197,8 @@
                     <!-- Clubs -->
                     <StackPanel Visibility="{Binding IsClubs, Converter={StaticResource B2V}}">
                         <TextBlock Text="Select one or both clubs." Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,14" />
-                        <CheckBox Style="{StaticResource ClubCheck}" Content="AI Center" Tag="AI" Background="#7C3AED" IsChecked="{Binding JoinAi}" />
-                        <CheckBox Style="{StaticResource ClubCheck}" Content="Fleet UMS Hobby Club" Tag="UMS" Background="#F59E0B" IsChecked="{Binding JoinHobbies}" />
+                        <CheckBox Style="{StaticResource ClubCheck}" Content="MANAGER WE" Tag="WE" Background="#7C3AED" IsChecked="{Binding JoinAi}" />
+                        <CheckBox Style="{StaticResource ClubCheck}" Content="MANAGER AT &amp;C/EXO" Tag="EXO" Background="#F59E0B" IsChecked="{Binding JoinHobbies}" />
                     </StackPanel>
 
                     <!-- PIN -->
@@ -282,6 +282,8 @@
         </ScrollViewer>
     </Grid>
 </UserControl>
+
+
 
 
 

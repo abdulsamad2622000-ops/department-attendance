@@ -144,7 +144,7 @@
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Header="" Width="64" CellTemplate="{StaticResource PhotoCell}" />
                         <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="200" />
-                        <DataGridTextColumn Header="Club" Binding="{Binding ClubName}" Width="160" />
+                        <DataGridTextColumn Header="Department" Binding="{Binding ClubName}" Width="160" />
                         <DataGridTextColumn Header="Inside since" Binding="{Binding Since}" Width="160" />
                         <DataGridTextColumn Header="Inside for" Binding="{Binding InsideFor}" Width="110" />
                         <DataGridTextColumn Header="Note" Binding="{Binding Note}" Width="*">
@@ -169,7 +169,7 @@
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Header="" Width="64" CellTemplate="{StaticResource PhotoCell}" />
                         <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="200" />
-                        <DataGridTextColumn Header="Clubs" Binding="{Binding ClubName}" Width="200" />
+                        <DataGridTextColumn Header="Departments" Binding="{Binding ClubName}" Width="200" />
                         <DataGridTextColumn Header="Last entry" Binding="{Binding Since}" Width="160" />
                         <DataGridTextColumn Header="Last action" Binding="{Binding InsideFor}" Width="*" />
                     </DataGrid.Columns>
@@ -178,6 +178,7 @@
         </Border>
     </Grid>
 </UserControl>
+
 
 
 

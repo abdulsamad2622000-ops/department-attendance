@@ -74,7 +74,7 @@ public class MemberService
 
         var validClubCount = await _db.Clubs.CountAsync(c => clubIds.Contains(c.Id) && c.IsActive);
         if (validClubCount != clubIds.Count)
-            return Fail("The selected club is not valid.");
+            return Fail("The selected department is not valid.");
 
         if (!IsValidPin(request.Pin))
             return Fail($"PIN must be exactly {PinLength} digits.");
@@ -267,7 +267,7 @@ public class MemberService
         return false;
     }
 
-    /// <summary>Active clubs the member has not joined yet (for the "Join this club" card).</summary>
+    /// <summary>Active clubs the member has not joined yet (for the "Join this department" card).</summary>
     public async Task<List<Club>> GetJoinableClubsAsync(int memberId) =>
         await _db.Clubs
             .Where(c => c.IsActive && !_db.MemberClubs.Any(mc => mc.MemberId == memberId && mc.ClubId == c.Id))
@@ -285,7 +285,7 @@ public class MemberService
 
         var club = await _db.Clubs.FindAsync(clubId);
         if (club is null || !club.IsActive)
-            return new OperationResult(false, "Club not found.");
+            return new OperationResult(false, "Department not found.");
 
         if (await _db.MemberClubs.AnyAsync(mc => mc.MemberId == memberId && mc.ClubId == clubId))
             return new OperationResult(false, "You are already a member of this club.");
@@ -321,6 +321,7 @@ public class MemberService
             Details = details
         });
 }
+
 
 
 

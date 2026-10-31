@@ -93,7 +93,7 @@ public partial class ReportsViewModel : ObservableObject
             .Select(c => new ClubItem(c.Id, c.Name)).ToListAsync();
 
         Clubs.Clear();
-        Clubs.Add(new ClubItem(0, "All clubs"));
+        Clubs.Add(new ClubItem(0, "All departments"));
         foreach (var c in list) Clubs.Add(c);
         Club = Clubs[0];
         await GenerateAsync();
@@ -179,21 +179,21 @@ public partial class ReportsViewModel : ObservableObject
         if (IsLog)
         {
             csv = ReportService.ToCsv(
-                new[] { "Date", "Time", "Member ID", "Name", "Club", "Type", "Method", "Note" },
+                new[] { "Date", "Time", "Member ID", "Name", "Department", "Type", "Method", "Note" },
                 LogRows.Select(r => new[] { r.Date, r.Time, r.Id, r.Name, r.Club, r.Type, r.Method, r.Note }));
             count = LogRows.Count;
         }
         else if (IsMember)
         {
             csv = ReportService.ToCsv(
-                new[] { "Member ID", "Name", "Clubs", "Visits", "Total time", "Average per visit", "Last visit" },
+                new[] { "Member ID", "Name", "Departments", "Visits", "Total time", "Average per visit", "Last visit" },
                 MemberRows.Select(r => new[] { r.Id, r.Name, r.Clubs, r.Visits, r.TotalTime, r.AverageTime, r.LastVisit }));
             count = MemberRows.Count;
         }
         else
         {
             csv = ReportService.ToCsv(
-                new[] { "Date", "Members", "Check-ins", "Check-outs", "By club" },
+                new[] { "Date", "Members", "Check-ins", "Check-outs", "By department" },
                 DailyRows.Select(r => new[] { r.Date, r.Members, r.CheckIns, r.CheckOuts, r.ByClub }));
             count = DailyRows.Count;
         }
@@ -226,4 +226,5 @@ public partial class ReportsViewModel : ObservableObject
         }
     }
 }
+
 

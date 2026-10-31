@@ -1,17 +1,17 @@
-﻿#define AppName "Fleet UMS Hobby Club Attendance"
-#define AppVersion "1.8.5"
+﻿#define AppName "Departments Attendance System"
+#define AppVersion "1.0.0"
 #define AppExe "HobbiesClub.App.exe"
 
 [Setup]
-AppId={{8F3C2A51-7B4E-4D2A-9C61-3E5B7A9D1F20}
+AppId={{19AA0F17-3F68-4F49-AF88-3F367E74D9C2}
 AppName={#AppName}
 AppVersion={#AppVersion}
 AppPublisher=NovaStackHub
-DefaultDirName={autopf}\HobbiesClub
-DefaultGroupName=Fleet UMS Hobby Club
+DefaultDirName={autopf}\DepartmentAttendance
+DefaultGroupName=Departments Attendance System
 DisableProgramGroupPage=yes
 OutputDir=..\installer-output
-OutputBaseFilename=HobbiesClub-Setup-{#AppVersion}
+OutputBaseFilename=DepartmentAttendance-Setup-{#AppVersion}
 Compression=lzma2/ultra64
 SolidCompression=yes
 ArchitecturesAllowed=x64compatible
@@ -28,30 +28,16 @@ Name: "startup"; Description: "Start automatically when Windows starts (kiosk PC
 
 [Dirs]
 ; Data folder: every Windows user can read/write the database and backups. Never removed on uninstall.
-Name: "{commonappdata}\HobbiesClub"; Permissions: users-modify; Flags: uninsneveruninstall
+Name: "{commonappdata}\DepartmentAttendance"; Permissions: users-modify; Flags: uninsneveruninstall
 
 [Files]
 Source: "..\publish\HobbiesClub\*"; DestDir: "{app}"; Excludes: "*.pdb"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
-Name: "{group}\Fleet UMS Hobby Club"; Filename: "{app}\{#AppExe}"
-Name: "{group}\Uninstall Fleet UMS Hobby Club"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\Fleet UMS Hobby Club"; Filename: "{app}\{#AppExe}"; Tasks: desktopicon
-Name: "{commonstartup}\Fleet UMS Hobby Club"; Filename: "{app}\{#AppExe}"; Tasks: startup
+Name: "{group}\Departments Attendance System"; Filename: "{app}\{#AppExe}"
+Name: "{group}\Uninstall Departments Attendance System"; Filename: "{uninstallexe}"
+Name: "{commondesktop}\Departments Attendance System"; Filename: "{app}\{#AppExe}"; Tasks: desktopicon
+Name: "{commonstartup}\Departments Attendance System"; Filename: "{app}\{#AppExe}"; Tasks: startup
 
 [Run]
-Filename: "{app}\{#AppExe}"; Description: "Open Fleet UMS Hobby Club now"; Flags: nowait postinstall skipifsilent
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Filename: "{app}\{#AppExe}"; Description: "Open Departments Attendance System now"; Flags: nowait postinstall skipifsilent

@@ -33,12 +33,12 @@ public partial class ActivityLogViewModel : ObservableObject
         ["MemberTerminated"] = "Member terminated",
         ["MemberReactivated"] = "Member reactivated",
         ["BadgeChanged"] = "Badge changed",
-        ["ClubJoined"] = "Joined a club",
-        ["ClubLeft"] = "Removed from a club",
+        ["ClubJoined"] = "Joined a department",
+        ["ClubLeft"] = "Removed from a department",
         ["PinReset"] = "PIN reset",
         ["FaceReenrolled"] = "Face re-enrolled",
         ["LateCheckOutEntered"] = "Late check-out entered",
-        ["AutoCheckOut"] = "Auto check-out (other club)",
+        ["AutoCheckOut"] = "Auto check-out (other department)",
         ["BackupCreated"] = "Backup created",
         ["BackupFailed"] = "Backup failed",
         ["BackupRestored"] = "Backup restored",
@@ -133,6 +133,7 @@ public partial class ActivityLogViewModel : ObservableObject
         }
     }
 }
+
 
 
 

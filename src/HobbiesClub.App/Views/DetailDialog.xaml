@@ -27,7 +27,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="170" />
-                    <DataGridTextColumn Header="Club" Binding="{Binding Club}" Width="170" />
+                    <DataGridTextColumn Header="Department" Binding="{Binding Club}" Width="170" />
                     <DataGridTextColumn Header="Time" Binding="{Binding When}" Width="140" />
                     <DataGridTextColumn Header="Details" Binding="{Binding Info}" Width="*" />
                 </DataGrid.Columns>
@@ -37,5 +37,6 @@
         </Grid>
     </DockPanel>
 </Window>
+
 
 

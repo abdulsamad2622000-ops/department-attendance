@@ -63,7 +63,7 @@ public class MemberAdminService
             return new OperationResult(false, "A member must stay in at least one club.");
 
         _db.MemberClubs.Remove(link);
-        AddAudit(actorUserId, actorUsername, "ClubLeft", $"Member {member.MemberCode}, club {clubId}");
+        AddAudit(actorUserId, actorUsername, "ClubLeft", $"Member {member.MemberCode}, department {clubId}");
         await _db.SaveChangesAsync();
         return new OperationResult(true);
     }
@@ -210,6 +210,7 @@ public class MemberAdminService
             Details = details
         });
 }
+
 
 
 

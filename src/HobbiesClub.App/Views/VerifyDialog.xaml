@@ -49,7 +49,7 @@
                 <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="{Binding Rank, Source={x:Static helpers:FieldLabelsSource.Instance}}" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Rank}" Style="{StaticResource TileValue}" /></StackPanel></Border>
                 <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="{Binding Roll, Source={x:Static helpers:FieldLabelsSource.Instance}}" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding RollRegNo}" Style="{StaticResource TileValue}" /></StackPanel></Border>
                 <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="{Binding Phone, Source={x:Static helpers:FieldLabelsSource.Instance}}" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Phone}" Style="{StaticResource TileValue}" /></StackPanel></Border>
-                <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Clubs" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Clubs}" Style="{StaticResource TileValue}" /></StackPanel></Border>
+                <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Departments" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Clubs}" Style="{StaticResource TileValue}" /></StackPanel></Border>
             </UniformGrid>
 
             <StackPanel Visibility="{Binding HasPrevious, Converter={StaticResource B2V}}" Margin="0,14,0,0">
@@ -102,6 +102,7 @@
         </StackPanel>
     </Border>
 </Window>
+
 
 
 

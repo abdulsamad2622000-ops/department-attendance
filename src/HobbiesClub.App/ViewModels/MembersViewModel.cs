@@ -38,7 +38,7 @@ public record ClubItem(int Id, string Name);
 /// <summary>Admin panel: list of all members with search, filters and per-member actions.</summary>
 public partial class MembersViewModel : ObservableObject
 {
-    public const string AllClubs = "All clubs";
+    public const string AllClubs = "All departments";
     public const string AllStatuses = "All";
 
     private List<MemberRow> _all = new();
@@ -394,7 +394,7 @@ public partial class MembersViewModel : ObservableObject
     {
         if (Selected is not { } m) return;
         var ok = System.Windows.MessageBox.Show(
-            $"Delete {m.FullName} permanently?\n\nThis also deletes all of their attendance history, face, fingerprints and club links.\nA backup is made first, so it can be undone from Backup.",
+            $"Delete {m.FullName} permanently?\n\nThis also deletes all of their attendance history, face, fingerprints and department links.\nA backup is made first, so it can be undone from Backup.",
             "Delete member", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Warning);
         if (ok != System.Windows.MessageBoxResult.Yes) return;
         await DeleteIdsAsync(new List<int> { m.Id }, $"{m.FullName} was");
@@ -406,7 +406,7 @@ public partial class MembersViewModel : ObservableObject
         var ids = _all.Where(r => r.IsChecked).Select(r => r.Id).ToList();
         if (ids.Count == 0) return;
         var ok = System.Windows.MessageBox.Show(
-            $"Delete {ids.Count} selected member(s) permanently?\n\nThis also deletes all of their attendance history, face, fingerprints and club links.\nA backup is made first, so it can be undone from Backup.",
+            $"Delete {ids.Count} selected member(s) permanently?\n\nThis also deletes all of their attendance history, face, fingerprints and department links.\nA backup is made first, so it can be undone from Backup.",
             "Delete selected members", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Warning);
         if (ok != System.Windows.MessageBoxResult.Yes) return;
         await DeleteIdsAsync(ids, $"{ids.Count} member(s) were");
@@ -449,3 +449,4 @@ public partial class MembersViewModel : ObservableObject
             "Deleted", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
     }
 }
+

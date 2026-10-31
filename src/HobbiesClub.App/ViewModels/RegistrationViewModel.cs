@@ -79,7 +79,7 @@ public partial class RegistrationViewModel : ObservableObject
     public string Prompt => Step switch
     {
         1 => "Your details",
-        2 => "Choose your club(s)",
+        2 => "Choose your department(s)",
         3 => "Choose a 4-digit PIN",
         4 => "Confirm your PIN",
         5 => "Face scan",
@@ -204,6 +204,7 @@ public partial class RegistrationViewModel : ObservableObject
     [RelayCommand]
     private void Back() => _shell.NavigateTo(new KioskViewModel(_shell, string.Empty));
 }
+
 
 
 

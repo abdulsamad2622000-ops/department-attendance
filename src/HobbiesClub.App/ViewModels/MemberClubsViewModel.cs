@@ -148,7 +148,7 @@ public partial class MemberClubsViewModel : ObservableObject
 
         var answer = MessageBox.Show(
             $"Join {card.Name}? You will be able to mark attendance there from now on.",
-            "Join club", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            "Join department", MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (answer != MessageBoxResult.Yes)
             return;
 
@@ -174,6 +174,7 @@ public partial class MemberClubsViewModel : ObservableObject
         _shell.NavigateTo(new KioskViewModel(_shell, string.Empty));
     }
 }
+
 
 
 

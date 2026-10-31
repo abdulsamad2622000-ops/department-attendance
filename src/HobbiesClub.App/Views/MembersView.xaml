@@ -136,7 +136,7 @@
                                 <ComboBox ItemsSource="{Binding BadgeOptions}" SelectedItem="{Binding SelectedBadge}" Height="40" VerticalContentAlignment="Center" Padding="10,0" />
                             </DockPanel>
 
-                            <TextBlock Text="Clubs" Style="{StaticResource Section}" />
+                            <TextBlock Text="Departments" Style="{StaticResource Section}" />
                             <DockPanel Margin="0,0,0,8">
                                 <Button DockPanel.Dock="Right" Content="Remove" Command="{Binding RemoveClubCommand}" Height="40" Padding="12,0" Margin="8,0,0,0" />
                                 <ComboBox ItemsSource="{Binding MyClubs}" SelectedItem="{Binding SelectedMyClub}" DisplayMemberPath="Name"
@@ -206,7 +206,7 @@
                         <DataGridTextColumn Header="{Binding Rank, Source={x:Static helpers:FieldLabelsSource.Instance}}" Binding="{Binding Rank}" Width="100" />
                         <DataGridTextColumn Header="{Binding Roll, Source={x:Static helpers:FieldLabelsSource.Instance}}" Binding="{Binding RollRegNo}" Width="100" />
                         <DataGridTextColumn Header="{Binding Unit, Source={x:Static helpers:FieldLabelsSource.Instance}}" Binding="{Binding Unit}" Width="100" />
-                        <DataGridTextColumn Header="Clubs" Binding="{Binding Clubs}" Width="*" MinWidth="160" />
+                        <DataGridTextColumn Header="Departments" Binding="{Binding Clubs}" Width="*" MinWidth="160" />
                         <DataGridTemplateColumn Header="Badge" Width="90">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -249,6 +249,7 @@
         </Grid>
     </DockPanel>
 </UserControl>
+
 
 
 

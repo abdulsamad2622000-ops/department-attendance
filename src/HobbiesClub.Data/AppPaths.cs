@@ -3,7 +3,7 @@
 public static class AppPaths
 {
     public static string Root => Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "HobbiesClub");
+        Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "DepartmentAttendance");
 
     public static string DataFolder => Path.Combine(Root, "Data");
     public static string BackupFolder => Path.Combine(Root, "Backups");
@@ -19,3 +19,4 @@ public static class AppPaths
         Directory.CreateDirectory(LogFolder);
     }
 }
+

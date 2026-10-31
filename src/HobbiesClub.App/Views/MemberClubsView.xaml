@@ -146,7 +146,7 @@
                                     <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="R/N" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding RollRegNo}" Style="{StaticResource TileValue}" /></StackPanel></Border>
                                     <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Unit" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Unit}" Style="{StaticResource TileValue}" /></StackPanel></Border>
                                     <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Phone" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding Phone}" Style="{StaticResource TileValue}" /></StackPanel></Border>
-                                    <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Clubs" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding ClubsText}" Style="{StaticResource TileValue}" /></StackPanel></Border>
+                                    <Border Style="{StaticResource Tile}"><StackPanel><TextBlock Text="Departments" Style="{StaticResource TileLabel}" /><TextBlock Text="{Binding ClubsText}" Style="{StaticResource TileValue}" /></StackPanel></Border>
                                 </UniformGrid>
                                 <TextBlock Text="Fingerprints" FontSize="12" Foreground="#475569" Margin="5,14,0,4" />
                                 <Border Background="#0E3263" CornerRadius="14" Padding="12,10">
@@ -161,7 +161,7 @@
 
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,24,0,0">
                 <StackPanel HorizontalAlignment="Center">
-                    <TextBlock Text="Your clubs" FontSize="22" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,8,0,6" />
+                    <TextBlock Text="Your departments" FontSize="22" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,8,0,6" />
                     <ItemsControl ItemsSource="{Binding Cards}" HorizontalAlignment="Center">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate><WrapPanel HorizontalAlignment="Center" /></ItemsPanelTemplate>
@@ -184,7 +184,7 @@
                     </ItemsControl>
 
                     <StackPanel Visibility="{Binding HasJoinCards, Converter={StaticResource B2V}}" Margin="0,20,0,0">
-                        <TextBlock Text="Other clubs" FontSize="22" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,6" />
+                        <TextBlock Text="Other departments" FontSize="22" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,6" />
                         <ItemsControl ItemsSource="{Binding JoinCards}" HorizontalAlignment="Center">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate><WrapPanel HorizontalAlignment="Center" /></ItemsPanelTemplate>
@@ -197,7 +197,7 @@
                                         <StackPanel>
                                             <TextBlock Text="{Binding Name}" FontSize="26" FontWeight="Bold" Foreground="White" />
                                             <TextBlock Text="You are not a member yet" FontSize="15" Foreground="#9FB3D1" Margin="0,6,0,14" />
-                                            <TextBlock Text="+ Join this club" FontSize="15" FontWeight="SemiBold" Foreground="#93C5FD" />
+                                            <TextBlock Text="+ Join this department" FontSize="15" FontWeight="SemiBold" Foreground="#93C5FD" />
                                         </StackPanel>
                                     </Button>
                                 </DataTemplate>
@@ -212,6 +212,7 @@
         </Grid>
     </Grid>
 </UserControl>
+
 
 
 

@@ -22,7 +22,7 @@ public partial class KioskViewModel : ObservableObject
     public KioskViewModel(ShellViewModel shell, string fullName)
     {
         _shell = shell;
-        Title = "Fleet UMS Hobby Club & AI Center";
+        Title = "Departments Attendance System";
         UpdateClock();
         _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         _timer.Tick += (_, _) => UpdateClock();
@@ -163,6 +163,7 @@ public partial class KioskViewModel : ObservableObject
         Status = "Incorrect Super Admin password.";
     }
 }
+
 
 
 

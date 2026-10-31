@@ -60,7 +60,7 @@ public partial class PinViewModel : ObservableObject
         foreach (var c in clubs) Clubs.Add(c);
         ShowKeypad = false;
         ShowClubs = true;
-        Prompt = "Select your club";
+        Prompt = "Select your department";
         Display = string.Empty;
         Message = string.Empty;
     }
@@ -177,7 +177,7 @@ public partial class PinViewModel : ObservableObject
         foreach (var c in clubs) Clubs.Add(c);
         ShowKeypad = false;
         ShowClubs = true;
-        Prompt = "Select your club";
+        Prompt = "Select your department";
         Display = string.Empty;
         Message = string.Empty;
     }
@@ -308,6 +308,7 @@ public partial class PinViewModel : ObservableObject
         _shell.NavigateTo(new KioskViewModel(_shell, string.Empty));
     }
 }
+
 
 
 

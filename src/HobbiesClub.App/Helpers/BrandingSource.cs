@@ -53,8 +53,8 @@ public sealed class BrandingSource : BrandingState
         {
             using var scope = HobbiesClub.App.App.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            db.Database.ExecuteSqlRaw("UPDATE Clubs SET Name = 'AI Center' WHERE Name = 'AI Club'");
-            db.Database.ExecuteSqlRaw("UPDATE Clubs SET Name = 'Fleet UMS Hobby Club' WHERE Name = 'Hobbies Club'");
+            db.Database.ExecuteSqlRaw("UPDATE Clubs SET Name = 'MANAGER WE' WHERE Name IN ('AI Club', 'AI Center')");
+            db.Database.ExecuteSqlRaw("UPDATE Clubs SET Name = 'MANAGER AT &C/EXO' WHERE Name IN ('Hobbies Club', 'Fleet UMS Hobby Club')");
         }
         catch { /* never block the login screen */ }
     }
@@ -163,5 +163,6 @@ public sealed class BrandingSource : BrandingState
         catch (Exception ex) { return "Could not save: " + ex.Message; }
     }
 }
+
 
 
